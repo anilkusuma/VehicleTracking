@@ -1,0 +1,208 @@
+{
+    "name": "VtsDevices",
+    "options": {
+        "idInjection": false,
+        "mysql": {
+            "schema": "db_ads",
+            "table": "vts_devices"
+        }
+    },
+    "properties": {
+        "deviceId": {
+            "type": "Number",
+            "id": "serial",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "device_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "deviceName": {
+            "type": "String",
+            "required": true,
+            "length": 200,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "device_name",
+                "dataType": "varchar",
+                "dataLength": 200,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "deviceImei": {
+            "type": "String",
+            "required": true,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "device_imei",
+                "dataType": "varchar",
+                "dataLength": 15,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "deviceSim": {
+            "type": "String",
+            "required": true,
+            "length": 10,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "device_sim",
+                "dataType": "varchar",
+                "dataLength": 10,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "vehicleType": {
+            "type": "String",
+            "required": true,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "vehicle_type",
+                "dataType": "varchar",
+                "dataLength": 15,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "vehicleOdometer": {
+            "type": "String",
+            "required": false,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "vehicle_odometer",
+                "dataType": "varchar",
+                "dataLength": 15,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "comments": {
+            "type": "String",
+            "required": false,
+            "length": 65535,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "comments",
+                "dataType": "text",
+                "dataLength": 65535,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "driverId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "driver_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "companyId": {
+            "type": "Number",
+            "required": true,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "company_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "N"
+            }
+        },
+        "userId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "user_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "creationDate": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "creation_date",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "lastUpdatedOn": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "last_updated_on",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        }
+    },
+    "validations": [],
+    "relations": {
+        "user": {
+            "type": "belongsTo",
+            "model": "VtsUsers",
+            "foreignKey": "userId"
+        },
+        "company": {
+            "type": "belongsTo",
+            "model": "VtsUsers",
+            "foreignKey": "companyId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

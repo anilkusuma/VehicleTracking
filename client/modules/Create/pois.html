@@ -1,0 +1,174 @@
+<link href="./modules/Create/create.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="Points top-id-div" id="Points">
+    <div class="pois-main main-div">
+        <div class="row users-select">
+            <div class="input-field user-select-div">
+                <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                </select>
+            </div>
+        </div>
+        <div class="row cards-row pois-row">
+            <div class="col cards-col pois-col" ng-repeat="poi in pois track by poi.poiId">
+                <div class="card hoverable poi-card object-card" >   
+                    <div class="deleteDiv">
+                        <div class="deletButton">
+                            <a class="btn-floating btn waves-effect waves-light red button-link delete-driver-button" ng-click="deletePoi(poi.poiId)">
+                                <i class="mdi-action-delete"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="cardContents" ng-click="editPoint(poi)">
+                        <div class="waves-effect waves-block waves-light poiMapDisplayDiv ">
+                            <a id="{{poi.poiId}}" class="poi_details_link static_map_a">
+                                <img src="https://maps.googleapis.com/maps/api/staticmap?center={{poi.poiLat}},{{poi.poiLong}}&zoom=13&size=300x300&maptype=roadmap&markers=color:red%7C{{poi.poiLat}},{{poi.poiLong}}&key=AIzaSyDBm0t5b6gyo6Go1EbYXT203rXeGOvfNug" alt="poi-img">
+                            </a>
+                        </div>
+                        <div class="card-title-div poi-card-title">
+                            <span class="poi_name">{{poi.poiName}}</span>
+                        </div>
+                        <div class="poi-details-div">
+                            <div class="card-content-div">
+                                <div class="poiAddress"><span class="poiAddressValue">{{poi.poiAddress}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fixed-action-btn fab-new-point" style="bottom: 45px; right: 45px;">
+        <a class="btn-floating btn-large waves-effect waves-light red button-link add-button" ng-click="addPoint()">
+            <i class="large mdi-content-add"></i>
+        </a>
+    </div>
+
+    <div id="createPointModel" class="modal create-modal" ng-controller="createPoiCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Create Poi</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="poiDetails details">
+                        <div class="row customer-select-row" ng-if="userDetails.userType!='USER'">
+                            <div class="input-field customer-select-div">
+                                <label for="customerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="customerSelect" id="customerSelect" ng-model="newPoi.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row poi-name-details">
+                            <div class="input-field col s12">
+                                <input id="PointName" type="text" class="validate" ng-model="newPoi.poiName"  ng-focus="inputFocused()">
+                                <label for="PointName">Name*</label>
+                                <div class="errorName errorNamePointName">
+                                    <div id="PointName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row poi-lat-long-details">
+                            <div class="input-field col s12 m6">
+                                <input id="PointLat" type="text" disabled class="validate" ng-model="newPoi.poiLat">
+                                <label for="PointLat" class="active">Latitude</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="PointLong" type="text" disabled class="validate" ng-model="newPoi.poiLong">
+                                <label for="PointLong" class="active">Longitude</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="PoiMap" id="PoiMap">
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-click="savePoi()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editPointModel" class="modal create-modal" ng-controller="editPoiCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Edit Poi</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12" >
+                    <div class="poiDetails details">
+                        <div class="row customer-select-row" ng-if="userDetails.userType!='USER'">
+                            <div class="input-field customer-select-div">
+                                <label for="editCustomerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="editCustomerSelect" id="editCustomerSelect" ng-model="openedPoi.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row poi-name-details">
+                            <div class="input-field col s12">
+                                <input id="EditPointName" type="text" class="validate" ng-model="openedPoi.poiName"  ng-focus="inputFocused()">
+                                <label for="EditPointName">Name*</label>
+                                <div class="errorName errorNameEditPointName">
+                                    <div id="EditPointName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row poi-lat-long-details">
+                            <div class="input-field col s12 m6">
+                                <input id="EditPointLat" type="text" disabled class="validate" ng-model="openedPoi.poiLat">
+                                <label for="EditPointLat" class="active">Latitude</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="EditPointLong" type="text" disabled class="validate" ng-model="openedPoi.poiLong">
+                                <label for="EditPointLong" class="active">Longitude</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="EditPoiMap" id="EditPoiMap">
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="!openedPoi.editClicked" ng-click="editPoi()">EDIT</a>
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="openedPoi.editClicked"  ng-click="savePoi()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ConfirmationModel" class="ConfirmationModel modal">
+        <div class="model-content">
+            <div class="row content">
+                <div class="col s12">
+                    <div class="row confirmmessage">
+                        <div class="col s12">
+                           <span class="deleteText">This action will delete the class permanently ?</span>
+                        </div>
+                    </div>
+                    <div class="row yesnorow">
+                        <div class="col s12">
+                            <div class="yesnoRow">
+                                <a class="waves-effect waves-teal btn-flat ConfirmButton" ng-click="deleteClass()">DELETE</a>
+                                <a class="waves-effect waves-grey btn-flat cancelButton" ng-click="confirmCancel()">CANCEL</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

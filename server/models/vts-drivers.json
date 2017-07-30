@@ -1,0 +1,148 @@
+{
+    "name": "VtsDrivers",
+    "options": {
+        "idInjection": false,
+        "mysql": {
+            "schema": "db_ads",
+            "table": "vts_drivers"
+        }
+    },
+    "properties": {
+        "driverId": {
+            "type": "Number",
+            "id": "serial",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "driver_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "name": {
+            "type": "String",
+            "required": true,
+            "length": 500,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "name",
+                "dataType": "varchar",
+                "dataLength": 500,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "mobileNumber": {
+            "type": "String",
+            "required": false,
+            "length": 10,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "mobile_number",
+                "dataType": "varchar",
+                "dataLength": 10,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "emailId": {
+            "type": "String",
+            "required": false,
+            "length": 500,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "email_id",
+                "dataType": "varchar",
+                "dataLength": 500,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "companyId": {
+            "type": "Number",
+            "required": true,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "company_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "N"
+            }
+        },
+        "userId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "user_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "creationDate": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "creation_date",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "lastUpdatedOn": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "last_updated_on",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        }
+    },
+    "validations": [],
+    "relations": {
+        "user": {
+            "type": "belongsTo",
+            "model": "VtsUsers",
+            "foreignKey": "userId"
+        },
+        "company": {
+            "type": "belongsTo",
+            "model": "VtsUsers",
+            "foreignKey": "companyId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

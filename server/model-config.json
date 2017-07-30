@@ -1,0 +1,80 @@
+{
+    "_meta": {
+        "sources": [
+            "loopback/common/models",
+            "loopback/server/models",
+            "../common/models",
+            "./models"
+        ],
+        "mixins": [
+            "loopback/common/mixins",
+            "loopback/server/mixins",
+            "../common/mixins",
+            "./mixins"
+        ]
+    },
+    "VtsPois": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "VtsUsers": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "VtsGeoFencing": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "VtsLogin": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "VtsValidator": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "VtsNotificationUsers": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "VtsDrivers": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "VtsDevices": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "DeviceGps": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "DeviceAlerts": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "DeviceStatus": {
+        "dataSource": "MySqlDB",
+        "public": true
+    },
+    "Packets":{
+        "dataSource":"MongoDB",
+        "public":true
+    },
+    "AccessToken": {
+        "dataSource": "db",
+        "public": false
+    },
+    "ACL": {
+        "dataSource": "db",
+        "public": false
+    },
+    "RoleMapping": {
+        "dataSource": "db",
+        "public": false
+    },
+    "Role": {
+        "dataSource": "db",
+        "public": false
+    }
+}

@@ -1,0 +1,152 @@
+{
+    "name": "VtsPois",
+    "options": {
+        "idInjection": false,
+        "mysql": {
+            "schema": "db_ads",
+            "table": "vts_pois"
+        }
+    },
+    "properties": {
+        "poiId": {
+            "type": "Number",
+            "id": "serial",
+            "required":false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "poi_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "poiName": {
+            "type": "String",
+            "required": true,
+            "length": 100,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "poi_name",
+                "dataType": "varchar",
+                "dataLength": 100,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "poiLat": {
+            "type": "String",
+            "required": true,
+            "length": 20,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "poi_lat",
+                "dataType": "varchar",
+                "dataLength": 20,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "poiLong": {
+            "type": "String",
+            "required": true,
+            "length": 20,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "poi_long",
+                "dataType": "varchar",
+                "dataLength": 20,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "poiAddress": {
+            "type": "String",
+            "required": false,
+            "length": 65535,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "poi_address",
+                "dataType": "text",
+                "dataLength": 65535,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "companyId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "company_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "userId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "user_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "creationDate": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "creation_date",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "lastUpdatedOn": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "last_updated_on",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
+}

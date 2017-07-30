@@ -1,0 +1,79 @@
+<link href="/modules/Reports/reports.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div id="OverSpeedReport" class="Reports OverSpeedReport">
+    <div class="row users-select">
+        <div class="input-field user-select-div">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            </select>
+        </div>
+    </div>
+    <div class="row report-gen-filter filter-div">
+        <div class="col s12">
+            <div class="card">
+                <div class="row filter-row">
+                    <div class="col fromDateCol dateCol" ng-focus="inputFocused()">
+                        <div class="from-date"  ng-controller="testCtrl">
+                            <label for="fromDate" active class="active">From date</label>
+                            <input class="form-control" type='text' class="fromDate" id="fromDate" ng-model='fromDate' placeholder="Select from date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                            <div class="errorName errorNameFromDate">
+                                <div id="FromDate-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col toDateCol dateCol" ng-focus="inputFocused()">
+                        <div class="from-date"  ng-controller="testCtrl">
+                            <label for="toDate" active class="active">To date</label>
+                            <input class="form-control" type='text' class="toDate" id="toDate" ng-model='toDate' placeholder="Select to date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                            <div class="errorName errorNameToDate">
+                                <div id="ToDate-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col vehicleSelect">
+                        <div class="input-field  vehicle-select-div">
+                            <label for="vehicle_number" id="vehicleNumberLabel" class="active">Select Vehicle</label>
+                            <select class="vehicle-select" id="replayVehicleNumberSelect" ng-model="selectedVehicle" ng-options="vehicle as vehicle.deviceName for vehicle in vehicles track by vehicle.deviceId" ng-change="vehicleChanged()">
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col speed-input">
+                         <div class="input-field">
+                            <input type="number" min="0" id="SpeedLimit" ng-model="speedLimit">
+                            <label for="SpeedLimit" class="speedlimit">Speed Limit</label>
+                            <div class="errorName errorNameSpeedLimit">
+                                <div id="SpeedLimit-error"></div>
+                            </div>
+                         </div>   
+                    </div>
+                    <div class="col button-col">
+                        <div class="submit-button">
+                            <a class="waves-light white-text teal filter-submit-button darken-2 btn"  ng-click="submitReport()">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="OverSpeedTable">
+        <div class="row">
+            <div class="col s12 z-depth-1 reportsTableCol">
+                <div class="table reportsTable">
+                    <table id="overspeed-table" class="highlight responsive-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th data-field="Sno">S.No</th>
+                                <th data-field="vehicle_number">Vehicle number</th>
+                                <th data-field="packet_time">Time</th>
+                                <th data-field="vehicle_location">Location</th>
+                                <th data-field="vehicle_speed">Speed(Km/Hr)</th>
+                                <th data-field="vehicle_odometer">Odometer(Km)</th>
+                                <th data-field="map_link">View on map</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+{
+    "name": "Packets",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "mongodb":{
+        "collection":"PacketsCollection"
+    },
+    "properties": {
+        "packetId":{
+            "id":true,
+            "type": "Number",
+            "required": false
+        }   
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
+}

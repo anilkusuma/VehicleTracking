@@ -1,0 +1,217 @@
+<link href="./modules/Create/create.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="Customers top-id-div" id="Customers">
+    <div class="customers-main main-div">
+        <div class="row customers-row">
+            <div class="col s6 m4 l3 customers-col" ng-repeat="customer in customers track by customer.userId">
+                <div class="card hoverable customer-card object-card" >   
+                    <div class="deleteDiv">
+                        <div class="deletButton">
+                            <a class="btn-floating btn waves-effect waves-light green accent-3  button-link delete-customer-button" ng-if="customer.accountActive == 'Y'" ng-click="deActivate(customer.userId)">
+                                <i class="fa fa-check"></i>
+                            </a>
+                            <a class="btn-floating btn waves-effect waves-light red button-link delete-customer-button" ng-if="customer.accountActive == 'N'" ng-click="activate(customer.userId)">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="cardContents" ng-click="clickCustomer(customer)">
+                        <div class="card-title-div">
+                            <span class="customer_username">{{customer.userName}}</span>
+                        </div>
+                        <div class="customer-details-div">
+                            <div class="card-content-div">
+                                <div class="customername"><span class="customernameValue">{{customer.vtsUsers.name}}</span></div>
+                                <div class="customeremail"><span class="customeremailValue">{{customer.vtsUsers.emailId}}</span></div>
+                                <div class="customerphone"><span class="customerphoneValue">{{customer.vtsUsers.mobileNumber}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-action-btn fab-new-customer" style="bottom: 45px; right: 45px;">
+        <a class="btn-floating btn-large waves-effect waves-light red button-link add-button" ng-click="addCustomer()">
+            <i class="large mdi-content-add"></i>
+        </a>
+    </div>
+
+    <div id="createCustomerModel" class="modal create-modal" ng-controller="createCustomerCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Create customer</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="userDetails details">
+                        <div class="row user-name-details">
+                            <div class="input-field col s12">
+                                <input id="CustomerName" type="text" class="validate" ng-model="newCustomer.name"  ng-focus="inputFocused()">
+                                <label for="CustomerName">Customer name*</label>
+                                <div class="errorName errorNameCustomerName">
+                                    <div id="CustomerName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row user-login-details">
+                            <div class="input-field col s12 m6">
+                                <input id="UserName" type="text" class="validate" ng-model="newCustomer.username"  ng-focus="inputFocused()" ng-change="usernameChanged()">
+                                <label for="UserName">Username*</label>
+                                <div class="errorName errorNameUserName">
+                                    <div id="UserName-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="UserPassword" type="text" class="validate" ng-model="newCustomer.userInformation"  ng-focus="inputFocused()">
+                                <label for="UserPassword">Password*</label>
+                                <div class="errorName errorNameUserPassword">
+                                    <div id="UserPassword-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row user-email-details">
+                            <div class="input-field col s12">
+                                <input id="EmailId" type="text" class="validate" ng-model="newCustomer.emailId"  ng-focus="inputFocused()">
+                                <label for="EmailId">Email id</label>
+                                <div class="errorName errorNameEmailId">
+                                    <div id="EmailId-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row user-phone-details">
+                            <div class="input-field col s12">
+                                <input id="MobileNumber" type="text" class="validate" ng-model="newCustomer.mobileNumber"  ng-focus="inputFocused()">
+                                <label for="MobileNumber">Phone number</label>
+                                <div class="errorName errorNameMobileNumber">
+                                    <div id="MobileNumber-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-address-row row">
+                            <div class="input-field  col s12 descCol">
+                                <textarea id="UserAddress" class="materialize-textarea" ng-model="newCustomer.address"></textarea>
+                                <label for="description">Address</label>
+                                <div class="errorName errorNameUserAddress">
+                                    <div id="UserAddress-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-click="saveCustomer()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editCustomerModel" class="modal create-modal" ng-controller="editCustomerCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Edit customer</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="userDetails details">
+                        <div class="row user-name-details">
+                            <div class="input-field col s12">
+                                <input id="CustomerName" type="text" ng-model="openedCustomer.name"  ng-focus="inputFocused()">
+                                <label for="CustomerName">Customer name*</label>
+                                <div class="errorName errorNameCustomerName">
+                                    <div id="CustomerName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row user-login-details">
+                            <div class="input-field col s12 m6">
+                                <input id="UserName" type="text" ng-model="openedCustomer.username"  ng-focus="inputFocused()" ng-change="usernameChanged()">
+                                <label for="UserName">Username*</label>
+                                <div class="errorName errorNameUserName">
+                                    <div id="UserName-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="UserPassword" type="Password" ng-model="openedCustomer.userInformation"  ng-focus="inputFocused()">
+                                <label for="UserPassword">Password*</label>
+                                <div class="errorName errorNameUserPassword">
+                                    <div id="UserPassword-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row user-email-details">
+                            <div class="input-field col s12">
+                                <input id="EmailId" type="text" ng-model="openedCustomer.emailId"  ng-focus="inputFocused()">
+                                <label for="EmailId">Email id</label>
+                                <div class="errorName errorNameEmailId">
+                                    <div id="EmailId-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row user-phone-details">
+                            <div class="input-field col s12">
+                                <input id="MobileNumber" type="text" ng-model="openedCustomer.mobileNumber"  ng-focus="inputFocused()">
+                                <label for="MobileNumber">Phone number</label>
+                                <div class="errorName errorNameMobileNumber">
+                                    <div id="MobileNumber-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-address-row row">
+                            <div class="input-field  col s12 descCol">
+                                <textarea id="UserAddress" class="materialize-textarea" ng-model="openedCustomer.address"></textarea>
+                                <label for="description">Address</label>
+                                <div class="errorName errorNameUserAddress">
+                                    <div id="UserAddress-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="!openedCustomer.editClicked" ng-click="editCustomer()">EDIT</a>
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="openedCustomer.editClicked"  ng-click="updateCustomer()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ConfirmationModel" class="ConfirmationModel modal">
+        <div class="model-content">
+            <div class="row content">
+                <div class="col s12">
+                    <div class="row confirmmessage">
+                        <div class="col s12">
+                           <span class="deleteText">This action will delete the class permanently ?</span>
+                        </div>
+                    </div>
+                    <div class="row yesnorow">
+                        <div class="col s12">
+                            <div class="yesnoRow">
+                                <a class="waves-effect waves-teal btn-flat ConfirmButton" ng-click="deleteClass()">DELETE</a>
+                                <a class="waves-effect waves-grey btn-flat cancelButton" ng-click="confirmCancel()">CANCEL</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

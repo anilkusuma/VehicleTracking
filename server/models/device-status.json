@@ -1,0 +1,272 @@
+{
+    "name": "DeviceStatus",
+    "options": {
+        "idInjection": false,
+        "mysql": {
+            "schema": "db_ads",
+            "table": "device_status"
+        }
+    },
+    "properties": {
+        "statusId": {
+            "type": "Number",
+            "id": "serial",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "status_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "deviceImei": {
+            "type": "String",
+            "required": true,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "device_imei",
+                "dataType": "varchar",
+                "dataLength": 15,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "vehicleId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "vehicle_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "packetTime": {
+            "type": "String",
+            "required": false,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "packet_time",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "packetSerialNumber": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "packet_serial_number",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "oeStatus": {
+            "type": "String",
+            "required": false,
+            "length": 2,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "oe_status",
+                "dataType": "varchar",
+                "dataLength": 2,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "gpsStatus": {
+            "type": "String",
+            "required": false,
+            "length": 2,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "gps_status",
+                "dataType": "varchar",
+                "dataLength": 2,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "alarmStatus": {
+            "type": "String",
+            "required": false,
+            "length": 20,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "alarm_status",
+                "dataType": "varchar",
+                "dataLength":20,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "chargeStatus": {
+            "type": "String",
+            "required": false,
+            "length": 2,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "charge_status",
+                "dataType": "varchar",
+                "dataLength": 2,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "accStatus": {
+            "type": "String",
+            "required": false,
+            "length": 2,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "acc_status",
+                "dataType": "varchar",
+                "dataLength": 2,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "activeStatus": {
+            "type": "String",
+            "required": false,
+            "length": 2,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "active_status",
+                "dataType": "varchar",
+                "dataLength": 2,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "voltageLevel": {
+            "type": "String",
+            "required": false,
+            "length": 1,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "voltage_level",
+                "dataType": "varchar",
+                "dataLength": 1,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "gsmSignalStrength": {
+            "type": "String",
+            "required": false,
+            "length": 1,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "gsm_signal_strength",
+                "dataType": "varchar",
+                "dataLength": 1,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "companyId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "company_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "userId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "user_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "createdOn": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "created_on",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "lastUpdatedTime": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "last_updated_time",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
+}

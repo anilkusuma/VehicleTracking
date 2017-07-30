@@ -1,0 +1,348 @@
+.Reports [type="checkbox"]:checked + label:before {
+    top: 1px !important;
+    left: 3px !important;
+}
+.Reports .row{
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    margin-bottom: 5px !important;
+}
+.Reports .dateCol{
+    margin-top: 0px !important;
+}
+
+.Reports .users-select{
+    margin-bottom: 25px !important; 
+}
+
+.Reports .filter-div .card {
+    padding: 20px;
+}
+.Reports .filter-div .card .filter-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.Reports .submit-button{
+    text-align: right;
+}
+.Reports .submit-button a{
+    padding: 0px 15px;
+    font-weight: 500;
+}
+.Reports .dateCol label{
+  position: relative;
+  top: 0px !important;
+}
+.Reports .reportsTableCol {
+    padding: 20px;
+    background-color: white;
+}
+.Reports .reportsTableCol .reportsTable{
+    overflow-x: scroll;
+}
+
+.Reports .autocomplete {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 5px;
+    flex-wrap: wrap;
+    padding-left: 15px;
+    border-bottom: 1px solid #9e9e9e;
+}
+.Reports .ac-users{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.Reports .chip{
+    margin-top: 5px;
+    margin-right: 10px;
+    display: flex;
+    overflow: hidden;
+}
+.Reports .ac-input{
+    width: 100%;
+}
+.Reports .ac-input input{
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+.Reports .ac-dropdown{
+    opacity: 1;
+    display: block;
+    position: absolute;
+    top: 45px;
+    left: 0px;
+    width: 100%;
+}
+.Reports .ac-dropdown li{
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid #f3f3f3;
+}
+.Reports .ac-dropdown li a {
+    color: black;
+    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+.Reports .ac-dropdown li .inputname{
+    display: flex;
+    align-items: center;
+    margin-left: 25px;
+}
+/* Track */
+
+.Reports #genday-table_wrapper{
+    padding-bottom: 20px;
+}
+.Reports #genday-table_paginate{
+    padding-top: 15px;
+}
+.Reports #genday-table{
+    padding-top: 25px;
+}
+.Reports #detailday-table_paginate{
+    padding-top: 15px;
+}
+.Reports #detailday-table_wrapper{
+    padding-bottom: 20px;
+}
+.Reports #detailday-table{
+    padding-top: 25px;
+}
+.Reports #overspeed-table_paginate{
+    padding-top: 15px;
+}
+.Reports #overspeed-table_wrapper{
+    padding-bottom: 20px;
+}
+.Reports #overspeed-table{
+    padding-top: 25px;
+}
+.Reports #stoppage-table_paginate{
+    padding-top: 15px;
+}
+.Reports #stoppage-table_wrapper{
+    padding-bottom: 20px;
+}
+.Reports #stoppage-table{
+    padding-top: 25px;
+}
+.Reports #geofence-table_paginate{
+    padding-top: 15px;
+}
+.Reports #geofence-table_wrapper{
+    padding-bottom: 20px;
+}
+.Reports #geofence-table{
+    padding-top: 25px;
+}
+
+.Reports #distance-table_paginate{
+    padding-top: 15px;
+}
+.Reports #distance-table_wrapper{
+    padding-bottom: 20px;
+}
+.Reports #distance-table{
+    padding-top: 25px;
+}
+
+.buttons-excel {
+    background-color: #4FA9D6;
+}
+.buttons-pdf {
+    background-color: #0091ea
+}
+.buttons-print{
+    background-color: #F970CD 
+}
+.dt-buttons {
+    margin-bottom: 25px;
+    text-align: right;
+}
+.dt-button{
+    margin-right: 2px;
+    margin-left: 2px;
+}
+.dt-button i{
+    font-size: 15px;
+}
+#OverSpeedReport .button-col{
+    margin-left: auto;
+}
+
+#GeoFenceReport .submit-button{
+    float: right;
+}
+
+#GeoFenceReport .vehciles-row{
+    margin-bottom: 20px !important;
+}
+
+
+#GeoFenceReport .button-col{
+    margin-top: 0px !important;
+    margin-bottom: 0px !important
+}
+
+
+
+
+.Reports .reportsTableCol .reportsTable::-webkit-scrollbar{ /* 1 */
+    height: 10px;
+}
+.Reports .reportsTableCol .reportsTable::-webkit-scrollbar-button{ /* 2 */ 
+  display: none;
+}
+.Reports .reportsTableCol .reportsTable::-webkit-scrollbar-track{ /* 3 */
+  display: none;
+}
+.Reports .reportsTableCol .reportsTable::-webkit-scrollbar-track-piece{ /* 4 */ 
+  display: none;
+}
+
+.Reports .reportsTableCol .reportsTable::-webkit-scrollbar-thumb{ /* 5 */ 
+    display: block;
+    background-color: #d8d8d8;
+}
+.Reports .reportsTableCol .reportsTable::-webkit-scrollbar-corner{ /* 6 */ 
+  display: none;
+}
+.Reports .reportsTableCol .reportsTable::-webkit-resizer{
+  display: none;
+}
+
+
+
+table tbody::-webkit-scrollbar{ /* 1 */
+    height: 5px;
+    width: 5px;
+}
+table tbody::-webkit-scrollbar-button{ /* 2 */ 
+  display: none;
+}
+table tbody::-webkit-scrollbar-track{ /* 3 */
+  display: none;
+}
+table tbody::-webkit-scrollbar-track-piece{ /* 4 */ 
+  display: none;
+}
+
+table tbody::-webkit-scrollbar-thumb{ /* 5 */ 
+    display: block;
+    background-color: #d8d8d8;
+}
+table tbody::-webkit-scrollbar-corner{ /* 6 */ 
+  display: none;
+}
+table tbody::-webkit-resizer{
+  display: none;
+}
+
+
+
+
+table::-webkit-scrollbar{ /* 1 */
+    height: 5px;
+    width: 5px;
+}
+table::-webkit-scrollbar-button{ /* 2 */ 
+  display: none;
+}
+table::-webkit-scrollbar-track{ /* 3 */
+  display: none;
+}
+table::-webkit-scrollbar-track-piece{ /* 4 */ 
+  display: none;
+}
+
+table::-webkit-scrollbar-thumb{ /* 5 */ 
+    display: block;
+    background-color: #d8d8d8;
+}
+table::-webkit-scrollbar-corner{ /* 6 */ 
+  display: none;
+}
+table::-webkit-resizer{
+  display: none;
+}
+
+
+.viewOnMapLink{
+    white-space: nowrap;
+    font-family: 'Merriweather','serif';
+}
+
+.linkDiv{
+    display: none;
+}
+
+
+
+@media only screen and (max-width: 600px){
+    .Reports .reportsTableCol .reportsTable::-webkit-scrollbar{ /* 1 */
+        height: 10px;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .Reports .filter-div .card .filter-row{
+        display: flex;
+        flex-direction: column;
+    }
+    #replayVehicleNumberSelect,.vehicleSelect,.button-col{
+        margin-top: 20px;
+    }
+    .StoppageReport .filter-div .card .filter-row .col{
+        width: 100%;
+    }
+    #GeoFenceReport .vehciles-row{
+        margin-bottom: 0px !important;
+    }
+    .geo-fence-filter .col{
+        padding: 0px !important;
+    }
+    .report-distance-filter .col{
+        padding: 0px !important;
+    }
+    .report-gen-filter .col{
+        padding: 0px !important;
+    }
+}
+
+@media only screen and (max-width: 801px) {
+    .OverSpeedReport .filter-div .card .filter-row{
+        display: flex;
+        flex-direction: column;
+    }
+    .OverSpeedReport .filter-div .card .filter-row .col{
+        width: 100%;
+    }
+
+    #replayVehicleNumberSelect,.vehicleSelect,.button-col,.speed-input{
+        margin-top: 20px;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .Reports .reportsTableCol .reportsTable{
+        overflow-x: inherit;
+    }
+    .Reports .reportsTableCol .reportsTable thead th{
+        width: 100%; 
+        border-bottom: none !important;
+        white-space: nowrap;
+    }
+    .Reports .reportsTableCol .reportsTable tbody td{
+        padding: 10px 18px;
+    }
+    table.dataTable.no-footer{
+        border-bottom: none !important;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+    }
+    table tbody::-webkit-scrollbar{ /* 1 */
+        height: 2px;
+        width: 2px;
+    }
+}

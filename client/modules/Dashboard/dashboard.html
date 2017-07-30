@@ -1,0 +1,182 @@
+<link href="/modules/Dashboard/dashboard.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="Dashboard">
+    <div class="row users-select">
+        <div class="input-field user-select-div">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            </select>
+        </div>
+    </div>
+    <div class="DashboardTable">
+        <div class="row">
+            <div class="col s12">
+                <div class="table z-depth-1">
+                    <table id="dashboardtable-table" class="highlight responsive-table" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th id="selectHeaderCheckbox" data-field="selectCheckbox">
+                                    <input type="checkbox" id="selectheader" ng-model="selectheader" ng-change="selectHeaderChanged()"/>
+                                    <label for="selectheader"></label>
+                                </th>
+                                <th data-field="Sno">S.No</th>
+                                <th data-field="vehicle_number">vehicle Number</th>
+                                <th data-field="vehicle_location">vehicle Location</th>
+                                <th data-field="vehicle_speed">Vehicle Speed (Km/Hr)</th>
+                                <th data-field="vehicle_odomer">Vehicle Odometer (Km)</th>
+                                <th data-field="packet_time">Last Updated Time</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr class="locationTable{{vehicle.deviceId}} data-row" ng-repeat="vehicle in vehicles track by $index">
+                                <td class="selectbox">
+                                    <input type="checkbox" class="checkboxrow" id="vehicleCheckbox{{vehicle.deviceId}}" ng-model="vehicle.showFlag" ng-change="showFlagChange($index)"/>
+                                    <label for="vehicleCheckbox{{vehicle.deviceId}}"></label>
+                                </td>
+                                <td class="Sno">{{$index}}</td>
+                                <td class="vehicle_number">{{vehicle.deviceName}}</td>
+                                <td class="vehicle_location">{{vehicle.vehicleLocation}}</td>
+                                <td class="vehicle_speed">{{vehicle.speed}}</td>
+                                <td class="vehicle_odometer">{{vehicle.odometer}}</td>
+                                <td class="packet_time">{{vehicle.packetTime}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="DashboardMap">
+        <div class="row">
+            <div class="col s12 DashboardMapCol">
+                <div class="card dashboardmapcard">
+                	<div class="row dashboardStatusRow">
+			    		<div class="col s12 statusIndicator">
+			    			<div class="orange_status statusDiv">
+			    				<span class="colorBox">
+			    				</span>
+			    				<span class="colorIndicator">
+			    					No Gps
+			    				</span>
+			    			</div>
+			    			<div class="green_status statusDiv">
+			    				<span class="colorBox">
+			    				</span>
+			    				<span class="colorIndicator">
+			    					Running
+			    				</span>
+			    			</div>
+			    			<div class="yellow_status statusDiv">
+			    				<span class="colorBox">
+			    				</span>
+			    				<span class="colorIndicator">
+			    					Idle
+			    				</span>
+			    			</div>
+			    			<div class="red_status statusDiv">
+			    				<span class="colorBox">
+			    				</span>
+			    				<span class="colorIndicator">
+			    					Offline
+			    				</span>
+			    			</div>
+			    		</div>
+    				</div>
+    				<div class="row dashboardMapRow">
+    					<div class="col s12 dashboardMapCol">
+    						<div class="DashboardMapCard" id="DashboardMapContent">
+    						</div>
+    					</div>
+    				</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+    <div class="DashboardGraph">
+        <div class="row">
+            <div class="col s12 m6 DashboardGraphFuel">
+                <div class="card DashboardGraphFuelCard" id="DashboardGraphFuelCard">
+                    <canvas id="myFuelChart">
+                        
+                    </canvas>
+                </div>
+            </div>
+            <div class="col s12 m6 DashboardGraphSpeed">
+                <div class="card DashboardGraphSpeedCard" id="DashboardGraphSpeedCard">
+                    <canvas id="mySpeedChart">
+                        
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="DashboardCount">
+        <div class="row">
+            <div class="col s12 m6 l3">
+                <div class="card vehicles-card">
+                    <div class="card-content  white-text">
+                        <div class="row">
+                            <div class="col s6">
+                                <i class="mdi-maps-local-shipping"></i>
+                            </div>
+                            <div class="col s6">
+                                <p class="drivers-card-p">Total vehicles </p>
+                                <p class="drivers-count"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l3">
+                <div class="card drivers-card">
+                    <div class="card-content  white-text">
+                        <div class="row">
+                            <div class="col s6">
+                                <i class="mdi-action-assignment-ind"></i>
+                            </div>
+                            <div class="col s6">
+                                <p class="drivers-card-p">Total Drivers </p>
+                                <p class="drivers-count"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l3">
+                <div class="card trips-card">
+                    <div class="card-content white-text">
+                        <div class="row">
+                            <div class="col s6">
+                                <i class="mdi-maps-directions"></i>
+                            </div>
+                            <div class="col s6">
+                                <p class="drivers-card-p">Total Routes</p>
+                                <p class="drivers-count"> 12 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 l3">
+                <div class="card geofence-card">
+                    <div class="card-content white-text">
+                        <div class="row">
+                            <div class="col s6">
+                                <i class="mdi-maps-my-location"></i>
+                            </div>
+                            <div class="col s6">
+                                <p class="drivers-card-p">Total Geo-Fences </p>
+                                <p class="drivers-count"> 4 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+    
+
+

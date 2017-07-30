@@ -1,0 +1,198 @@
+{
+    "name": "VtsLogin",
+    "options": {
+        "idInjection": false,
+        "mysql": {
+            "schema": "db_ads",
+            "table": "vts_login"
+        }
+    },
+    "properties": {
+        "userId": {
+            "type": "Number",
+            "id": "serial",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "user_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "userName": {
+            "type": "String",
+            "required": true,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "user_name",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "userInformation": {
+            "type": "String",
+            "required": true,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "user_information",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "userType": {
+            "type": "String",
+            "required": true,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "user_type",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "firstLogin": {
+            "type": "String",
+            "required": false,
+            "length": 1,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "first_login",
+                "dataType": "varchar",
+                "dataLength": 1,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "accountActive": {
+            "type": "String",
+            "required": false,
+            "length": 2,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "account_active",
+                "dataType": "varchar",
+                "dataLength": 2,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "companyId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "company_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "creationDate": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "creation_date",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "lastUpdateOn": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "last_update_on",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        }
+    },
+    "validations": [],
+    "relations": {
+        "vtsUsers": {
+            "type": "hasOne",
+            "model": "VtsUsers",
+            "foreignKey": "userId"
+        },
+        "vtsValidator":{
+            "type":"hasMany",
+            "model":"VtsValidator",
+            "foreignKey":"userId"
+        },
+        "companyUsers": {
+            "type": "hasMany",
+            "model": "VtsLogin",
+            "foreignKey": "companyId"
+        },
+        "userDevices": {
+            "type": "hasMany",
+            "model": "VtsDevices",
+            "foreignKey": "userId"
+        },
+        "companyDevices": {
+            "type": "hasMany",
+            "model": "VtsDevices",
+            "foreignKey": "companyId"
+        },
+        "userDrivers": {
+            "type": "hasMany",
+            "model": "VtsDrivers",
+            "foreignKey": "userId"
+        },
+        "companyDrivers": {
+            "type": "hasMany",
+            "model": "VtsDrivers",
+            "foreignKey": "companyId"
+        },
+        "userNotUsers": {
+            "type": "hasMany",
+            "model": "VtsNotificationUsers",
+            "foreignKey": "userId"
+        },
+        "userPois": {
+            "type": "hasMany",
+            "model": "VtsPois",
+            "foreignKey": "userId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

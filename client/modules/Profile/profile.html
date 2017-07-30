@@ -1,0 +1,92 @@
+<link href="./modules/Profile/profile.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div id="UserDetails">
+    <div class="edit-user-content">
+        <div class="row">
+            <div class="col s12 m8 l9">
+                <div class="details-div z-depth-1">
+                    <div class="details-div-content">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="input-field">
+                                    <input type="text" id="user_first_name" disabled="disabled" ng-model="user.name">
+                                    <label for="user_first_name" class="active">Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m6">
+                                <div class="input-field">
+                                    <input type="text" id="user_mobile" disabled="disabled" ng-model="user.phone">
+                                    <label for="user_mobile" class="active">Mobile Number</label>
+                                </div>   
+                            </div>
+                            <div class="col s12 m6">
+                                <div class="input-field">
+                                    <input type="text" id="user_email" disabled="disabled" ng-model="user.emailId">
+                                    <label for="user_email" class="active">Email Id</label>
+                                </div>   
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="input-field">
+                                    <textarea class="materialize-textarea" id="user_address" disabled="disabled" ng-model="user.address"></textarea>
+                                    <label for="user_address" class="active">Address</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4 l3">
+                <div class="image-div  z-depth-1">
+                    <div class="waves-effect waves-block waves-light image-inner-div">
+                        <input type="file" class="hidden" ng-model="profilePic" ngf-select name="profilePicInput" ngf-pattern='image/*' accept="image/*" name="profilePicInput" class="profilePic" accept="image/*" ng-change="uploadProfilePic()">
+                        <img class="profile-pic-image profile-image" alt="blog-img">
+                        <figcaption>
+                            <h2>Change<span> Image</span></h2>
+                            <p class="description">Click to upload new picture.</p>
+                        </figcaption> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-details-x">
+            <div class="card z-depth-1">
+                <div class="row update-row">
+                    <div class="col s12 update-col">
+                        <div class="row">
+                            <div class="col s12 ">
+                                <div class="input-field">
+                                    <input type="password" id="user_old" ng-model="user.oldPassword"/>
+                                    <label for="user_old">Old Password *</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="input-field">
+                                    <input type="password" id="user_new" ng-model="user.newPassword"/>
+                                    <label for="user_new">New Password *</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="input-field">
+                                    <input type="password" id="user_new_reenter" ng-model="user.reTypeNewPassword"/>
+                                    <label for="user_new_reenter">Re-enter password *</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row action-button center-align">
+                            <div class="col s12">
+                                <a class="btn waves-effect waves-white teal darken-2 update-userpass-button " ng-click="updatePassowrd()">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

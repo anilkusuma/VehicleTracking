@@ -1,0 +1,223 @@
+<link href="./modules/Create/create.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="Vehicles top-id-div" id="Vehicles">
+    <div class="vehicles-main main-div">
+        <div class="row users-select">
+            <div class="input-field user-select-div">
+                <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                </select>
+            </div>
+        </div>
+        <div class="row vehicles-row">
+            <div class="col s6 m4 l3 vehicles-col" ng-repeat="vehicle in vehicles track by vehicle.deviceId">
+                <div class="card hoverable vehicle-card object-card" >   
+                    <div class="deleteDiv">
+                        <div class="deletButton">
+                            <a class="btn-floating btn waves-effect waves-light red button-link delete-vehicle-button" ng-click="deleteVehicle(vehicle.deviceId)">
+                                <i class="mdi-action-delete"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="cardContents" ng-click="editVehicle(vehicle)">
+                        <div class="card-title-div">
+                            <span class="vehicle_name">{{vehicle.deviceName}}</span>
+                        </div>
+                        <div class="vehicle-details-div">
+                            <div class="card-content-div">
+                                <div class="deviceImei"><span class="deviceImeiValue">{{vehicle.deviceImei}}</span></div>
+                                <div class="deviceSim"><span class="deviceSimValue">{{vehicle.deviceSim}}</span></div>
+                                <div class="deviceType"><span class="deviceTypeValue">{{vehicle.vehicleType}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fixed-action-btn fab-new-customer" style="bottom: 45px; right: 45px;">
+        <a class="btn-floating btn-large waves-effect waves-light red button-link add-button" ng-click="addVehicle()">
+            <i class="large mdi-content-add"></i>
+        </a>
+    </div>
+
+    <div id="createVehicleModel" class="modal create-modal" ng-controller="createVehicleCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Create vehicle</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="userDetails details">
+                        <div class="row customer-select-row" ng-if="userDetails.userType!='USER'">
+                            <div class="input-field customer-select-div">
+                                <label for="customerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="customerSelect" id="customerSelect" ng-model="newDevice.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row device-name-details">
+                            <div class="input-field col s12">
+                                <input id="DeviceName" type="text" class="validate" ng-model="newDevice.deviceName"  ng-focus="inputFocused()">
+                                <label for="DeviceName">Name*</label>
+                                <div class="errorName errorNameDeviceName">
+                                    <div id="DeviceName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row device-imei-details">
+                            <div class="input-field col s12 m6">
+                                <input id="DeviceImei" type="text" class="validate" ng-model="newDevice.deviceImei"  ng-focus="inputFocused()" ng-change="imeiChanged()">
+                                <label for="DeviceImei">Imei number*</label>
+                                <div class="errorName errorNameDeviceImei">
+                                    <div id="DeviceImei-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="DeviceSim" type="text" class="validate" ng-model="newDevice.deviceSim"  ng-focus="inputFocused()">
+                                <label for="DeviceSim">Sim*</label>
+                                <div class="errorName errorNameDeviceSim">
+                                    <div id="DeviceSim-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row device-select-details">
+                            <div class="input-field col s12 m6 vehicleType-select-div">
+                                <label for="vehicleTypeSelect" class="active">Vehicle type</label>
+                                <select class="vehicleType-select" id="vehicleTypeSelect" ng-model="newDevice.vehicleType" ng-options="type as type for type in newDevice.vehicleTypes track by $index">
+                                </select>
+                            </div>
+                            <div class="input-field col s12 m6 driver-select-div">
+                                <label for="driverSelect" class="active">Driver</label>
+                                <select class="driver-select" id="driverSelect"  ng-model="newDevice.driver" ng-options="driver as driver.name for driver in newDevice.drivers track by driver.driverId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="device-address-row row">
+                            <div class="input-field  col s12 descCol">
+                                <textarea id="DeviceComments" class="materialize-textarea" ng-model="newDevice.comments"></textarea>
+                                <label for="description">Comments</label>
+                                <div class="errorName errorNameDeviceComments">
+                                    <div id="DeviceComments-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-click="saveVehicle()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="editVehicleModel" class="modal create-modal" ng-controller="editVehicleCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Create vehicle</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="userDetails details">
+                        <div class="row customer-select-row">
+                            <div class="input-field customer-select-div" ng-if="userDetails.userType!='USER'">
+                                <label for="editCustomerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="editCustomerSelect" id="editCustomerSelect" ng-model="openedDevice.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row device-name-details">
+                            <div class="input-field col s12">
+                                <input id="EditDeviceName" type="text" class="validate" ng-model="openedDevice.deviceName"  ng-focus="inputFocused()">
+                                <label for="EditDeviceName">Name*</label>
+                                <div class="errorName errorNameEditDeviceName">
+                                    <div id="EditDeviceName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row device-imei-details">
+                            <div class="input-field col s12 m6">
+                                <input id="EditDeviceImei" type="text" class="validate" ng-model="openedDevice.deviceImei"  ng-focus="inputFocused()" ng-change="imeiChanged()">
+                                <label for="EditDeviceImei">Imei number*</label>
+                                <div class="errorName errorNameEditDeviceImei">
+                                    <div id="EditDeviceImei-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="DeviceSim" type="text" class="validate" ng-model="openedDevice.deviceSim"  ng-focus="inputFocused()">
+                                <label for="EditDeviceSim">Sim*</label>
+                                <div class="errorName errorNameEditDeviceSim">
+                                    <div id="EditDeviceSim-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row device-select-details">
+                            <div class="input-field col s12 m6 vehicleType-select-div">
+                                <label for="EditVehicleTypeSelect" class="active">Vehicle type</label>
+                                <select class="vehicleType-select" id="EditVehicleTypeSelect" ng-model="openedDevice.vehicleType" ng-options="type as type for type in openedDevice.vehicleTypes track by $index">
+                                </select>
+                            </div>
+                            <div class="input-field col s12 m6 driver-select-div">
+                                <label for="EditDriverSelect" class="active">Driver</label>
+                                <select class="driver-select" id="EditDriverSelect"  ng-model="openedDevice.driver" ng-options="driver as driver.name for driver in openedDevice.drivers track by driver.driverId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="device-address-row row">
+                            <div class="input-field  col s12 descCol">
+                                <textarea id="EditDeviceComments" class="materialize-textarea" ng-model="newDevice.comments"></textarea>
+                                <label for="EditDeviceComments">Comments</label>
+                                <div class="errorName errorNameEditDeviceComments">
+                                    <div id="EditDeviceComments-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="!openedDevice.editClicked" ng-click="editVehicle()">EDIT</a>
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="openedDevice.editClicked" ng-click="saveVehicle()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ConfirmationModel" class="ConfirmationModel modal">
+        <div class="model-content">
+            <div class="row content">
+                <div class="col s12">
+                    <div class="row confirmmessage">
+                        <div class="col s12">
+                           <span class="deleteText">This action will delete the class permanently ?</span>
+                        </div>
+                    </div>
+                    <div class="row yesnorow">
+                        <div class="col s12">
+                            <div class="yesnoRow">
+                                <a class="waves-effect waves-teal btn-flat ConfirmButton" ng-click="deleteClass()">DELETE</a>
+                                <a class="waves-effect waves-grey btn-flat cancelButton" ng-click="confirmCancel()">CANCEL</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,60 @@
+<link href="/modules/Reports/reports.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div id="DistanceReport" class="Reports DistanceReport">
+    <div class="row users-select">
+        <div class="input-field user-select-div">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            </select>
+        </div>
+    </div>
+    <div class="row report-distance-filter filter-div">
+        <div class="filter-card">
+            <div class="card">
+                <div class="row filter-row">
+                    <div class="col s12 l4 fromDateCol dateCol" ng-focus="inputFocused()">
+                        <div class="from-date"  ng-controller="testCtrl">
+                            <label for="fromDate" active class="active">From date</label>
+                            <input class="form-control" type='text' class="fromDate" id="fromDate" ng-model='fromDate' placeholder="Select from date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                            <div class="errorName errorNameFromDate">
+                                <div id="FromDate-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 l4 toDateCol dateCol" ng-focus="inputFocused()">
+                        <div class="from-date"  ng-controller="testCtrl">
+                            <label for="toDate" active class="active">To date</label>
+                            <input class="form-control" type='text' class="toDate" id="toDate" ng-model='toDate' placeholder="Select to date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                            <div class="errorName errorNameToDate">
+                                <div id="ToDate-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 l4 button-col">
+                        <div class="submit-button">
+                            <a class="waves-light white-text teal filter-submit-button darken-2 btn"  ng-click="submitReport()">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="DistanceTable">
+        <div class="row">
+            <div class="col s12 z-depth-1 reportsTableCol">
+                <div class="table reportsTable">
+                    <table id="distance-table" class="highlight responsive-table" style="width:100%">
+                        <thead>
+                          <tr>
+                              <th data-field="vehicle_number">Vehicle number</th>
+                              <th data-field="start_time">Start Time</th>
+                              <th data-field="end_time">End Time</th>
+                              <th data-field="distance_covered">Distance</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

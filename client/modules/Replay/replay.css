@@ -1,0 +1,144 @@
+#ReplayPage .row{
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+#ReplayPage .map_actions .btn:hover {
+    box-shadow: none !important;
+}
+
+#vehicleNumberLabel{
+    padding-bottom: 5px;
+}
+
+#Replay .users-select{
+    
+}
+#ReplayPage .dateCol{
+    margin-top: 0px !important;
+}
+
+#ReplayPage .filter-div .card {
+    padding: 20px;
+}
+#ReplayPage .filter-div .card .filter-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#ReplayPage .submit-button{
+    text-align: right;
+}
+#ReplayPage .submit-button a{
+    padding: 0px 15px;
+    font-weight: 500;
+}
+#ReplayPage .dateCol label{
+  position: relative;
+  top: 0px !important;
+}
+
+#ReplayPage .vehiclehidden
+{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 99;
+    font-size: 50px;
+    cursor: pointer !important;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter: Alpha(Opacity=0);
+}
+
+
+/*vehicle details page */
+
+
+#ReplayPage .map_actions i {
+    font-size: 2.8rem;
+    line-height:50px
+}
+
+#ReplayPage .map_actions a{
+    width:50px;
+    height: 50px;
+}
+
+#ReplayPage .map_actions{
+    margin: 0 auto;
+}
+
+#ReplayPage .minimize-button{
+    position: relative;
+    top:-340px;
+    height: 37px;
+    width: 37px;
+    z-index: 100;
+    transition: opacity 1s;
+	-webkit-transition: opacity 1s;
+	-o-transition: opacity 1s;
+	-moz-transition: opacity 1s;
+}
+#ReplayPage .maximize-button{
+    position: relative;
+    top:-89px;
+    height: 37px;
+    width: 37px;
+    opacity: 0;
+    z-index: 100;
+    transition: opacity 1s;
+	-webkit-transition: opacity 1s;
+	-o-transition: opacity 1s;
+	-moz-transition: opacity 1s;
+}
+
+#ReplayPage #odometer-reading{
+    font-size: 30px;
+}
+
+#ReplayPage .odometer-div {
+    position: relative;
+    top:-100px;
+    left: 68px;
+}
+#ReplayPage .readings-div {
+    position: relative;
+    top : -389px;
+    z-index: 99;
+    width:300px;
+    height:300px;
+    transition: opacity 1s;
+	-webkit-transition: opacity 1s;
+	-o-transition: opacity 1s;
+	-moz-transition: opacity 1s;
+}
+#ReplayPage #speedometer {
+    display: none;
+}
+
+#speedometerWraper-speedometer,.speedometer-div{
+    width:300px;
+    height:300px;
+}
+
+
+#ReplayPage .editvehicle-map .col{
+    padding: 0px !important;
+}
+#ReplayPage .editvehicle-map #replayMap {
+    height: 800px;
+    padding-top : 15px;
+    padding-bottom: 15px;
+}
+
+@media only screen and (max-width: 600px) {
+    #ReplayPage .filter-div .card .filter-row{
+        display: flex;
+        flex-direction: column;
+    }
+    #replayVehicleNumberSelect,.vehicleSelect,.button-col{
+        margin-top: 20px;
+    }
+}

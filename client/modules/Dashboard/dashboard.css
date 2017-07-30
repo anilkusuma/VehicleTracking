@@ -1,0 +1,242 @@
+/*================================================================================
+	Item Name: Materialize - Material Design Admin Template
+	Version: 2.3
+	Author: GeeksLabs
+	Author URL: http://www.themeforest.net/user/geekslabs
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN CSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+
+/*
+
+.add-driver-modal-footer .btn {
+    
+    margin-left: 44px !important;
+    margin-right: 44px !important;
+    margin-bottom: 20px !important;
+}
+
+
+*/
+
+
+
+/*
+
+
+
+<div class="star-rating">
+                                                            <ul class="rating">
+                                                                <li><span> Peferomance Rating : </span></li>
+                                                                <li><i class="fa fa-star"></i></li>
+                                                                <li><i class="fa fa-star"></i></li>
+                                                                <li><i class="fa fa-star"></i></li>
+                                                                <li><i class="fa fa-star"></i></li>
+                                                                <li><i class="fa fa-star"></i></li>
+                                                            </ul>
+                                                        </div>
+*/
+.statusIndicator {
+	overflow:hidden;
+}
+.dashboardStatusRow{
+	margin-bottom:0px;
+}
+.statusIndicator .colorBox {
+	margin-right: 4px;
+    margin-top: 5px;
+    padding: 5px;
+    float: left;
+}
+.orange_status .colorBox{
+	background-color:orange;
+}
+.red_status .colorBox{
+	background-color:red;
+}
+.yellow_status .colorBox{
+	background-color:yellow;
+}
+.green_status .colorBox{
+	background-color:green;
+}
+.statusIndicator .colorIndicator{
+	font-family: monospace;
+    font-style : italic;
+    font-weight: bold;
+}
+
+.statusIndicator .statusDiv{
+	float: right;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#selectHeaderCheckbox{
+    padding-left: 10px;
+}
+.number_labels{
+	
+	padding : 2px;
+	border : 1px solid #030F54;
+	opacity : 1 !important;
+	margin-top : -41px !important;
+	margin-left : 13px !important; 
+	font-style:italic;
+	font-weight:bold;
+}
+
+#dashboardtable-table{
+    padding-top: 15px;
+    margin-bottom: 25px;
+}
+
+.fuelLogo i:before {
+    font-size: 2.8rem;
+}
+
+.dashboardtoolbarpanel .textcol span{
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+.dashboardtoolbarpanel .textcol{
+    margin-top: 10px;
+}
+.dashboardtoolbarpanel .logocol {
+    padding-bottom: 5px;
+    position: relative;
+    top: -8px;
+}
+
+.dashboardtoolbar{
+    position: relative;
+    top:-1175px;
+    z-index: 100;
+}
+.dashboardtoolbarpanel{
+    margin: 0px;
+    background-color: rgba(247, 247, 247, 0.9) !important;
+    height: 84px;
+}
+    
+
+.dashboard-minimize-button{
+    position: relative;
+    top:-340px;
+    height: 37px;
+    width: 37px;
+    z-index: 100;
+    transition: opacity 1s;
+	-webkit-transition: opacity 1s;
+	-o-transition: opacity 1s;
+	-moz-transition: opacity 1s;
+}
+.dashboard-maximize-button{
+    position: relative;
+    top:-89px;
+    height: 37px;
+    width: 37px;
+    opacity: 0;
+    z-index: 100;
+    transition: opacity 1s;
+	-webkit-transition: opacity 1s;
+	-o-transition: opacity 1s;
+	-moz-transition: opacity 1s;
+}
+
+#dashboard-odometer-reading{
+    font-size: 30px;
+}
+
+.dashboard-odometer-div {
+    position: relative;
+    top:-100px;
+    left: 68px;
+}
+.dasboard-readings-div {
+    position: relative;
+    top : -389px;
+    z-index: 99;
+    width:300px;
+    height:300px;
+    transition: opacity 1s;
+	-webkit-transition: opacity 1s;
+	-o-transition: opacity 1s;
+	-moz-transition: opacity 1s;
+}
+#dashboard_speedometer {
+    display: none;
+}
+
+speedometerWraper-dashboard_speedometer,.dashboard-speedometer-div{
+    width:300px;
+    height:300px;
+}
+
+
+/* Dashboard Table */
+
+.table {
+    padding: 20px;
+}
+
+
+
+#headerclass p{
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    color: red;
+    font-size: 1.4rem;
+}
+.DashboardMapCard{
+    height: 800px;
+
+}
+.DashboardGraph .card,#myFuelChart,#mySpeedChart {
+    height: 300px !important;
+    width: 100%;
+}
+
+#DashboardGraphFuelCanvas {
+    position: relative;
+
+    padding: 20px;
+}
+.drivers-card .card-content{
+    background-color: #4B78E2;
+}
+.vehicles-card .card-content{
+    
+background-color: #E05084;
+}
+
+.trips-card .card-content{
+    background-color: #3D968B;
+}
+.geofence-card .card-content{
+    background-color: #EAA842;
+}
+
+.DashboardCount .card-content {
+    height: 135px;
+}
+
+.DashboardCount i:before,.DashboardCount i {
+    font-size: 90px;
+    position: relative;
+    top : -20px;
+    left : -15px;
+    padding: 10px;
+    height: 100px;
+    
+}
+.drivers-card-p {
+    position: relative;
+    font-size: 14px;
+}
+.drivers-count {
+    font-size: 45px;
+}

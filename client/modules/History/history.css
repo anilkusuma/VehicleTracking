@@ -1,0 +1,62 @@
+
+#History .HistoryTable .table{
+    padding: 15px;
+    overflow: scroll;
+}
+#History .HistoryTable table td,.HistoryTable table th{
+    border-right: 1px solid #d0d0d0;
+    text-align: center;
+}
+
+#History #HistoryMap {
+    height: 800px;
+    padding-top : 15px;
+    padding-bottom: 15px;
+}
+
+
+
+#History .users-select{
+    
+}
+#History .dateCol{
+    margin-top: 0px !important;
+}
+
+#History .filter-div .card {
+    padding: 20px;
+}
+#History .filter-div .card .filter-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#History .submit-button{
+    text-align: right;
+}
+#History .submit-button a{
+    padding: 0px 15px;
+    font-weight: 500;
+}
+#History .dateCol label{
+  position: relative;
+  top: 0px !important;
+}
+
+
+
+#History .editvehicle-map .col{
+    padding: 0px !important;
+}
+
+
+@media only screen and (max-width: 600px) {
+    #History .filter-div .card .filter-row{
+        display: flex;
+        flex-direction: column;
+    }
+    #replayVehicleNumberSelect,.vehicleSelect,.button-col{
+        margin-top: 20px;
+    }
+}
+    

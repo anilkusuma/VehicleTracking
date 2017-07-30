@@ -1,0 +1,89 @@
+
+<link href="/modules/Replay/replay.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div id="ReplayPage">
+    <div class="row users-select">
+        <div class="input-field user-select-div">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            </select>
+        </div>
+    </div>
+    <div class="replay-filter filter-div">
+        <div class="filter-card">
+            <div class="card">
+                <div class=" row filter-row">
+                    <div class="col s12 m4 l3 fromDateCol dateCol" ng-focus="inputFocused()">
+                        <div class="from-date"  ng-controller="testCtrl">
+                            <label for="fromDate" active class="active">From date</label>
+                            <input class="form-control" type='text' class="fromDate" id="fromDate" ng-model='fromDate' placeholder="Select from date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                            <div class="errorName errorNameFromDate">
+                                <div id="FromDate-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m4 l3 toDateCol dateCol" ng-focus="inputFocused()">
+                        <div class="from-date"  ng-controller="testCtrl">
+                            <label for="toDate" active class="active">To date</label>
+                            <input class="form-control" type='text' class="toDate" id="toDate" ng-model='toDate' placeholder="Select to date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                            <div class="errorName errorNameToDate">
+                                <div id="ToDate-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m4 l3 vehicleSelect">
+                        <div class="input-field  vehicle-select-div">
+                               <label for="vehicle_number" id="vehicleNumberLabel" class="active">Select Vehicle</label>
+                               <select class="vehicle-select" id="replayVehicleNumberSelect" ng-model="selectedVehicle" ng-options="vehicle as vehicle.deviceName for vehicle in vehicles track by vehicle.deviceId" ng-change="vehicleChanged()">
+                               </select>
+                         </div>
+                    </div>
+                    <div class="col s12 m4 l3 button-col">
+                        <div class="submit-button">
+                            <a class="waves-light white-text teal filter-submit-button darken-2 btn"  ng-click="submitReplay()"><i class="mdi-content-send right" ></i>Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row editvehicle-map">
+        <div class="col s12">
+            <div class="card ReplayMapCard">
+                <div class="row  map_actions_row map_actions" ng-if="showMapActions">
+                    <div class="col s1 offset-s3">
+                        <div class="speed-dec"><a class="speeddec-a tooltipped waves-teal waves-effect waves-ripple white btn btn-floating btn-flat"  data-position="left" data-delay="10" data-tooltip="Slowdown playback" ng-click="decrease()"><i class="speeddec mdi-hardware-keyboard-arrow-down teal-text large darken-2 right"></i></a></div>  
+                    </div>
+                    <div class="col s1 offset-s1">
+                        <div class="pause" ng-show="!showPlayButton">
+                            <a class="pause-a tooltipped waves-effect waves-ripple waves-teal white btn btn-floating btn-flat" data-position="top" data-delay="10" data-tooltip="Pause playback" ng-click="pause()">
+                                <i class="pause-play mdi-av-pause teal-text large darken-2 right"></i>
+                            </a>
+                        </div>
+                        <div class="play" ng-show="showPlayButton">
+                            <a class="play-a tooltipped  waves-effect waves-ripple waves-teal white btn btn-floating btn-flat"  data-position="top" data-delay="10" data-tooltip="Resume playback" ng-click="play()">
+                                <i class="pause-play mdi-av-play-arrow teal-text large darken-2 right"></i>
+                            </a>
+                        </div>  
+                    </div>
+                    <div class="col s1 offset-s1">
+                        <div class="speed-inc"><a class="speedinc-a tooltipped  waves-teal waves-effect waves-ripple white btn btn-floating btn-flat"  data-position="right" data-delay="10" data-tooltip="Speedup playback" ng-click="increase()"><i class="speedinc mdi-hardware-keyboard-arrow-up teal-text large darken-2 right"></i></a></div>  
+                    </div>
+                </div>
+                <div class="row map_row">
+                    <div class="col s12 replayMapCol" style="height:800px">
+                        <div id="replayMap"></div>
+                        <div class="minimize-button"><a class="minimize-a waves-teal waves-effect white btn btn-floating btn-flat" ng-click="minimize()"><i class="minimize mdi-content-remove teal-text large darken-2 right"></i></a></div>
+                        <div class="maximize-button"><a class="maximize-a waves-teal waves-effect white btn btn-floating btn-flat" ng-click="maximize()"><i class="maximize mdi-content-add teal-text large darken-2 right"></i></a></div>
+                        <div class="readings-div">
+                            <div class="speedometer-div">
+                                <input id="speedometer" value="0">
+                            </div>
+                            <div class="odometer-div"> 
+                                <div id="odometer-reading" class="odometer-reading"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

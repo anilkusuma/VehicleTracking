@@ -1,0 +1,133 @@
+<link href="/modules/Reports/reports.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div id="GeoFenceReport" class="Reports GeoFenceReport" ng->
+    <div class="row users-select">
+        <div class="input-field user-select-div">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            </select>
+        </div>
+    </div>
+    <div class="row geo-fence-filter filter-div">
+        <div class="col s12">
+            <div class="card">
+                <div class="row filter-row">
+                    <div class="col s12">
+                        <div class="row vehciles-row">
+                            <div class="input-field to_vehicles_field col s12 m6">
+                                <div class="autocomplete">
+                                    <div class="ac-input">
+                                        <input type="text" id="to_vehicles" placeholder="Search Vehicles" data-activates="VehiclesDropDown" data-beloworigin="true" autocomplete="off" ng-model="geo['vehicleString']" ng-focus="vInputFocused()" ng-keyup="vInputChanged($event)">
+                                    </div>
+                                    <div class="ac-users">
+                                        <div class="chip" ng-repeat="vehicle in geo.vehicles track by $index">
+                                            {{vehicle.deviceName}}
+                                            <i class="mdi-content-clear close " ng-click="vChipClosed($index)"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errorName errorNameToVehicles">
+                                    <div id="ToVehicles-error"></div>
+                                </div>
+                                <ul id="VehihclesDropDown" class="dropdown-content ac-dropdown" ng-mouseleave="vAutoSuggestSelected()" tab-index="-1" ng-blur="fAutoSuggestSelected()">
+                                    <li class="ac-item"  ng-repeat="data in geo.vResponseData track by $index" ng-mousedown="vAutoSuggestClicked($index)">
+                                        <div class="checkboxInput">
+                                            <input type="checkbox" class="checkBoxSelect filled-in" id="checkBoxSelect{{data.deviceId}}" ng-model="data.selected" />
+                                            <label for="checkBoxSelect{{data.deviceId}}"></label>
+                                        </div>
+                                        <div class="inputname">
+                                            <a href="javascript:void(0)">{{data.deviceName}}</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="input-field to_fence_field col s12 m6">
+                                <div class="autocomplete">
+                                    <div class="ac-input">
+                                        <input type="text" id="to_fence" placeholder="Search Geofences" data-activates="FenceDropDown" data-beloworigin="true" autocomplete="off" ng-model="geo['fenceString']" ng-focus="fInputFocused()" ng-keyup="fInputChanged($event)">
+                                    </div>
+                                    <div class="ac-users">
+                                        <div class="chip" ng-repeat="fence in geo.fences track by $index">
+                                            {{fence.geoFenceName}}
+                                            <i class="mdi-content-clear close " ng-click="fChipClosed($index)"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errorName errorNameToFence">
+                                    <div id="ToFence-error"></div>
+                                </div>
+                                <ul id="FenceDropDown" class="dropdown-content ac-dropdown" ng-mouseleave="fAutoSuggestSelected()" ng-blur="fAutoSuggestSelected()">
+                                    <li class="ac-item"  ng-repeat="data in geo.fResponseData track by $index" ng-mousedown="fAutoSuggestClicked($index)">
+                                        <div class="checkboxInput">
+                                            <input type="checkbox" class="checkBoxSelect filled-in" id="fCheckBoxSelect{{data.geoFenceId}}" ng-model="data.selected" />
+                                            <label for="fCheckBoxSelect{{data.geoFenceId}}"></label>
+                                        </div>
+                                        <div class="inputname">
+                                            <a href="javascript:void(0)">{{data.geoFenceName}}</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="dates-row row">
+                            <div class="col s12 m4 fromDateCol dateCol" ng-focus="inputFocused()">
+                                <div class="from-date"  ng-controller="testCtrl">
+                                    <label for="fromDate" active class="active">From date</label>
+                                    <input class="form-control" type='text' class="fromDate" id="fromDate" ng-model='fromDate' placeholder="Select from date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                                    <div class="errorName errorNameFromDate">
+                                        <div id="FromDate-error"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s12 m4 toDateCol dateCol" ng-focus="inputFocused()">
+                                <div class="from-date"  ng-controller="testCtrl">
+                                    <label for="toDate" active class="active">To date</label>
+                                    <input class="form-control" type='text' class="toDate" id="toDate" ng-model='toDate' placeholder="Select to date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='d/MM/yyyy HH:mm' ng-focus="inputFocused()"/>
+                                    <div class="errorName errorNameToDate">
+                                        <div id="ToDate-error"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s12 m4 interval-input">
+                                 <div class="input-field">
+                                    <input type="number" min="0" id="TimeInterval" ng-model="timeInterval">
+                                    <label for="TimeInterval" class="timeInterval">Time Interval(In Min)</label>
+                                    <div class="errorName errorNameTimeInterval">
+                                        <div id="TimeInterval-error"></div>
+                                    </div>
+                                 </div>   
+                            </div>
+                        </div>
+                        <div class="row button row">
+                            <div class="col s12 button-col">
+                                <div class="submit-button">
+                                    <a class="waves-light white-text teal filter-submit-button darken-2 btn"  ng-click="submitReport()">Submit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="GeoFenceTable">
+        <div class="row">
+            <div class="col s12 z-depth-1 reportsTableCol">
+                <div class="table reportsTable">
+                    <table id="geofence-table" class="highlight responsive-table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th data-field="Sno">S.No</th>
+                                <th data-field="vehicle_number">Vehicle</th>
+                                <th data-field="entry_time">Entry Time</th>
+                                <th data-field="exit_time">Exit Time</th>
+                                <th data-field="geo_fence">Geofence</th>
+                                <th data-field="duration">Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

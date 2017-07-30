@@ -1,0 +1,180 @@
+<link href="./modules/Create/create.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="Drivers top-id-div" id="Drivers">
+    <div class="drivers-main main-div">
+        <div class="row users-select">
+            <div class="input-field user-select-div">
+                <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                </select>
+            </div>
+        </div>
+        <div class="row drivers-row">
+            <div class="col s6 m4 l3 drivers-col" ng-repeat="driver in drivers track by driver.driverId">
+                <div class="card hoverable drivers-card object-card" >   
+                    <div class="deleteDiv">
+                        <div class="deletButton">
+                            <a class="btn-floating btn waves-effect waves-light red button-link delete-driver-button" ng-click="deleteDriver(driver.driverId)">
+                                <i class="mdi-action-delete"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="cardContents" ng-click="editDriver(driver)">
+                        <div class="card-title-div">
+                            <span class="driver_name">{{driver.name}}</span>
+                        </div>
+                        <div class="driver-details-div">
+                            <div class="card-content-div">
+                                <div class="driverNumber"><span class="driverNumberValue">{{driver.mobileNumber}}</span></div>
+                                <div class="driverEmail"><span class="driverEmailValue">{{driver.emailId}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fixed-action-btn fab-new-driver" style="bottom: 45px; right: 45px;">
+        <a class="btn-floating btn-large waves-effect waves-light red button-link add-button" ng-click="addDriver()">
+            <i class="large mdi-content-add"></i>
+        </a>
+    </div>
+
+    <div id="createDriverModel" class="modal create-modal" ng-controller="createDriverCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Create driver</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="userDetails details">
+                        <div class="row customer-select-row" ng-if="userDetails.userType!='USER'">
+                            <div class="input-field customer-select-div">
+                                <label for="customerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="customerSelect" id="customerSelect" ng-model="newDriver.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row driver-name-details">
+                            <div class="input-field col s12">
+                                <input id="DriverName" type="text" class="validate" ng-model="newDriver.name"  ng-focus="inputFocused()">
+                                <label for="DriverName">Name*</label>
+                                <div class="errorName errorNameDriverName">
+                                    <div id="DriverName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row driver-phone-details">
+                            <div class="input-field col s12 m6">
+                                <input id="DriverNumber" type="text" class="validate" ng-model="newDriver.mobileNumber"  ng-focus="inputFocused()">
+                                <label for="DriverNumber">Mobile number*</label>
+                                <div class="errorName errorNameDriverNumber">
+                                    <div id="DriverNumber-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="DriverEmail" type="text" class="validate" ng-model="newDriver.emailId"  ng-focus="inputFocused()">
+                                <label for="DriverEmail">Email id*</label>
+                                <div class="errorName errorNameDriverEmail">
+                                    <div id="DriverEmail-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-click="saveDriver()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="editDriverModel" class="modal create-modal" ng-controller="editDriverCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Edit driver</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="userDetails details">
+                        <div class="row customer-select-row" ng-if="userDetails.userType!='USER'">
+                            <div class="input-field customer-select-div">
+                                <label for="editCustomerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="editCustomerSelect" id="editCustomerSelect" ng-model="openedDriver.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row driver-name-details">
+                            <div class="input-field col s12">
+                                <input id="EditDriverName" type="text" class="validate" ng-model="openedDriver.name"  ng-focus="inputFocused()">
+                                <label for="EditDriverName">Name*</label>
+                                <div class="errorName errorNameEditDriverName">
+                                    <div id="EditDriverName-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row driver-phone-details">
+                            <div class="input-field col s12 m6">
+                                <input id="EditDriverNumber" type="text" class="validate" ng-model="openedDriver.mobileNumber"  ng-focus="inputFocused()">
+                                <label for="EditDriverNumber">Mobile number*</label>
+                                <div class="errorName errorNameEditDriverNumber">
+                                    <div id="EditDriverNumber-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="EditDriverEmail" type="text" class="validate" ng-model="openedDriver.emailId"  ng-focus="inputFocused()">
+                                <label for="EditDriverEmail">Email id*</label>
+                                <div class="errorName errorNameEditDriverEmail">
+                                    <div id="EditDriverEmail-error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="!openedDriver.editClicked" ng-click="editDriver()">EDIT</a>
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="openedDriver.editClicked" ng-click="saveDriver()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ConfirmationModel" class="ConfirmationModel modal">
+        <div class="model-content">
+            <div class="row content">
+                <div class="col s12">
+                    <div class="row confirmmessage">
+                        <div class="col s12">
+                           <span class="deleteText">This action will delete the class permanently ?</span>
+                        </div>
+                    </div>
+                    <div class="row yesnorow">
+                        <div class="col s12">
+                            <div class="yesnoRow">
+                                <a class="waves-effect waves-teal btn-flat ConfirmButton" ng-click="deleteClass()">DELETE</a>
+                                <a class="waves-effect waves-grey btn-flat cancelButton" ng-click="confirmCancel()">CANCEL</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

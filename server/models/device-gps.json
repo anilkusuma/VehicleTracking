@@ -1,0 +1,263 @@
+{
+    "name": "DeviceGps",
+    "options": {
+        "idInjection": false,
+        "mysql": {
+            "schema": "db_ads",
+            "table": "device_gps"
+        }
+    },
+    "properties": {
+        "packetId": {
+            "type": "Number",
+            "id": "serial",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "packet_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "deviceImei": {
+            "type": "String",
+            "required": true,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "device_imei",
+                "dataType": "varchar",
+                "dataLength": 15,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "vehicleId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "vehicle_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "packetTime": {
+            "type": "String",
+            "required": false,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "packet_time",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "latitude": {
+            "type": "String",
+            "required": true,
+            "length": 20,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "latitude",
+                "dataType": "varchar",
+                "dataLength": 20,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "longitude": {
+            "type": "String",
+            "required": true,
+            "length": 20,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "longitude",
+                "dataType": "varchar",
+                "dataLength": 20,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "speed": {
+            "type": "String",
+            "required": true,
+            "length": 4,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "speed",
+                "dataType": "varchar",
+                "dataLength":4,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "N"
+            }
+        },
+        "direction": {
+            "type": "String",
+            "required": false,
+            "length": 5,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "direction",
+                "dataType": "varchar",
+                "dataLength": 5,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "noOfSat": {
+            "type": "String",
+            "required": false,
+            "length": 3,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "no_of_sat",
+                "dataType": "varchar",
+                "dataLength": 3,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "odometer": {
+            "type": "String",
+            "required": false,
+            "length": 15,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "odometer",
+                "dataType": "varchar",
+                "dataLength": 15,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "alertId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "alert_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "packetSerialNumber": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "packet_serial_number",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "companyId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "company_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "userId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "user_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            }
+        },
+        "createdOn": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "created_on",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        },
+        "lastUpdatedTime": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "last_updated_time",
+                "dataType": "timestamp",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            }
+        }
+    },
+    "validations": [],
+    "relations": {
+        "alert": {
+            "type": "hasOne",
+            "model": "DeviceAlerts",
+            "foreignKey": "alertId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

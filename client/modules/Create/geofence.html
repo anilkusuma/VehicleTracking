@@ -1,0 +1,183 @@
+<link href="./modules/Create/create.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="Fences top-id-div" id="Fences">
+    <div class="fences-main main-div">
+        <div class="row users-select">
+            <div class="input-field user-select-div">
+                <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                </select>
+            </div>
+        </div>
+        <div class="row fences-row cards-row">
+            <div class="col cards-col fences-col" ng-repeat="fence in fences track by fence.geoFenceId">
+                <div class="card hoverable fences-card object-card" >   
+                    <div class="deleteDiv">
+                        <div class="deletButton">
+                            <a class="btn-floating btn waves-effect waves-light red button-link delete-driver-button" ng-click="deleteFence(fence.geoFenceId)">
+                                <i class="mdi-action-delete"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="cardContents" ng-click="editFence(fence)">
+                        <div class="waves-effect waves-block waves-light fenceMapDisplayDiv">
+                            <a id="{{fence.geoFenceId}}" class="fence_details_link static_map_a">
+                                <img src="https://maps.googleapis.com/maps/api/staticmap?center={{fence.centerLat}},{{fence.centerLong}}&zoom=13&size=300x300&maptype=roadmap&markers=color:red%7C{{fence.centerLat}},{{fence.centerLong}}&key=AIzaSyDBm0t5b6gyo6Go1EbYXT203rXeGOvfNug" alt="poi-img">
+                            </a>
+                        </div>
+                        <div class="card-title-div poi-card-title" style="margin-top: 20px;">
+                            <span class="fence_name">{{fence.geoFenceName}}</span>
+                        </div>
+                        <div class="fence-details-div">
+                            <div class="card-content-div">
+                                <div class="fenceRadius "  style="margin-bottom: 15px;"><span class="fenceRadiusValue">{{fence.radiusInMeters}} Meters</span></div>
+                                <div class="fenceAddress" style="text-align: center;"><span class="fenceAddressValue">{{fence.centerString}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fixed-action-btn fab-new-fence" style="bottom: 45px; right: 45px;">
+        <a class="btn-floating btn-large waves-effect waves-light red button-link add-button" ng-click="addFence()">
+            <i class="large mdi-content-add"></i>
+        </a>
+    </div>
+
+    <div id="createFenceModel" class="modal create-modal" ng-controller="createFenceCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Create Geo Fence</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="fenceDetails details">
+                        <div class="row customer-select-row" ng-if="userDetails.userType!='USER'">
+                            <div class="input-field customer-select-div">
+                                <label for="customerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="customerSelect" id="customerSelect" ng-model="newFence.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row fence-name-details">
+                            <div class="input-field col s12 m6">
+                                <input id="FenceName" type="text" class="validate" ng-model="newFence.geoFenceName"  ng-focus="inputFocused()">
+                                <label for="FenceName">Name*</label>
+                                <div class="errorName errorNameFenceName">
+                                    <div id="FenceName-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="fenceRadius" type="text" disabled class="validate" ng-model="newFence.radiusInMeters">
+                                <label for="fenceRadius" class="active">Radius in meters</label>
+                            </div>
+                        </div>
+                        <div class="row fence-lat-long-details">
+                            <div class="input-field col s12 m6">
+                                <input id="FenceLat" type="text" disabled class="validate" ng-model="newFence.centerLat">
+                                <label for="FenceLat" class="active">Center latitude</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="FenceLong" type="text" disabled class="validate" ng-model="newFence.centerLong">
+                                <label for="FenceLong" class="active">Center longitude</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="FenceMap" id="FenceMap">
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-click="saveFence()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editFenceModel" class="modal create-modal" ng-controller="editFenceCtr">
+        <div class="model-content">
+            <div class="modalHeader row z-depth-1">
+                <div class="col s12">
+                    <div class="HeaderText">
+                        <span class="modal-image"><i class="mdi-action-account-balance-wallet modal-image-i white-text left"></i></span>
+                        <span class="modal-text">Edit Geo Fence</span>
+                        <span class="close-image"><i class="mdi-content-clear close-i white-text" ng-click="closeModel()"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row modalContentRow">
+                <div class="col modalContentCol s12">
+                    <div class="fenceDetails details">
+                        <div class="row customer-select-row" ng-if="userDetails.userType!='USER'">
+                            <div class="input-field customer-select-div">
+                                <label for="editCustomerSelect" class="active">Customer</label>
+                                <select class="customer-select" id="editCustomerSelect" id="editCustomerSelect" ng-model="openedFence.selectUser" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row fence-name-details">
+                            <div class="input-field col s12 m6">
+                                <input id="EditFenceName" type="text" class="validate" ng-model="openedFence.geoFenceName"  ng-focus="inputFocused()">
+                                <label for="EditFenceName">Name*</label>
+                                <div class="errorName errorNameEditFenceName">
+                                    <div id="EditFenceName-error"></div>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="EditFenceRadius" type="text" disabled class="validate" ng-model="openedFence.radiusInMeters">
+                                <label for="EditFenceRadius" class="active">Radius in meters</label>
+                            </div>
+                        </div>
+                        <div class="row fence-lat-long-details">
+                            <div class="input-field col s12 m6">
+                                <input id="EditFenceLat" type="text" disabled class="validate" ng-model="openedFence.centerLat">
+                                <label for="EditFenceLat" class="active">Center latitude</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="EditFenceLong" type="text" disabled class="validate" ng-model="openedFence.centerLong">
+                                <label for="EditFenceLong" class="active">Center longitude</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="EditFenceMap" id="EditFenceMap">
+                    </div>
+                </div>
+            </div>
+            <div class="row footerRow">
+                <div class="FooterButtons">
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="!openedFence.editClicked" ng-click="editFence()">EDIT</a>
+                    <a class="waves-effect waves-light btn-raised btn sendbutton" ng-if="openedFence.editClicked"  ng-click="saveFence()">SAVE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ConfirmationModel" class="ConfirmationModel modal">
+        <div class="model-content">
+            <div class="row content">
+                <div class="col s12">
+                    <div class="row confirmmessage">
+                        <div class="col s12">
+                           <span class="deleteText">This action will delete the class permanently ?</span>
+                        </div>
+                    </div>
+                    <div class="row yesnorow">
+                        <div class="col s12">
+                            <div class="yesnoRow">
+                                <a class="waves-effect waves-teal btn-flat ConfirmButton" ng-click="deleteClass()">DELETE</a>
+                                <a class="waves-effect waves-grey btn-flat cancelButton" ng-click="confirmCancel()">CANCEL</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

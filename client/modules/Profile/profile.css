@@ -1,0 +1,132 @@
+.action-button{
+    padding-top : 30px;
+}
+.hidden
+{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 99;
+    font-size: 50px;
+    cursor: pointer;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter: Alpha(Opacity=0);
+}
+
+
+
+.user-details-x .card {
+    padding: 25px;
+}
+
+
+.image-div {
+    width: 100%;
+    height: 400px;
+    
+}
+
+image-inner-div{
+    height: 400px;
+}
+
+.image-div img {
+    bottom : 0;
+    height: 400px;
+    width: 100%
+}
+.add-user-content {
+    padding-top: 15px;
+}
+.details-div-content {
+    padding: 40px;
+}
+.details-div-content .col {
+    padding-bottom: 20px;
+}
+
+
+.send-button {
+    padding-top:20px;
+}
+
+.add-user-content {
+    padding-top: 25px;
+}
+
+
+.user-details-x {
+    padding-top: 15px;
+}
+
+
+
+input.header-search-input{
+    padding-right: 98px !important;
+}
+
+.save-button-row {
+    padding-top:30px;
+}
+
+.save-button {
+    margin-top:20px;
+}
+
+.error-message-row{
+    padding-top: 10px;
+    display: none;
+}
+
+.error-message-row {
+    background-color: #F1EEEE;
+}
+
+
+#confirmation-modal{
+    height: 150px !important;
+    width: 300px !important;
+    border-radius: 10px !important;
+}
+
+#update-user-modal {
+    height: 150px !important;
+    width: 300px !important;
+    border-radius: 10px !important;
+}
+
+#update-userpass-modal {
+    height: 150px !important;
+    width: 300px !important;
+    border-radius: 10px !important;
+}
+.error-card {
+    padding: 15px;
+}
+#UserDetails {
+    margin-top: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+    .details-div {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+        background-color: white;
+    }
+    .user-details-x .card {
+        height: auto;
+    }
+}
+
+
+@media only screen and (min-width: 600px) {
+    .details-div {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 10px;
+        background-color: white;
+    }
+}
