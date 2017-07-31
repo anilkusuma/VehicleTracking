@@ -145,7 +145,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
     };
     $scope.vehicleChanged = function(){
         loadTodayHistory();
-    }
+    };
     var loadTodayHistory = function(){
         showPreloader();
         HistorySerive.getTodayHistory($scope.selectedVehicle.deviceImei,function(status,history){
@@ -330,10 +330,10 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
             , zIndex: null
             , boxStyle: {
                 background : "white",
-                opacity: 0.9
-              , width: "350px"
-              ,padding : "10px"
-              ,border: "1px solid black"
+                opacity: 0.9,
+                width: "350px",
+                padding : "10px",
+                border: "1px solid black"
             }
             , closeBoxMargin: "10px 5px 0px 2px"
             , closeBoxURL: ""

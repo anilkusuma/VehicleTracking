@@ -21,8 +21,8 @@
                                 <th data-field="vehicle_number">vehicle Number</th>
                                 <th data-field="vehicle_location">vehicle Location</th>
                                 <th data-field="vehicle_speed">Vehicle Speed (Km/Hr)</th>
-                                <th data-field="vehicle_odomer">Vehicle Odometer (Km)</th>
-                                <th data-field="packet_time">Last Updated Time</th>
+                                <th data-field="vehicle_odomer">Distance Covered Today (Km)</th>
+                                <th data-field="packet_time" ng-if="userDetails.userType!='USER'">Last Updated Time</th>
                             </tr>
                         </thead>
 
@@ -92,91 +92,6 @@
         </div>
     </div>
 </div>
-<!--
-    <div class="DashboardGraph">
-        <div class="row">
-            <div class="col s12 m6 DashboardGraphFuel">
-                <div class="card DashboardGraphFuelCard" id="DashboardGraphFuelCard">
-                    <canvas id="myFuelChart">
-                        
-                    </canvas>
-                </div>
-            </div>
-            <div class="col s12 m6 DashboardGraphSpeed">
-                <div class="card DashboardGraphSpeedCard" id="DashboardGraphSpeedCard">
-                    <canvas id="mySpeedChart">
-                        
-                    </canvas>
-                </div>
-            </div>
-        </div>
-    </div>
 
-<div class="DashboardCount">
-        <div class="row">
-            <div class="col s12 m6 l3">
-                <div class="card vehicles-card">
-                    <div class="card-content  white-text">
-                        <div class="row">
-                            <div class="col s6">
-                                <i class="mdi-maps-local-shipping"></i>
-                            </div>
-                            <div class="col s6">
-                                <p class="drivers-card-p">Total vehicles </p>
-                                <p class="drivers-count"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m6 l3">
-                <div class="card drivers-card">
-                    <div class="card-content  white-text">
-                        <div class="row">
-                            <div class="col s6">
-                                <i class="mdi-action-assignment-ind"></i>
-                            </div>
-                            <div class="col s6">
-                                <p class="drivers-card-p">Total Drivers </p>
-                                <p class="drivers-count"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m6 l3">
-                <div class="card trips-card">
-                    <div class="card-content white-text">
-                        <div class="row">
-                            <div class="col s6">
-                                <i class="mdi-maps-directions"></i>
-                            </div>
-                            <div class="col s6">
-                                <p class="drivers-card-p">Total Routes</p>
-                                <p class="drivers-count"> 12 </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m6 l3">
-                <div class="card geofence-card">
-                    <div class="card-content white-text">
-                        <div class="row">
-                            <div class="col s6">
-                                <i class="mdi-maps-my-location"></i>
-                            </div>
-                            <div class="col s6">
-                                <p class="drivers-card-p">Total Geo-Fences </p>
-                                <p class="drivers-count"> 4 </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
--->
-    
 
 

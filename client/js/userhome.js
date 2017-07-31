@@ -144,6 +144,10 @@ if(selector == null || validator== null || userID == null || userType == null ||
                 templateUrl: '/modules/Reports/distanceReports.html',
                 controller: 'distanceReportsCtr'
             })
+            .when('/settings', {
+                templateUrl: '/modules/Settings/settings.html',
+                controller: 'settingsCtr'
+            })
             .when('/profile', {
                 templateUrl: '/modules/Profile/profile.html',
                 controller: 'profileCtr'
@@ -286,7 +290,13 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
     var showPage = function(){
         var name = $rootScope.userDetails.name;
         $scope.username = name.toTitleCase();
-        $scope.userRoal = $rootScope.userDetails.userType.toTitleCase();
+        if($rootScope.userDetails.userType == 'COMPANY'){
+            $scope.userRoal = 'Agency';
+        }else if ($rootScope.userDetails.userType == 'COMPANY'){
+            $scope.userRoal = 'Client'; 
+        }else{
+            $scope.userRoal = 'Admin';
+        }
         $rootScope.refreshImage();
         if(deviceDetector.isDesktop()){
             $(".button-collapse").sideNav();

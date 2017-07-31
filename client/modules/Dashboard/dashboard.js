@@ -22,7 +22,17 @@ app.factory('DashboardService',['$http','$rootScope',function($http,$rootScope){
             callback("ERROR");  
         });
     };
-        
+    DashboardServices.getTodayOdometer = function(imei,callback){
+        var url = '/api/DeviceGps/TodaysOdometer?imei='+imei;
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function successCallback(response) {
+            callback(response.data.returnStatus,response.data.responseData.distanceCovered);
+        },function errorCallback(response) {
+            callback("ERROR");  
+        });
+    }
     return DashboardServices;
 }]);
 
@@ -32,6 +42,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
     showPreloader();
     $scope.img = new Image();
     $scope.img.src = "./images/Truck Top View ex 1X1 50 pix.png";
+    //$scope.img.src = "./images/BikeTopView.png";
 	var resetAllDashboardVariables = function(){
         $scope.dashboardVariable = {};
 	    $scope.dashboardVariable.Map = "";
@@ -137,22 +148,57 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
     };
 
     var loadDashboardMap = function(){
-        
+        var styles = [
+            {
+                "featureType": "poi",
+                "elementType": "all",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "labels.icon",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit",
+                "elementType": "all",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            }
+        ];
+        var styledMap = new google.maps.StyledMapType(styles, {
+            name: "Styled Map"
+        });
         var mapOptions= {
-                            center: new google.maps.LatLng(17.473075,78.482160),
-                            zoom:8,
-                            mapTypeControl:true,
-                            streetViewControl:false,
-                            scrollwheel: false,
-                            draggable: true,
-                            fullscreenControl:true
-                        };
+            center: new google.maps.LatLng(17.473075,78.482160),
+            zoom:8,
+            mapTypeControlOptions: {
+                mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+            },
+            streetViewControl:false,
+            scrollwheel: false,
+            draggable: true,
+            fullscreenControl:true
+        };
         $scope.dashboardVariable.Map = new google.maps.Map(document.getElementById('DashboardMapContent'),mapOptions);
+        $scope.dashboardVariable.Map.mapTypes.set('map_style', styledMap);
+        $scope.dashboardVariable.Map.setMapTypeId('map_style');
     };
     var getLocationDetails = function(vehicle){
         DashboardService.getVehicleLatestPacket(vehicle.deviceImei,function(status,location){
             if(status == "SUCCESS"){
-                if(moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') != vehicle.packetTime || vehicle.packetTime == "" || true){
+                if(moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') != vehicle.packetTime || vehicle.packetTime == ""){
                     vehicle.latitude = location[0].latitude;
                     vehicle.longitude = location[0].longitude;
                     vehicle.speed = location[0].speed;
@@ -180,7 +226,12 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                                 vehicle.vehicleLocation = address;
                             },0,true);
                         });
-                        populateMap(vehicle);
+                        DashboardService.getTodayOdometer(vehicle.deviceImei,function(status,odometer){
+                            if(status == "SUCCESS" || status == "EMPTY"){
+                                vehicle.odometer = odometer;
+                            }
+                            populateMap(vehicle);
+                        });
                     }
                 }
             }else if(status == "FAILED"){
@@ -192,8 +243,6 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                                                     },2000,true);
         });
     };
-
-
     $scope.showFlagChange = function($index){
         if($scope.vehicles[$index].showFlag){
             if($scope.vehicles[$index].vehicleMarker !== ""){
@@ -255,7 +304,8 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         }
     };
     var updateInfoBox = function(vehiclev){
-        var content = "Vehicle Number: " + vehiclev.deviceName+ "<br/>" + "Speed : " + vehiclev.speed + " KMPH" + "<br/>" + "Last Onlie : " + vehiclev.packetTime + "<br/>" + "Total Odometer : " + vehiclev.odometer  + " Km" + "<br/>" ;
+        //"<div class='content'>Last Onlie : " + vehiclev.packetTime + "</div>" +
+        var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" + "<div class='content'>Distance travelled today : " + vehiclev.odometer  + " Km" + "</div>" ;
         vehiclev.infobox.setContent(content);
         vehiclev.infobox.setPosition(vehiclev.vehicleMarker.getPosition());
     };
@@ -364,7 +414,6 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                     }
                 }
                 ib.open($scope.dashboardVariable.Map, vehicle.vehicleMarker);
-                
             });
             return ib;
         }
@@ -452,8 +501,6 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             canvas.restore();
         }
     };
-
-
     if($rootScope.userDetailsDone){
         showPreloader();
         $timeout(init,0,false);

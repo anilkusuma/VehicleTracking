@@ -1,0 +1,129 @@
+<link href="/modules/Settings/settings.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div id="Settings" class="Settings">
+    <div class="row users-select">
+        <div class="input-field user-select-div">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            </select>
+        </div>
+    </div>
+    <div class="row report-gen-filter filter-div">
+        <div class="filter-card">
+            <div class="card">
+                <div class="row filter-row">
+                    <div class="col s12 l4 fromDateCol dateCol" ng-focus="inputFocused()">
+                        <div class="from-date"  ng-controller="testCtrl">
+                            <label for="fromDate" active class="active">Date</label>
+                            <input class="form-control" type='text' class="fromDate" id="fromDate" ng-model='fromDate' placeholder="Select from date" date-time-picker-dropdown readonly="readonly"  display-mode="date" display-format='d/MM/yyyy' ng-focus="inputFocused()"/>
+                            <div class="errorName errorNameFromDate">
+                                <div id="FromDate-error"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 l4 vehicleSelect">
+                        <div class="input-field  vehicle-select-div">
+                            <label for="vehicle_number" id="vehicleNumberLabel" class="active">Select Vehicle</label>
+                            <select class="vehicle-select" id="replayVehicleNumberSelect" ng-model="selectedVehicle" ng-options="vehicle as vehicle.deviceName for vehicle in vehicles track by vehicle.deviceId" ng-change="vehicleChanged()">
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col s12 l4 button-col">
+                        <div class="submit-button">
+                            <a class="waves-light white-text teal filter-submit-button darken-2 btn"  ng-click="submitReport()"></i>Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="settings-tab">
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <ul class="tabs">
+                    <li class="tab col s6 settings-table-li"><a class="settings-table active" href="#SettingsTableTab">Table view</a></li>
+                    <li class="tab col s6 settings-map-li"><a class="settings-map" href="#SettingsMapTab">Map view</a></li>
+                </ul>
+                <div id="SettingsMapTab" class="col tab-divs s12">
+                    <div class="SettingsMapDiv" id="SettingsMapDiv">
+                    </div>
+                </div>
+                <div id="SettingsTableTab" class="col s12 tab-divs">
+                    <div class="DetailDayTable">
+                        <div class="table reportsTable">
+                            <table id="detailday-table" class="highlight responsive-table" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th data-field="vehicle_number">Packet Number</th>
+                                        <th data-field="packet_time">Packet Time</th>
+                                        <th data-field="vehicle_latitude">Latitude</th>
+                                        <th data-field="vehicle_longitude">Longitude</th>
+                                        <th data-field="vehicle_speed">Speed(Km/Hr)</th>
+                                        <th data-field="vehicle_odometer">Odometer(Km)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="EditPointDiv" class="EditPointDiv">
+        <div class="pointDetails details card">
+            <div class="row packet_id_row">
+                <div class="input-field col s12 m6">
+                    <input id="packetId" type="text" read-only class="validate" disabled="disabled" ng-model="editPacket.packetId" >
+                    <label for="packetId" class="active">Packet Id</label>
+                </div>
+                <div class="col fromDateCol dateCol m6 s12" ng-focus="inputFocused()">
+                    <div class="edit-date"  ng-controller="testCtrl">
+                        <label for="editDate" active class="active">Packet date</label>
+                        <input class="form-control" type='text' class="editDate" id="editDate" ng-model='editPacket.packetTime' placeholder="Select packet date" date-time-picker-dropdown readonly="readonly"  display-mode="date-time" display-format='dd/MM/yyyy HH:mm:ss' ng-focus="inputFocused()"/>
+                        <div class="errorName errorNameEditDate">
+                            <div id="EditDate-error"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row location_row">
+                <div class="input-field col s12 m6">
+                    <input id="PacketLatitude" type="number" step="any" class="validate" min="0" ng-model="editPacket.latitude" readonly="readonly" disabled="disabled"  ng-focus="inputFocused()">
+                    <label for="PacketLatitude" class="active">Latitude*</label>
+                    <div class="errorName errorNamePacketLatitude">
+                        <div id="PacketLatitude-error"></div>
+                    </div>
+                </div>
+                <div class="input-field col s12 m6">
+                    <input id="PacketLongitude" type="number" step="any" class="validate" min="0" ng-model="editPacket.longitude" readonly="readonly" disabled="disabled" ng-focus="inputFocused()">
+                    <label for="PacketLongitude" class="active">Longitude*</label>
+                    <div class="errorName errorNamePacketLongitude">
+                        <div id="PacketLongitude-error"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row speed_row">
+                <div class="input-field col s12 m6">
+                    <input id="PacketSpeed" type="number" class="validate" step="any" min="0" ng-model="editPacket.speed"  ng-focus="inputFocused()">
+                    <label for="PacketSpeed" class="active">Speed*</label>
+                    <div class="errorName errorNamePacketSpeed">
+                        <div id="PacketSpeed-error"></div>
+                    </div>
+                </div>
+                <div class="input-field col s12 m6">
+                    <input id="PacketOdometer" type="number" class="validate" step="any" min="0"  ng-model="editPacket.odometer"  ng-focus="inputFocused()">
+                    <label for="PacketOdometer" class="active">Odometer*</label>
+                    <div class="errorName errorNamePacketOdometer">
+                        <div id="PacketOdometer-error"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="FooterButton">
+                <a class="waves-effect waves-light btn deletebutton" ng-click="deletePacket()">DELETE</a>
+                <a class="waves-effect waves-light btn-raised btn sendbutton" ng-click="savePacket()">SAVE</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

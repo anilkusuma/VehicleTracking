@@ -139,7 +139,7 @@
                                                 <i class="mdi-maps-local-shipping"></i>Vehicles
                                             </a>
                                         </li>
-                                        <li class="nav-li drivers-li bold" ng-if="adminType || companyType || userType">
+                                        <!-- <li class="nav-li drivers-li bold" ng-if="adminType || companyType || userType">
                                             <a id="drivers" href="drivers" class="waves-effect waves-cyan">
                                                 <i class="mdi-action-assignment-ind"></i>Drivers
                                             </a>
@@ -158,10 +158,10 @@
                                             <a id="users" href="users" class="waves-effect waves-cyan">
                                                 <i class="mdi-social-people"></i>Users
                                             </a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-li customers-li bold" ng-if="adminType || companyType ">
                                             <a id="customers" href="customers" class="waves-effect waves-cyan">
-                                                <i class="fa fa-university"></i>Customers
+                                                <i class="fa fa-university"></i>Clients
                                             </a>
                                         </li>
 		                            </ul>
@@ -181,16 +181,21 @@
 		                                </li>
 		                                <li class="nav-li stoppagereport-li" ng-if="adminType || companyType || userType" ><a id="stoppageReports" href="reports/stoppage" class="waves-effect waves-cyan">Stoppage Report</a>
 		                                </li>
-		                                <li class="nav-li overspeedreport-li" ng-if="adminType || companyType || userType"><a id="overSpeedReports" href="/reports/overspeed" class="waves-effect waves-cyan">Over Speed Report</a>
+		                                <!-- <li class="nav-li overspeedreport-li" ng-if="adminType || companyType || userType"><a id="overSpeedReports" href="/reports/overspeed" class="waves-effect waves-cyan">Over Speed Report</a>
 		                                </li>
                                         <li class="nav-li geofencereports-li" ng-if="adminType || companyType || userType"><a id="geoFenceReports" href="/reports/geofence" class="waves-effect waves-cyan">Geofence Report</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-li distancereports-li" ng-if="adminType || companyType || userType"><a id="distanceReports" href="/reports/distance" class="waves-effect waves-cyan">Distance Report</a>
                                         </li>
 		                            </ul>
 		                        </div>
 		                    </li>
 		                </ul>
+                    </li>
+                    <li class="nav-li settings-li bold" ng-if="adminType || companyType ">
+                        <a id="settings" href="/settings" class="waves-effect waves-cyan">
+                            <i class="fa fa-pencil"></i>Settings
+                        </a>
                     </li>
                     <li class="li-hover"><div class="divider"></div></li>
                     <li class="li-hover"><p class="ultra-small margin more-text">PAGON</p></li>
@@ -309,5 +314,6 @@
     <script type="text/javascript" src="/modules/History/history.js"></script> 
     <script type="text/javascript" src="/modules/Reports/reports.js"></script>
     <script type="text/javascript" src="/modules/Profile/profile.js"></script>
+    <script type="text/javascript" src="/modules/Settings/settings.js"></script>
 </body>
 </html>
