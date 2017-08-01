@@ -34,6 +34,19 @@ app.factory('SettingsService',['$http','$rootScope','$timeout',function($http,$r
             callback("ERROR");
         });
     };
+    SettingsServices.createPacket= function(packet,callback){
+        var url = '/api/DeviceGps/CreatePacket';
+        $http({
+            method: 'POST',
+            url: url,
+            data:packet
+        }).then(function successCallback(response) {
+            callback(response.data.returnStatus,response.data.reason);
+        },function errorCallback(response) {
+            callback("ERROR");
+        });
+    };
+    
     SettingsServices.deletePacket = function(packetId,callback){
         var url = '/api/DeviceGps/DeletePacket?packetId='+packetId;
         $http({
@@ -57,13 +70,14 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
     $scope.bounds = "";
     var clearEditValues = function(){
         $scope.editPacket = {};
+        $scope.editPacket.vehicleId="";
+        $scope.editPacket.deviceImei="";
         $scope.editPacket.packetTime = new Date();
         $scope.editPacket.speed = 0;
         $scope.editPacket.odometer = 0;
         $scope.editPacket.latitude = 0;
         $scope.editPacket.longitude = 0;
         $scope.editPacket.packetId = -1;
-        $scope.EditMarker = undefined;
     }
     clearEditValues();
     $timeout(function(){$('ul.tabs').tabs()},0,false);
@@ -153,9 +167,12 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 clearMap();
                 clearEditValues();
                 SettingsService.getVehicleData($scope.selectedVehicle,moment().format('YYYY-MM-DD'),function(status,packets,vehicle){
+                    $scope.editPacket.vehicleId=$scope.selectedVehicle.vehicleId;
+                    $scope.editPacket.deviceImei=$scope.selectedVehicle.deviceImei;
                     if(status == "SUCCESS"){
                         packets = packets.reverse();
                         vehicle.packets = packets;
+                        
                         hidePreloader({},function(){
                             $timeout(function(){
                                 $(window).trigger('resize');
@@ -205,8 +222,12 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             showPreloader();
             $scope.dataTabel.clear();
             $scope.dataTabel.draw();
+            clearMap();
+            clearEditValues();
             $scope.startTime = moment(startDate).format('YYYY-MM-DD');
             SettingsService.getVehicleData($scope.submittedVehicle,$scope.startTime,function(status,packets,vehicle){
+                $scope.editPacket.vehicleId=$scope.selectedVehicle.vehicleId;
+                $scope.editPacket.deviceImei=$scope.selectedVehicle.deviceImei;
                 if(status == "SUCCESS"){
                     packets = packets.reverse();
                     vehicle.packets = packets;
@@ -252,13 +273,15 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
     };
     var setEditPacketOnClick = function(e){
         $timeout(function(){
-            $scope.editPacket = {};
-            $scope.editPacket.packetTime = new Date();
-            $scope.editPacket.speed = 0;
             $scope.editPacket.latitude = parseFloat(e.latLng.lat().toString().substring(0,10));
             $scope.editPacket.longitude = parseFloat(e.latLng.lng().toString().substring(0,10));
-            $scope.editPacket.odometer=0;
             $scope.editPacket.packetId = -1;
+        },0,true); 
+    }
+    var setDotPacket = function(e){
+        $timeout(function(){
+            $scope.editPacket.latitude = parseFloat(e.latLng.lat().toString().substring(0,10));
+            $scope.editPacket.longitude = parseFloat(e.latLng.lng().toString().substring(0,10));
         },0,true); 
     }
     var placeMarker = function(e){
@@ -292,6 +315,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                                         size    : new google.maps.Size( 7, 7 ),
                                         anchor  : new google.maps.Point( 4, 4 )
                                     },
+                                    draggable : true,
                                     position : point
                                 });
             pointMarker.packet = packets[i];
@@ -337,6 +361,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 selectPacket(markerv.packet);
             },0,true); 
         });
+        google.maps.event.addListener(markerv,'dragend',setDotPacket);
 
         google.maps.event.addListener(markerv, 'mouseout', function () {
             ib.close();
@@ -345,7 +370,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
     };
     
     var updateInfoBox = function(ibv,i,packet){
-        var content = "Packet Number : " +packet.packetId+ "<br/>" + "Speed : " + packet.speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(packet.packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +packet.odometer + "<br/>";
+        var content = "Packet Number : " +packet.packetId+ "<br/>" + "Speed : " + packet.speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(packet.packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +packet.odometer + " Km <br/>";
         ibv.setContent(content);
     };
     var setVariableToMap = function(){
@@ -371,6 +396,8 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             if($scope.pointMarkers[i] != undefined)
                 $scope.pointMarkers[i].setMap(null);
         }
+        if($scope.EditMarker != undefined)
+            $scope.EditMarker.setMap(null);
         resetVariables();
     };
 
@@ -401,7 +428,6 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
         if($scope.EditMarker != undefined){
             $scope.EditMarker.setMap(null);
         }
-        $scope.editPacket = {};
         $scope.editPacket.packetId = packet.packetId;
         $scope.editPacket.packetTime = new Date(packet.packetTime);
         $scope.editPacket.speed = parseInt(packet.speed);
@@ -415,6 +441,8 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             Materialize.toast('Select a valid packet ',2000);
         }
         var packet = {};
+        packet.vehicleId = $scope.editPacket.vehicleId;
+        packet.deviceImei = $scope.editPacket.deviceImei;
         packet.packetId = $scope.editPacket.packetId;
         packet.speed = $scope.editPacket.speed.toString();
         packet.odometer = $scope.editPacket.odometer.toString();
@@ -450,7 +478,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                     Materialize.toast('Packet deleted successfully',2000);
                     Materialize.toast('Refresh to see changes',2000);
                 }else{
-                    Materialize.toast('Error in deleting packet, try again later.',2000);\
+                    Materialize.toast('Error in deleting packet, try again later.',2000);
                 }
             });
         }

@@ -37,7 +37,7 @@
                                 <td class="vehicle_location">{{vehicle.vehicleLocation}}</td>
                                 <td class="vehicle_speed">{{vehicle.speed}}</td>
                                 <td class="vehicle_odometer">{{vehicle.odometer}}</td>
-                                <td class="packet_time">{{vehicle.packetTime}}</td>
+                                <td class="packet_time" ng-if="userDetails.userType!='USER'">{{vehicle.packetTime}}</td>
                             </tr>
                         </tbody>
                     </table>

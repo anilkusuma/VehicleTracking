@@ -748,18 +748,97 @@ module.exports = function(DeviceGps) {
             ],
             http:{path:'/DistanceReport',verb:'get'}
         }
-    );  
+    ); 
+
+
+    DeviceGps.createPacket = function(req,res,next){
+        customLib.validateCookies(req,function(validated,user){
+            if(validated){
+                var user = JSON.parse(user);
+                var userType = user.vtsLogin.userType;
+                var userId="";
+                if(userType == "COMPANY"){
+                    userId = req.body.userId;
+                }
+                else if(userType == "USER") {
+                    result = {};
+                    result.returnStatus="ERROR";
+                    res.send(result);
+                }
+
+                var userLoginName = user.vtsLogin.userName;
+                var companyId = user.vtsLogin.companyId;
+                var packet = {};
+                var object = req.body;
+                console.log('Object is '+JSON.stringify(object));
+                if(object.latitude != null && object.latitude != "" ){
+                    packet.latitude = object.latitude;
+                }
+                if(object.longitude != null && object.longitude != "" ){
+                    packet.longitude = object.longitude;
+                }
+                if(object.speed != null && object.speed != "" ){
+                    packet.speed = object.speed;
+                }
+                if(object.odometer != null && object.odometer != "" ){
+                    packet.odometer = object.odometer;
+                }
+                if(object.packetTime != null && object.packetTime != "" ){
+                    packet.packetTime = moment(object.packetTime,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+                }
+                packet.vehicleId = object.vehicleId;
+                packet.deviceImei = object.deviceImei;
+                packet.userId = userId;
+                packet.companyId = companyId;
+                console.log('Object is '+JSON.stringify(packet));
+                DeviceGps.create(packet,function(err,obj){
+                    if(err){
+                        result = {};
+                        console.log('Error is '+err);
+                        result.returnStatus="ERROR";
+                        res.send(result);
+                    }else if(obj == null){
+                        result = {};
+                        result.returnStatus="EMPTY";
+                        res.send(result);
+                    }else{
+                        result = {};
+                        result.returnStatus="SUCCESS";
+                        res.send(result);
+                    }
+                });
+            }else{
+                result = {};
+                result.returnStatus="FAILED";
+                res.send(result);
+            }
+        });
+    };
+    DeviceGps.remoteMethod(
+        'createPacket',
+        {
+            isStatice:true,
+            accepts:[
+                { arg:'req' ,type:'object','http':{source:'req'}},
+                { arg:'res' ,type:'object','http':{source:'res'}},
+            ],
+            http:{path:'/CreatePacket',verb:'post'}
+        }
+    ); 
 
     DeviceGps.updatePacket = function(req,res,next){
         customLib.validateCookies(req,function(validated,user){
             if(validated){
-
                 var user = JSON.parse(user);
                 var userType = user.vtsLogin.userType;
-                if(userType == "COMPANY")
-                    var userId = req.body.userId;
-                else if(userType == "USER")
-                    var userId = user.userId;
+                var userId = "";
+                if(userType == "COMPANY"){
+                    userId = req.body.userId;
+                }else if(userType == "USER") {
+                    var result = {};
+                    result.returnStatus="ERROR";
+                    res.send(result);
+                }
 
                 var userLoginName = user.vtsLogin.userName;
                 var companyId = user.vtsLogin.companyId;
@@ -845,10 +924,14 @@ module.exports = function(DeviceGps) {
 
                 var user = JSON.parse(user);
                 var userType = user.vtsLogin.userType;
+                var userId = "";
                 if(userType == "COMPANY")
-                    var userId = req.query.userId;
-                else if(userType == "USER")
-                    var userId = user.userId;
+                    userId = req.query.userId;
+                else if (userType == "USER"){
+                    result = {};
+                    result.returnStatus="ERROR";
+                    res.send(result);
+                }
 
                 var companyId = user.vtsLogin.companyId;
 
