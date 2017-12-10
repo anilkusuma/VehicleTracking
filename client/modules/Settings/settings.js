@@ -1,7 +1,7 @@
 app.factory('SettingsService',['$http','$rootScope','$timeout',function($http,$rootScope,$timeout){
     var SettingsServices = {};
     SettingsServices.getVehicleData = function(vehicle,selectedDate,callback){
-        var url = '/api/DeviceGps/DetailedReport?imei='+vehicle.deviceImei+'&selDate='+selectedDate;
+        var url = '/api/DeviceGps/SettingPackets?imei='+vehicle.deviceImei+'&selDate='+selectedDate;
         $http({
             method: 'GET',
             url: url
@@ -112,7 +112,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             var data = $scope.dataTabel.row(this).data();
             var packet = {};
             packet.packetId = data[0];
-            packet.packetTime = data[1];
+            packet.packetTime = moment(data[1],'DD/MM/YYYY HH:mm:ss').format('ddd MMM DD YYYY HH:mm:ss');
             packet.latitude = data[2];
             packet.longitude = data[3];
             packet.speed = data[4].toString();
@@ -167,7 +167,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 clearMap();
                 clearEditValues();
                 SettingsService.getVehicleData($scope.selectedVehicle,moment().format('YYYY-MM-DD'),function(status,packets,vehicle){
-                    $scope.editPacket.vehicleId=$scope.selectedVehicle.vehicleId;
+                    $scope.editPacket.vehicleId=$scope.selectedVehicle.deviceId;
                     $scope.editPacket.deviceImei=$scope.selectedVehicle.deviceImei;
                     if(status == "SUCCESS"){
                         packets = packets.reverse();
@@ -226,7 +226,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             clearEditValues();
             $scope.startTime = moment(startDate).format('YYYY-MM-DD');
             SettingsService.getVehicleData($scope.submittedVehicle,$scope.startTime,function(status,packets,vehicle){
-                $scope.editPacket.vehicleId=$scope.selectedVehicle.vehicleId;
+                $scope.editPacket.vehicleId=$scope.selectedVehicle.deviceId;
                 $scope.editPacket.deviceImei=$scope.selectedVehicle.deviceImei;
                 if(status == "SUCCESS"){
                     packets = packets.reverse();
@@ -278,10 +278,11 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             $scope.editPacket.packetId = -1;
         },0,true); 
     }
-    var setDotPacket = function(e){
+    var setDotPacket = function(e,packet){
         $timeout(function(){
-            $scope.editPacket.latitude = parseFloat(e.latLng.lat().toString().substring(0,10));
-            $scope.editPacket.longitude = parseFloat(e.latLng.lng().toString().substring(0,10));
+            packet.latitude = parseFloat(e.latLng.lat().toString().substring(0,10));
+            packet.longitude = parseFloat(e.latLng.lng().toString().substring(0,10));
+            selectPacket(packet);
         },0,true); 
     }
     var placeMarker = function(e){
@@ -291,7 +292,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 map: $scope.SettingsMap,
                 draggable: true,
                 animation: google.maps.Animation.DROP,
-                title:"New Fence",
+                title:"New Point",
             });  
             //$scope.SettingsMap.panTo(e.latLng);
             google.maps.event.addListener($scope.EditMarker,'dragend',setEditPacketOnClick);
@@ -311,9 +312,9 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             var point = new google.maps.LatLng(packets[i].latitude,packets[i].longitude);
             var pointMarker = new google.maps.Marker({
                                     icon     : {
-                                        url     : "https://maps.gstatic.com/intl/en_us/mapfiles/markers2/measle_blue.png",
-                                        size    : new google.maps.Size( 7, 7 ),
-                                        anchor  : new google.maps.Point( 4, 4 )
+                                        url     : "./images/MapsMarker.png",
+                                        size    : new google.maps.Size(48,48),
+                                        anchor  : new google.maps.Point(24,48)
                                     },
                                     draggable : true,
                                     position : point
@@ -350,21 +351,30 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             , infoBoxClearance: new google.maps.Size(1, 1)
             , isHidden: false
             , pane: "floatPane"
-            , enableEventPropagation: false
+            , enableEventPropagation: true
         };
         var ib = new InfoBox(myOptions);
+
         google.maps.event.addListener(markerv, 'mouseover', function () {
             ib.open($scope.SettingsMap, markerv);
+        });
+        google.maps.event.addListener(markerv, 'mouseout', function () {
+            ib.close();
         });
         google.maps.event.addListener(markerv,'click',function(){
             $timeout(function(){
                 selectPacket(markerv.packet);
             },0,true); 
         });
-        google.maps.event.addListener(markerv,'dragend',setDotPacket);
-
-        google.maps.event.addListener(markerv, 'mouseout', function () {
-            ib.close();
+        google.maps.event.addListener($scope.SettingsMap,'click', function () {
+            for(var i = 0 ; i < $scope.infoBoxes.length ; i++){
+                if($scope.infoBoxes[i] !== ""){
+                    $scope.infoBoxes[i].close();
+                }
+            }
+        });
+        google.maps.event.addListener(markerv,'dragend',function(e){
+            setDotPacket(e,markerv.packet);
         });
         return ib;
     };
@@ -441,7 +451,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             Materialize.toast('Select a valid packet ',2000);
         }
         var packet = {};
-        packet.vehicleId = $scope.editPacket.vehicleId;
+        packet.vehicleId = $scope.editPacket.deviceId;
         packet.deviceImei = $scope.editPacket.deviceImei;
         packet.packetId = $scope.editPacket.packetId;
         packet.speed = $scope.editPacket.speed.toString();
@@ -452,7 +462,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
         if(packet.packetId == -1){
             SettingsService.createPacket(packet,function(status,reason){
                 if(status == "SUCCESS"){
-                    Materialize.toast('Packet updated successfully',2000);
+                    Materialize.toast('Packet created successfully',2000);
                     Materialize.toast('Refresh to see changes',2000);
                 }else{
                     Materialize.toast('Error in updating packet, try again later.',2000);

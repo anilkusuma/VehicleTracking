@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html>
-
-  <head>
-    <title>Pagon | Tracking Solutions </title>
-    	<!-- BEGIN META -->
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content="Pagon,tracking solutions,top,tracking,gps,fleet managment,ranking,software
-		">
-		<meta name="description" content="Pagon School Bus Tracking Software will help school managment in effective managment of their fleet.">
-    	<link rel="icon" href="./favicon.ico" sizes="32x32"/>
+    <head>
+        <title>Pagon | Tracking Solutions </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="Pagon,tracking solutions,top,tracking,gps,fleet managment,ranking,software
+        ">
+        <meta name="description" content="Pagon School Bus Tracking Software will help school managment in effective managment of their fleet.">
+        <link rel="icon" href="./favicon.ico" sizes="32x32"/>
         <link href="./libs/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
-		<link href="http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900" rel="stylesheet" type="text/css"/>
+        <link href="//fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900" rel="stylesheet" type="text/css"/>
         <link type="text/css" rel="stylesheet" href="./css/homesa.css" />
-		<link type="text/css" rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css" />
-		<link type="text/css" rel="stylesheet" href="/css/material-design-iconic-font.css" />
+        <link type="text/css" rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css" />
+        <link type="text/css" rel="stylesheet" href="/css/material-design-iconic-font.css" />
         <style>
-        body {
-            background: #fcfcfc;
-        }
-      
+            body {
+                background: #fcfcfc;
+            }
         </style>
-  </head>
-  <body class="loginBody">
-	<section class="section-account" ng-app="VtsLogin" ng-controller="loginForm">
-		<div class="img-backdrop" style="background-image: url('/images/background.jpg')"></div>
-			<div class="spacer"></div>
-			<div class="row loginRow">
-				<div class="col s12 m8 loginCol">
-                    <div class="brandnameDiv">
-					    <span class="brandSpan">PAGON TECHNOLOGIES</span>
+    </head>
+    <body>
+        <div class="glossy-backround">
+        </div>
+        <div class="loginSection">
+           <section class="section-account" ng-app="VtsLogin" ng-controller="loginForm">
+                <div class="card login">
+                    <div class="pagonLogo loginLogo">
+                        <img src="./images/logo-title.png" alt="Pagon logo">
                     </div>
                     <div class="inputDivs">
-						<div class="usernameDiv">
+                        <div class="usernameDiv">
                             <div class="input-field">
                                 <input type="text" id="userName" name="userName" ng-model="userName" ng-focus="inputFocused('username')" ng-keyup="inputChanged($event)">
                                 <label for="userName">Username</label>
@@ -41,7 +38,7 @@
                                 <div id="username-error"></div>
                             </div>
                         </div>
-						<div class="passwordDiv">
+                        <div class="passwordDiv">
                             <div class="input-field">
                                 <input type="password" id="password" name="password" ng-model="password" ng-focus="inputFocused('password')" ng-keyup="inputChanged($event)">
                                 <label for="password">Password</label>
@@ -49,27 +46,33 @@
                             <div class="errorName errorNamePassword">
                                 <div id="password-error"></div>
                             </div>
-                            <p class="help-block right"><a href="#">Forgotten?</a></p>
+                            <!-- <p class="help-block right"><a href="#">Forgotten?</a></p> -->
                         </div>
-						<div class="rememberMeDiv">
+                        <div class="rememberMeDiv">
                             <input type="checkbox" class="filled-in"  name="rememberMe" id="rememberMe" type="checkbox" ng-model="rememberMe"/>
                             <label for="rememberMe">Remember me</label>
                         </div>
                         <div class="loginbutton">
                            <button class="btn btn-primary btn-raised loginButton" type="button" ng-click="login()">Login</button>
                         </div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<script src="/libs/jquery/jquery-3.1.1.min.js"></script>
-        <script src="/js/js.cookie.js"></script>
-        <script src="/libs/angularjs/angular.min.js"></script>
-        <script src="/libs/angularjs/angular-cookies.min.js"></script>
-        <script src="/libs/momemntjs/moment.js"></script>
-        <script type="application/javascript" src="/libs/materialize/js/materialize.js"></script>
-        <script type="application/javascript" src="/js/login.js"></script> 
-	</body>
+                    </div>
+                </div>
+            </section>
+        </div>     
+    </body>
+
+    <script src="/libs/jquery/jquery-3.1.1.min.js"></script>
+    <script src="/js/js.cookie.js"></script>
+    <script src="/libs/angularjs/angular.min.js"></script>
+    <script src="/libs/angularjs/angular-cookies.min.js"></script>
+    <script src="/libs/momemntjs/moment.js"></script>
+    <script type="application/javascript" src="/libs/materialize/js/materialize.js"></script>
+    <script type="application/javascript" src="/js/login.js"></script> 
 </html>
 
+            
+
+
+
+                            
 							

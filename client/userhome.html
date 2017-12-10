@@ -13,7 +13,7 @@
     <link rel="icon" href="./favicon.ico"/>
 
     <link href="/libs/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="https://fonts.googleapis.com/css?family=Slabo+27px|Material+Icons|Lobster+Two|Aref+Ruqaa|Merriweather|PT+Serif|Roboto+Mono|Cardo|Courgette|Patua+One" rel="stylesheet">
+    <!-- <link href="//fonts.googleapis.com/css?family=Slabo+27px|Material+Icons|Lobster+Two|Aref+Ruqaa|Merriweather|PT+Serif|Roboto+Mono|Cardo|Courgette|Patua+One" rel="stylesheet"> -->
     <link href="/libs/scDateTime/datetime.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="/libs/scDateTime/sc-date-time.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="/libs/font-awesome/css/font-awesome.css" type="text/css" rel="stylesheet" media="screen">
@@ -119,9 +119,9 @@
 		                            <ul>
 		                                <li class="nav-li live-li active" ng-if="userType || adminType || companyType"><a href="live" id="liveTracking"><i class="mdi-maps-my-location"></i>Live</a>
 		                                </li>
-		                                <li class="nav-li history-li" ng-if="userType || adminType || companyType"><a id="historyTracking" href="history"><i class="mdi-action-history"></i>History</a>
+		                                <li class="nav-li history-li" ng-if="adminType || companyType"><a id="historyTracking" href="history"><i class="mdi-action-history"></i>History</a>
 		                                </li>
-		                                <li class="nav-li Replay-li" ng-if="userType || adminType || companyType"><a id="replayTracking" href="replay"><i class="mdi-av-videocam"></i>Playback</a>
+		                                <li class="nav-li Replay-li" ng-if="adminType || companyType"><a id="replayTracking" href="replay"><i class="mdi-av-videocam"></i>Playback</a>
 		                                </li
 		                            </ul>
 		                        </div>
@@ -169,7 +169,7 @@
 		                    </li>
 		                </ul>
 		            </li>
-                    <li class="no-padding" ng-if="adminType || companyType || userType">
+                    <li class="no-padding" ng-if="adminType || companyType">
 	                    <ul class="collapsible" data-collapsible="accordian">
 		                    <li class="nav-li bold reports-li">
 		                    	<a id="reprots" class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-chart"></i>Reports</a>
@@ -199,7 +199,7 @@
                     </li>
                     <li class="li-hover"><div class="divider"></div></li>
                     <li class="li-hover"><p class="ultra-small margin more-text">PAGON</p></li>
-                    <li><a href="http://www.pagon.co.in" target="_blank"><i class="mdi-action-info"></i>About</a>
+                    <li><a href="http://www.pagon.in" target="_blank"><i class="mdi-action-info"></i>About</a>
                     </li>
                     <li><a href="help"><i class="mdi-action-help"></i>Help</a>
                     </li>
@@ -244,8 +244,8 @@
     <footer class="page-footer" style="display:none">
         <div class="footer-copyright indigo darken-4">
             <div class="container">
-                Copyright 2015 <a class="grey-text text-lighten-4" href="http://www.pagon.co.in" target="_blank">Pagon</a> All rights reserved.
-                <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="http://pagon.co.in/">Pagon</a></span>
+                Copyright 2015 <a class="grey-text text-lighten-4" href="http://www.pagon.in" target="_blank">Pagon</a> All rights reserved.
+                <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="http://pagon.in/">Pagon</a></span>
             </div>
         </div>
     </footer>
@@ -284,7 +284,7 @@
 
     
     <!-- google maps libraries -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBm0t5b6gyo6Go1EbYXT203rXeGOvfNug"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiAkJ4U2QTF0XFCPp7cqiKSNGGbt__0HU"></script>
     <script type="text/javascript" src="/libs/map/epoly.js"></script>
     <script type="text/javascript" src="/libs/map/ELabel.js"></script>
     <script type="text/javascript" src="/libs/map/SlidingMarker.min.js"></script>

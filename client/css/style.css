@@ -9,6 +9,13 @@
 
 
 ------------------------------------------*/
+input{
+   margin-bottom: 0px !important;
+}
+.error{
+    color: #cc0000;
+    font-size: smaller;
+}
 .user-select-div{
 
     display: flex;

@@ -42,7 +42,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
     showPreloader();
     $scope.img = new Image();
     $scope.img.src = "./images/Truck Top View ex 1X1 50 pix.png";
-    //$scope.img.src = "./images/BikeTopView.png";
+    //$scope.img.src = "./images/BikeTopView2.png";
 	var resetAllDashboardVariables = function(){
         $scope.dashboardVariable = {};
 	    $scope.dashboardVariable.Map = "";
@@ -194,6 +194,21 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         $scope.dashboardVariable.Map = new google.maps.Map(document.getElementById('DashboardMapContent'),mapOptions);
         $scope.dashboardVariable.Map.mapTypes.set('map_style', styledMap);
         $scope.dashboardVariable.Map.setMapTypeId('map_style');
+        google.maps.event.addListener($scope.dashboardVariable.Map, 'zoom_changed', function() {
+            zoomChangeBoundsListener = 
+                google.maps.event.addListener($scope.dashboardVariable.Map, 'bounds_changed', function(event) {
+                    if (this.getZoom() > 10 && this.initialZoom == true) {
+                        // Change max/min zoom here
+                        this.setZoom(15);
+                        this.initialZoom = false;
+                    }
+                google.maps.event.removeListener(zoomChangeBoundsListener);
+                $timeout(function(){
+                    triggerMapResize();
+                },0,true);
+            });
+        });
+        $scope.dashboardVariable.Map.initialZoom = true;
     };
     var getLocationDetails = function(vehicle){
         DashboardService.getVehicleLatestPacket(vehicle.deviceImei,function(status,location){
@@ -369,13 +384,6 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                                 });
             return epolyMarker;
         },
-        MarkerImage : {
-            url:'./images/Truck Top View ex 1X1 50 pix.png',
-            size: new google.maps.Size(50,50),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(25, 25),
-            rotation: '180'
-        },
         createInfoBox : function(vehicle){
             var location = new google.maps.LatLng(vehicle.latitude,vehicle.longitude);
             var boxText = document.createElement("div");
@@ -493,7 +501,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         plotImage : function(angle,canvas){
             var cosa = Math.cos(angle);
             var sina = Math.sin(angle);
-            canvas.clearRect(0,0,50,50);
+            canvas.clearRect(0,0,25,25);
             canvas.save();
             canvas.rotate(angle);
             canvas.translate(25*sina+25*cosa,25*cosa-25*sina);

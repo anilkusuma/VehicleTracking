@@ -145,6 +145,8 @@ module.exports = function(DeviceGps) {
 
     DeviceGps.getTodayPackets = function(req,res,next){
         var result = {};
+        result.responseData={};
+        
         var start_time = null;
         var end_time = null;
         var startLocation = null;
@@ -155,7 +157,7 @@ module.exports = function(DeviceGps) {
         var distanceCovered = null;
         customLib.validateCookies(req,function(status,user){
             var today = moment().format('YYYY-MM-DD');
-            var todayStart = today+'00:00:00';
+            var todayStart = today+' 00:00:00';
             var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
             if(status){
                 DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:todayStart}},{'packetTime':{lte:todayEnd}}]},order:'packetTime DESC'},function(err,instance){
@@ -248,7 +250,7 @@ module.exports = function(DeviceGps) {
         var result = {};
         customLib.validateCookies(req,function(status,user){
             var today = moment().format('YYYY-MM-DD');
-            var todayStart = today+'00:00:00';
+            var todayStart = today+' 00:00:00';
             var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
             if(status){
                 DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:todayStart}},{'packetTime':{lte:todayEnd}}]},order:'packetTime DESC'},function(err,instance){
@@ -257,6 +259,7 @@ module.exports = function(DeviceGps) {
                         result.returnStatus = "ERROR";
                         res.send(result);
                     }else if(instance.length > 1){
+                        var distanceCovered = instance[0].odometer-instance[instance.length-1].odometer ;
                         distanceCovered = Math.round(distanceCovered*100)/100;
                         result.responseData = {};
                         result.responseData.distanceCovered = distanceCovered;
@@ -288,6 +291,49 @@ module.exports = function(DeviceGps) {
             http:{path:'/TodaysOdometer',verb:'get'}
         }
     );
+     DeviceGps.settingPackets = function(req,res,next){
+        var result = {};
+        customLib.validateCookies(req,function(status,user){
+            var selDate = moment(req.query.selDate,'YYYY-MM-DD').format('YYYY-MM-DD');
+            var selStartDate = selDate+' 00:00:00';
+            var selEndDate = selDate+' 23:59:59';
+            if(status){
+                DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:selStartDate}},{'packetTime':{lte:selEndDate}}]},order:'packetTime DESC'},function(err,instance){
+                    if(err){
+                        result = {};
+                        result.returnStatus = "ERROR";
+                        res.send(result);
+                    }else if(instance.length!=0){
+                        result ={};
+                        result.responseData = instance;
+                        result.returnStatus = "SUCCESS";
+                        res.send(result);
+                    }else{
+                        result = {};
+                        result.returnStatus = "EMPTY";
+                        res.send(result);
+                    }
+                });
+            }
+            else{
+                result = {};
+                result.returnStatus="FAILED";
+                res.send(result);
+            }
+        });
+    };
+    DeviceGps.remoteMethod(
+        'settingPackets',
+        {
+            isStatice:true,
+            accepts:[
+                { arg:'req' ,type:'object','http':{source:'req'}},
+                { arg:'res' ,type:'object','http':{source:'res'}},
+            ],
+            http:{path:'/SettingPackets',verb:'get'}
+        }
+    );
+
     DeviceGps.detailedDayReport = function(req,res,next){
         var result = {};
         customLib.validateCookies(req,function(status,user){
@@ -770,6 +816,7 @@ module.exports = function(DeviceGps) {
                 var companyId = user.vtsLogin.companyId;
                 var packet = {};
                 var object = req.body;
+
                 console.log('Object is '+JSON.stringify(object));
                 if(object.latitude != null && object.latitude != "" ){
                     packet.latitude = object.latitude;

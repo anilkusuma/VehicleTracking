@@ -148,6 +148,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
     };
     var loadTodayHistory = function(){
         showPreloader();
+        $scope.submittedVehicle = $scope.selectedVehicle;
         HistorySerive.getTodayHistory($scope.selectedVehicle.deviceImei,function(status,history){
             if(status == "SUCCESS"){
                 $scope.submittedVehicle.history = history;
