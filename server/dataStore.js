@@ -182,7 +182,7 @@ module.exports = {
                 DataStore.saveStatusPacket(packet,function(status){
                     callback(status);
                 });
-            }else if(packet.packetType == "16" || packetType == "26" || packetType == "27"){
+            }else if(packet.packetType == "16" || packet.packetType == "26" || packet.packetType == "27"){
                 DataStore.saveAlertPacket(packet,function(status){
                     callback(status);
                 });
