@@ -180,7 +180,7 @@ module.exports.distanceBwLatLng = function(lat1,lon1,lat2,lon2) {
     var d = R * c;
     return d;
 }
-module.exports.convertDateTime = function(dateString){
+module.exports.convertDateTime = function(dateString,timezone){
     var moment = require('moment-timezone');
     var year = parseInt(dateString.substring(0,2),16).toString();
     var month = parseInt(dateString.substring(2,4),16).toString();
@@ -190,8 +190,12 @@ module.exports.convertDateTime = function(dateString){
     var second = parseInt(dateString.substring(10,12),16).toString();
     var year = "20"+year;
     var totalTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
-    totalTime = moment.tz(totalTime,'YYYY-M-D H:m:s','Hongkong').tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
-    console.log('totalTime is '+totalTime);
+    console.log('receivedTime is '+totalTime);
+    //totalTime = moment.tz(totalTime,'YYYY-M-D H:m:s','Hongkong').tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
+    totalTime = moment(totalTime,'YYYY-M-D H:m:s').utcOffset(timezone,true);
+    console.log('timeZone time is '+totalTime);
+    totalTime = totalTime.tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
+    console.log('localTime is '+totalTime);
     return totalTime;
 }
 
@@ -212,6 +216,24 @@ module.exports.convertCource = function(state,cource){
     completeCource = parseInt(completeCource,2);
     console.log('cource is '+completeCource);
     return completeCource;
+};
+module.exports.convertTimeZone = function(timezoneinfo){
+    console.log('timezone is '+timezoneinfo.substring(0,3));
+    var timezone = parseInt(timezoneinfo.substring(0,3),16).toString();
+    console.log('timezone is '+timezone);
+    while(timezone.length < 4){
+        timezone = '0'+timezone;
+    }
+    timezone = timezone.substring(0,2)+':'+timezone.substring(2,timezone.length);
+    var zone = timezoneinfo.substring(3,4);
+    zone = parseInt(zone,16);
+    if(zone >= 8){
+        timezone = '-'+timezone;
+    }else{
+        timezone = '\+'+timezone;
+    }
+    console.log('timezone is '+timezone);
+    return timezone;
 };
 module.exports.convertTerminalInformation = function(info){
     info = parseInt(info,16);

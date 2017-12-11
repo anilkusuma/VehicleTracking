@@ -501,7 +501,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         plotImage : function(angle,canvas){
             var cosa = Math.cos(angle);
             var sina = Math.sin(angle);
-            canvas.clearRect(0,0,25,25);
+            canvas.clearRect(0,0,50,50);
             canvas.save();
             canvas.rotate(angle);
             canvas.translate(25*sina+25*cosa,25*cosa-25*sina);

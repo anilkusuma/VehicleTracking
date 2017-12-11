@@ -32,6 +32,8 @@ app.start = function() {
     } else if(cluster.isWorker) {
         app.listen(function() {
             app.emit('started');
+            // var tempTimeZone = customLib.convertTimeZone('0001');
+            // customLib.convertDateTime('110c0b102603',tempTimeZone);
             var baseUrl = app.get('url').replace(/\/$/, '');
             if (app.get('loopback-component-explorer')) {
                 var explorerPath = app.get('loopback-component-explorer').mountPath;
@@ -45,6 +47,7 @@ app.start = function() {
             console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
             sock.setEncoding('hex');
             var loginStatus = false;
+            var timeZone = '+00:00';
             var deviceImei = '';
             var dataString='';
             var startPattern = "7878";
@@ -65,6 +68,11 @@ app.start = function() {
                                     deviceImei = packet.substring(5,20);
                                     loginStatus = true;
                                     var login = {};
+                                    if(packetLength == "11"){
+                                        timeZone = customLib.convertTimeZone(packet.substring(24,28));
+                                    }else{
+                                        timeZone = "+08:00";
+                                    }
                                     login.deviceImei = deviceImei;
                                     login.packetSerialNumber = parseInt(packet.substring(packet.length-8,packet.length-4),16).toString();
                                     login.packetType = packetType;
@@ -87,6 +95,11 @@ app.start = function() {
                                 if(deviceImei == packet.substring(5,20)){
                                     if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring(packet.length-4,packet.length)){
                                         loginStatus = true;
+                                        if(packetLength == "11"){
+                                            timeZone = customLib.convertTimeZone(packet.substring(24,28));
+                                        }else{
+                                            timeZone = "+08:00";
+                                        }
                                         deviceImei = packet.substring(5,20);
                                         login.deviceImei = deviceImei;
                                         login.packetSerialNumber = parseInt(packet.substring(packet.length-8,packet.length-4),16).toString();
@@ -110,9 +123,11 @@ app.start = function() {
                                 if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring((packet.length-4),packet.length)){
                                     console.log('location packet is : '+packet);
                                     var location = {};
+
                                     location.deviceImei = deviceImei;
                                     location.packetType = packetType;
-                                    location.packetTime = customLib.convertDateTime(packet.substring(4,16));
+                                    location.timeZone = timeZone;
+                                    location.packetTime = customLib.convertDateTime(packet.substring(4,16),timeZone);
                                     location.noOfSat = parseInt(packet.substring(17,18),16).toString();
                                     location.latitude = customLib.convertLatOrLong(packet.substring(18,26));
                                     location.longitude =customLib.convertLatOrLong(packet.substring(26,34));;
@@ -164,12 +179,13 @@ app.start = function() {
                                     var alaram = {};
                                     alaram.packetType = packetType;
                                     alaram.deviceImei = deviceImei;
-                                    alaram.packetTime = customLib.convertDateTime(packet.substring(4,16));
+                                    alaram.packetTime = customLib.convertDateTime(packet.substring(4,16),timeZone);
                                     alaram.packetSerialNumber = parseInt(packet.substring(packet.length-8,packet.length-4),16).toString();
 
                                     alaram.location = {};
                                     alaram.location.deviceImei = deviceImei;
-                                    alaram.location.packetTime = customLib.convertDateTime(packet.substring(4,16));
+                                    alaram.location.timeZone = timeZone;
+                                    alaram.location.packetTime = customLib.convertDateTime(packet.substring(4,16),timeZone);
                                     alaram.location.noOfSat = parseInt(packet.substring(17,18),16).toString();
                                     alaram.location.latitude = customLib.convertLatOrLong(packet.substring(18,26));
                                     alaram.location.longitude =customLib.convertLatOrLong(packet.substring(26,34));
