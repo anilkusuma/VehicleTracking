@@ -57,10 +57,12 @@ app.start = function() {
                     }else{
                         var packet = dataString.substring(dataString.indexOf("7878")+4,dataString.indexOf("0d0a"));
                         var packetType = packet.substring(2,4);
+                        var packetLength = packet.substring(0,2);
                         console.log('packet is '+packet+' \n pakcetType is '+packetType+'\n');
+                        11 01 0 358899059006893 2120 0001 015d 1575
                         if(!loginStatus){
                             if(packetType == "01"){
-                                if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring(24,28)){
+                                if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring(packet.length-4,packet.length)){
                                     deviceImei = packet.substring(5,20);
                                     loginStatus = true;
                                     var login = {};
@@ -84,7 +86,7 @@ app.start = function() {
                         }else{
                             if(packetType == "01"){
                                 if(deviceImei == packet.substring(5,20)){
-                                    if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring(24,28)){
+                                    if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring(packet.length-4,packet.length)){
                                         loginStatus = true;
                                         deviceImei = packet.substring(5,20);
                                         login.deviceImei = deviceImei;
@@ -105,7 +107,7 @@ app.start = function() {
                                 }else{
                                     sock.end();
                                 }
-                            }else if(packetType == "12"){
+                            }else if(packetType == "12" || packetType == "22"){
                                 if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring((packet.length-4),packet.length)){
                                     console.log('location packet is : '+packet);
                                     var location = {};
@@ -129,7 +131,7 @@ app.start = function() {
                                 }else{
                                     sock.end();
                                 }
-                            }else if(packetType == "13"){
+                            }else if(packetType == "13" ){
                                 if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring((packet.length-4),packet.length)){
                                     var heartbeat = {};
                                     heartbeat.packetTime = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
@@ -157,7 +159,7 @@ app.start = function() {
                                 }else{
                                     sock.end();
                                 }
-                            }else if(packetType == "16"){
+                            }else if(packetType == "16" || packetType == "26"){
                                 if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring((packet.length-4),packet.length)){
                                     console.log('alaram packet is '+packet);
                                     var alaram = {};
