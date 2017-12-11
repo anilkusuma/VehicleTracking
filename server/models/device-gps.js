@@ -1,12 +1,12 @@
 module.exports = function(DeviceGps) {
 	var customLib = require('../../server/customlib.js');
     var app = require('../../server/server.js');
-    var moment = require('moment');  
+    var moment = require('moment-timezone');
     var bodyParser = require('body-parser').urlencoded({extended: true});
     DeviceGps.lastTwoPacketsOfVehicles = function(req,res,next){
         var result = {};
 		customLib.validateCookies(req,function(status,user){
-            var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+            var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
 			if(status){
 				DeviceGps.find({where:{'and':[{'deviceImei':req.query.imei},{'packetTime':{lte:todayEnd}}]},order:'packetTime DESC',limit:2},function(err,instance){
 					if(err){
@@ -53,7 +53,7 @@ module.exports = function(DeviceGps) {
         var maximumSpeed = null;
         var numberOfStops = null;
         var distanceCovered = null;
-        var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+        var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
 		customLib.validateCookies(req,function(status,user){
 			if(status){
 				DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:req.query.startTime}},{'packetTime':{lte:todayEnd}},{'packetTime':{lte:req.query.endTime}}]},order:'packetTime DESC'},function(err,instance){
@@ -156,9 +156,9 @@ module.exports = function(DeviceGps) {
         var numberOfStops = null;
         var distanceCovered = null;
         customLib.validateCookies(req,function(status,user){
-            var today = moment().format('YYYY-MM-DD');
+            var today = moment().tz('Asia/Calcutta').format('YYYY-MM-DD');
             var todayStart = today+' 00:00:00';
-            var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+            var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
             if(status){
                 DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:todayStart}},{'packetTime':{lte:todayEnd}}]},order:'packetTime DESC'},function(err,instance){
                     if(err){
@@ -249,9 +249,9 @@ module.exports = function(DeviceGps) {
     DeviceGps.getTodaysOdometer = function(req,res,next){
         var result = {};
         customLib.validateCookies(req,function(status,user){
-            var today = moment().format('YYYY-MM-DD');
+            var today = moment().tz('Asia/Calcutta').format('YYYY-MM-DD');
             var todayStart = today+' 00:00:00';
-            var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+            var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
             if(status){
                 DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:todayStart}},{'packetTime':{lte:todayEnd}}]},order:'packetTime DESC'},function(err,instance){
                     if(err){
@@ -340,7 +340,7 @@ module.exports = function(DeviceGps) {
             var selDate = moment(req.query.selDate,'YYYY-MM-DD').format('YYYY-MM-DD');
             var selStartDate = selDate+' 00:00:00';
             var selEndDate = selDate+' 23:59:59';
-            var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+            var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
             if(status){
                 DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:selStartDate}},{'packetTime':{lte:todayEnd}},{'packetTime':{lte:selEndDate}}]},order:'packetTime DESC'},function(err,instance){
                     if(err){
@@ -383,7 +383,7 @@ module.exports = function(DeviceGps) {
             var startTime = moment(req.query.startTime,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
             var endTime = moment(req.query.endTime,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
             var speed = parseInt(req.query.minSpeed);
-            var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+            var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
             if(status){
                 DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:startTime}},{'packetTime':{lte:todayEnd}},{'packetTime':{lte:endTime}}]},order:'packetTime DESC'},function(err,instance){
                     if(err){
@@ -428,7 +428,7 @@ module.exports = function(DeviceGps) {
             var startTime = moment(req.query.startTime,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
             var endTime = moment(req.query.endTime,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
             var speed = parseInt(req.query.minStoppageTime);
-            var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+            var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
             if(status){
                 DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:startTime}},{'packetTime':{lte:todayEnd}},{'packetTime':{lte:endTime}}]},order:'packetTime ASC'},function(err,instance){
                     if(err){
@@ -647,7 +647,7 @@ module.exports = function(DeviceGps) {
         var result = {};
         result.responseData = [];
         result.returnStatus = "SUCCESS";
-        var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+        var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
         (function processOne(){
             if(i>=vehicles.length){
                 callback(result);
@@ -717,7 +717,7 @@ module.exports = function(DeviceGps) {
         var start_time = null;
         var end_time = null;
         var distanceCovered = null;
-        var todayEnd = moment().format('YYYY-MM-DD HH:mm:ss');
+        var todayEnd = moment().tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
         customLib.validateCookies(req,function(status,user){
             if(status){
                 var user = JSON.parse(user);
