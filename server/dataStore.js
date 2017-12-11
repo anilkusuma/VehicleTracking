@@ -174,7 +174,7 @@ module.exports = {
                 callback(false);
                 return;
             }
-            if(packet.packetType == "12"){
+            if(packet.packetType == "12" || packet.packetType == "22"){
                 DataStore.saveGpsPacket(packet,function(status){
                     callback(status);
                 });
@@ -182,7 +182,7 @@ module.exports = {
                 DataStore.saveStatusPacket(packet,function(status){
                     callback(status);
                 });
-            }else if(packet.packetType == "16"){
+            }else if(packet.packetType == "16" || packetType == "26" || packetType == "27"){
                 DataStore.saveAlertPacket(packet,function(status){
                     callback(status);
                 });

@@ -59,7 +59,6 @@ app.start = function() {
                         var packetType = packet.substring(2,4);
                         var packetLength = packet.substring(0,2);
                         console.log('packet is '+packet+' \n pakcetType is '+packetType+'\n');
-                        11 01 0 358899059006893 2120 0001 015d 1575
                         if(!loginStatus){
                             if(packetType == "01"){
                                 if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring(packet.length-4,packet.length)){
@@ -159,7 +158,7 @@ app.start = function() {
                                 }else{
                                     sock.end();
                                 }
-                            }else if(packetType == "16" || packetType == "26"){
+                            }else if(packetType == "16" || packetType == "26" || packetType == "27"){
                                 if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring((packet.length-4),packet.length)){
                                     console.log('alaram packet is '+packet);
                                     var alaram = {};
