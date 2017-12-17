@@ -56,25 +56,25 @@ module.exports = {
             });
         });
     },
-    saveAlertPacket : function(alarm,callback){
+    saveAlertPacket : function(alaram,callback){
         var app = require('./server.js');
         var moment = require('moment');
         var deviceGps = {
-                            "deviceImei":alarm.deviceImei,
-                            "packetTime":alarm.packetTime,
-                            "noOfSat":alarm.location.noOfSat,
-                            "latitude":alarm.location.latitude,
-                            "longitude":alarm.location.longitude,
-                            "speed":alarm.location.speed,
-                            "direction":alarm.location.direction.toString(),
+                            "deviceImei":alaram.deviceImei,
+                            "packetTime":alaram.packetTime,
+                            "noOfSat":alaram.location.noOfSat,
+                            "latitude":alaram.location.latitude,
+                            "longitude":alaram.location.longitude,
+                            "speed":alaram.location.speed,
+                            "direction":alaram.location.direction.toString(),
                             "odometer":'',
-                            "packetSerialNumber":parseInt(alarm.packetSerialNumber),
+                            "packetSerialNumber":parseInt(alaram.packetSerialNumber),
                             "alertId":''
                         };
 
         var deviceAlert =   {
-                                "deviceImei":alarm.deviceImei,
-                                "packetTime":alarm.packetTime,
+                                "deviceImei":alaram.deviceImei,
+                                "packetTime":alaram.packetTime,
                                 "packetSerialNumber":parseInt(alaram.packetSerialNumber),
                                 "oeStatus":alaram.alaramStatus.oeStatus,
                                 "gpsStatus":alaram.alaramStatus.activeStatus,
