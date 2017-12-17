@@ -133,7 +133,7 @@ module.exports.processFileData = function(data,callback){
             if(valid){
                 dataStore.processReceivedPacket(packetString,function(status){
                     if(status){
-                        console.log('customlib packet processed success.');
+                        //console.log('customlib packet processed success.');
                     }else{
                         console.log('customlib packet processing failed.');
                     }
@@ -197,6 +197,60 @@ module.exports.convertDateTime = function(dateString,timezone){
     totalTime = totalTime.tz('Asia/Calcutta').format('YYYY-MM-DD HH:mm:ss');
     console.log('localTime is '+totalTime);
     return totalTime;
+}
+
+module.exports.simulateTestFromMongoDb = function(){
+    var app = require('./server.js');
+    var fs = require('fs');
+    var path = require('path');
+    app.models.Packets.find({'order':'packetId ASC'},function(err,instance){
+        if(err){
+            console.log('Error in testing '+err);
+        }else{
+            if(instance.length > 0){
+                for(var i=0;i<instance.length;i++){
+                    var fileAppendString = '*'+JSON.stringify(instance[i])+'#';
+                    fs.appendFileSync(path.resolve('./packetData.txt'),fileAppendString);
+                }   
+            }
+        }
+    });
+};
+
+module.exports.simulateTestFromMysql = function(deviceImei){
+    var app = require('./server.js');
+    var fs = require('fs');
+    var path = require('path');
+    var moment = require('moment');
+    app.models.TestDeviceGps.find({order:'packetId ASC'},function(err,instance){
+        if(err){
+            console.log('Error in testing '+err);
+        }else{
+            if(instance.length > 0){
+                for(var i=0;i<instance.length;i++){
+                    var location = {};
+
+                    location.deviceImei = instance[i].deviceImei;
+                    location.packetType = "12";
+                    location.timeZone = "+05:30";
+                    location.packetTime = moment(instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+                    location.noOfSat = instance[i].noOfSat;
+                    location.latitude = instance[i].latitude;
+                    location.longitude = instance[i].longitude;
+                    location.speed= instance[i].speed;
+                    if(instance[i].direction != null)
+                        location.direction = instance[i].direction;
+                    else
+                        location.direction = 0;
+                    location.packetSerialNumber = instance[i].packetSerialNumber;
+                    location.alertId = null;
+
+                    var fileAppendString = '*'+JSON.stringify(location)+'#';
+                    fs.appendFileSync(path.resolve('./packetData.txt'),fileAppendString);
+                }   
+            }
+        }
+    });
 }
 
 module.exports.convertLatOrLong = function(latLong){

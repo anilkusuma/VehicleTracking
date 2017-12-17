@@ -1,13 +1,23 @@
 module.exports = {
-    MySqlDB: {
-        host: 'localhost',
-        port: 3306,
-        url : 'mysql://anilkusuma:anilkusuma@localhost/db_ads',
-        database: 'db_ads',
-        password: 'anilkusuma',
-        name : 'MySqlDB',
-        user : 'anilkusuma',
-        connector : 'mysql'
+    "MySqlDB": {
+        "host": "localhost",
+        "port": 3306,
+        "url": "mysql://anilkusuma:anilkusuma@localhost/db_ads",
+        "database": "db_ads",
+        "password": "anilkusuma",
+        "name": "MySqlDB",
+        "user": "anilkusuma",
+        "connector": "mysql"
+    },
+    "GoogleMySqlDB": {
+        "host": "35.187.153.164",
+        "port": 3306,
+        "url": "mysql://anilkusuma:anilkusuma@35.187.153.164/db_ads",
+        "database": "db_ads",
+        "password": "anilkusuma",
+        "name": "GoogleMySqlDB",
+        "user": "anilkusuma",
+        "connector": "mysql"
     },
     "MongoDB": {
         "host": "localhost",

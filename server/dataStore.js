@@ -23,35 +23,65 @@ module.exports = {
                 if(vehicles[0].vehicleOdometer != '0')
                     deviceGps.odometer = vehicles[0].vehicleOdometer;
             }
-            app.models.DeviceGps.find({where:{'deviceImei':deviceGps.deviceImei},order:'packetTime DESC',limit:1},function(err,instance){
+            var currentPacketTime = moment(deviceGps.packetTime,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+            app.models.DeviceGps.find({where:{and:[{'deviceImei':deviceGps.deviceImei},{'packetTime':{lte:currentPacketTime}}]},order:'packetTime DESC',limit:1},function(err,instance){
                 if(instance.length!=0){
-                    if(deviceGps.odometer == '')
-                        deviceGps.odometer = instance[0].odometer;
-
-                    deviceGps.odometer = parseFloat(deviceGps.odometer)+customLib.distanceBwLatLng(instance[0].latitude,instance[0].longitude,deviceGps.latitude,deviceGps.longitude);
+                    var currentOdomter = instance[0].odometer;
+                    var instanceTime = moment(instance[0].packetTime,'ddd MMM DD YYYY HH:mm:ss');
+                    
+                    deviceGps.odometer = parseFloat(instance[0].odometer)+customLib.distanceBwLatLng(instance[0].latitude,instance[0].longitude,deviceGps.latitude,deviceGps.longitude);
                     deviceGps.odometer = deviceGps.odometer.toFixed(4).substring(0,15);
                 }else{
                     if(deviceGps.odometer == '')
                         deviceGps.odometer = '0';
                 }
-                app.models.DeviceGps.create(deviceGps,function(err,obj){
-                    if(err){
-                        console.log('Data Store Failed '+err);
-                        callback(false);
-                    }else if(obj == null){
-                        //console.log('Data Store Failed returned object is null'+err);
-                        callback(false);
-                    }else{
-                        //console.log('Data Store Success returned object '+JSON.stringify(obj));
-                        var veh = {};
-                        veh.vehicleOdometer = deviceGps.odometer;
-                        vehicles[0].updateAttributes(veh,function(err,info){
-                            if(err){
-                                console.log('Error in updating vehicle odometer '+err);
+                app.models.DeviceGps.find({where:{and:[{'deviceImei':deviceGps.deviceImei},{'packetTime':{gt:currentPacketTime}}]},order:'packetTime ASC'},function(ascerr,ascinstance){
+                    var outOfOrder = false;
+                    if(ascinstance.length!=0){
+                        console.log('Outof order packet received at '+ deviceGps.packetTime + ' '+ascinstance.length);
+                        outOfOrder = true;
+                        var acurrentOdometer = parseFloat(ascinstance[0].odometer);
+                        var ainstanceTime = moment(ascinstance[0].packetTime,'ddd MMM DD YYYY HH:mm:ss');
+
+                        var correctedOdometer = parseFloat(deviceGps.odometer)+customLib.distanceBwLatLng(ascinstance[0].latitude,ascinstance[0].longitude,deviceGps.latitude,deviceGps.longitude);
+                        var odometerdiff = correctedOdometer - acurrentOdometer;
+                        if(odometerdiff > 0){
+                            for(var i=0;i<ascinstance.length;i++){
+                                var temp = {};
+                                temp.odometer = parseFloat(ascinstance[i].odometer)+odometerdiff;
+                                temp.odometer = temp.odometer.toFixed(4).substring(0,15);
+                                console
+                                ascinstance[i].updateAttributes(temp,function(err,obj){
+                                    if(err)
+                                        console.log('Odometer earlier packets update failed '+err+JSON.stringify(obj));
+                                    
+                                });
                             }
-                            callback(true);
-                        });
+                        }
                     }
+                    app.models.DeviceGps.create(deviceGps,function(err,obj){
+                        if(err){
+                            console.log('Data Store Failed '+err);
+                            callback(false);
+                        }else if(obj == null){
+                            //console.log('Data Store Failed returned object is null'+err);
+                            callback(false);
+                        }else{
+                            //console.log('Data Store Success returned object '+JSON.stringify(obj));
+                            if(!outOfOrder){
+                                var veh = {};
+                                veh.vehicleOdometer = deviceGps.odometer;
+                                vehicles[0].updateAttributes(veh,function(err,info){
+                                    if(err){
+                                        console.log('Error in updating vehicle odometer '+err);
+                                    }
+                                    callback(true);
+                                });
+                            }else{
+                                callback(true);
+                            }
+                        }
+                    });
                 });
             });
         });
@@ -164,7 +194,7 @@ module.exports = {
         var app = require('./server.js');
         var DataStore = require('./dataStore.js');
 
-        console.log("inside processReceivedPacket : "+packetString);
+        //console.log("inside processReceivedPacket : "+packetString);
 
         if(packetString){
             try{

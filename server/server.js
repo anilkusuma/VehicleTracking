@@ -29,6 +29,7 @@ app.start = function() {
             cluster.fork();
         });
         customLib.getFromFileAndStore();
+        //customLib.simulateTestFromMysql();
     } else if(cluster.isWorker) {
         app.listen(function() {
             app.emit('started');
