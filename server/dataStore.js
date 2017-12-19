@@ -136,18 +136,18 @@ module.exports = {
                     console.log('Alarm Packet Success returned object '+JSON.stringify(obj));
                     var alertId = obj.alertId;
                     deviceGps.alertId = alertId;
-                    app.models.DeviceGps.create(deviceGps,function(err,obj){
-                        if(err){
-                            console.log('Alarm Gps Store Failed '+err);
-                            callback(false);
-                        }else if(obj == null){
-                            //console.log('Alarm Gps Failed returned object is null'+err);
-                            callback(false);
-                        }else{
-                            //console.log('Alarm Gps Success returned object '+JSON.stringify(obj));
-                            callback(true);
-                        }
-                    });
+                    // app.models.DeviceGps.create(deviceGps,function(err,obj){
+                    //     if(err){
+                    //         console.log('Alarm Gps Store Failed '+err);
+                    //         callback(false);
+                    //     }else if(obj == null){
+                    //         //console.log('Alarm Gps Failed returned object is null'+err);
+                    //         callback(false);
+                    //     }else{
+                    //         //console.log('Alarm Gps Success returned object '+JSON.stringify(obj));
+                    //         callback(true);
+                    //     }
+                    // });
                 }
             });
         });
