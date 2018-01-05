@@ -439,7 +439,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             $scope.EditMarker.setMap(null);
         }
         $scope.editPacket.packetId = packet.packetId;
-        $scope.editPacket.packetTime = new Date(packet.packetTime);
+        $scope.editPacket.packetTime = moment(packet.packetTime,'ddd MMM DD YYYY HH:mm:ss').toDate();
         $scope.editPacket.speed = parseInt(packet.speed);
         $scope.editPacket.odometer = parseFloat(packet.odometer);
         $scope.editPacket.latitude = parseFloat(packet.latitude);
