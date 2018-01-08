@@ -294,12 +294,12 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
     var showPage = function(){
         var name = $rootScope.userDetails.name;
         $scope.username = name.toTitleCase();
-        if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.userRoal = 'Agency';
-        }else if ($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.userRoal = 'Client'; 
-        }else{
+        if($rootScope.userDetails.userType == 'ADMIN'){
             $scope.userRoal = 'Admin';
+        }else if ($rootScope.userDetails.userType == 'COMPANY'){
+            $scope.userRoal = 'Agency'; 
+        }else{
+            $scope.userRoal = 'User';
         }
         $rootScope.refreshImage();
         if(deviceDetector.isDesktop()){
