@@ -407,7 +407,7 @@ app.controller('vehicleCtr',['$scope','$timeout','CreateService','Upload','$root
                 $rootScope.initSelect();
             });
         }else if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0,'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
@@ -473,7 +473,7 @@ app.controller('createVehicleCtr',['$scope','$rootScope','$timeout','CreateServi
         $scope.newDevice.driver = {'driverId':0,'name':'None'};
         $scope.newDevice.selectUser = {};
         $scope.newDevice.userId = '';
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0,'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
 
         CreateService.getDriversOfUser($rootScope.userDetails.companyId,$rootScope.currentCustomer.userId,function(status,drivers){
             if(status == "SUCCESS"){
@@ -952,7 +952,7 @@ app.controller('driverCtr',['$scope','$rootScope','$timeout','CreateService','$h
             $('.drivers-li').addClass('active');
         },0,false);
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0,'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
@@ -999,7 +999,7 @@ app.controller('createDriverCtr',['$scope','$rootScope','$timeout','CreateServic
         $scope.newDriver.emailId = '';
         $scope.newDriver.selectUser = {};
         $scope.newDriver.userId = '';
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
 
         if($rootScope.userDetails.userType == "COMPANY"){
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
@@ -1116,7 +1116,7 @@ app.controller('editDriverCtr',['$scope','$rootScope','$timeout','CreateService'
 
         $scope.openedDriver.selectUser = {};
         $scope.openedDriver.userId = '';
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
 
         if($rootScope.userDetails.userType == "COMPANY"){
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
@@ -1277,7 +1277,7 @@ app.controller('userCtr',['$scope','$timeout','CreateService','Upload','$rootSco
             $('.users-li').addClass('active');
         },0,false);
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);

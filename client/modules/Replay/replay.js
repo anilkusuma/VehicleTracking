@@ -144,7 +144,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
             loadEditMap();
         },0,true);
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);

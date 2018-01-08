@@ -141,7 +141,7 @@ app.controller('generalCtr',['$rootScope','$scope','ReportsService','$timeout','
             $('#reprots').trigger("click.collapse");
             $('.dayreport-li').addClass('active');
         },0,false);
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
         $scope.dataTabel = $('#genday-table').DataTable({
                                "filter": true,
                                "destroy": true,
@@ -317,7 +317,7 @@ app.controller('detailCtr',['$rootScope','$scope','ReportsService','$timeout','$
             $('#reprots').trigger("click.collapse");
             $('.detaildayreport-li').addClass('active');
         },0,false);
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
         $scope.dataTabel = $('#detailday-table').DataTable({
                                "filter": true,
                                "destroy": true,
@@ -486,7 +486,7 @@ app.controller('overSpeedCtr',['$rootScope','$scope','ReportsService','$timeout'
             $('#reprots').trigger("click.collapse");
             $('.overspeedreport-li').addClass('active');
         },0,false);
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
         $scope.dataTabel = $('#overspeed-table').DataTable({
                                "filter": true,
                                "destroy": true,
@@ -660,7 +660,7 @@ app.controller('stoppageCtr',['$rootScope','$scope','ReportsService','$timeout',
             $('#reprots').trigger("click.collapse");
             $('.stoppagereport-li').addClass('active');
         },0,false);
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
         $scope.dataTabel = $('#stoppage-table').DataTable({
                                "filter": true,
                                "destroy": true,
@@ -827,7 +827,7 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
             $('#reprots').trigger("click.collapse");
             $('.geofencereports-li').addClass('active');
         },0,false);
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
         $scope.dataTabel = $('#geofence-table').DataTable({
                                "filter": true,
                                "destroy": true,
@@ -1252,7 +1252,7 @@ app.controller('distanceReportsCtr',['$rootScope','$scope','ReportsService','$ti
             $('#reprots').trigger("click.collapse");
             $('.distancereports-li').addClass('active');
         },0,false);
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
         $scope.dataTabel = $('#distance-table').DataTable({
                                "filter": true,
                                "destroy": true,
