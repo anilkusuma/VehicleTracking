@@ -46,6 +46,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
 	var resetAllDashboardVariables = function(){
         $scope.dashboardVariable = {};
 	    $scope.dashboardVariable.Map = "";
+        $scope.dashboardVariable.dashboardTable = "";
 	    $scope.dashboardVariable.dashboard_markers = [];
 	    $scope.dashboardVariable.dashboard_infobox = [];
 	    $scope.dashboardVariable.markerClusterer = [];
@@ -54,6 +55,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
     var init = function(){
         $scope.dashboardVariable = {};
         $scope.dashboardVariable.Map = "";
+        $scope.dashboardVariable.dashboardTable = "";
         $scope.dashboardVariable.bounds = new google.maps.LatLngBounds();
         $scope.dashboardVariable.dashboardMarkers = [];
         $scope.dashboardVariable.dashboardInfobox = [];
@@ -118,6 +120,10 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         DashboardService.getUserVehicles($rootScope.currentCustomer.userId,function(status,vehicles){
             if(status == "SUCCESS"){
                 $scope.vehicles = vehicles;
+                if($scope.dashboardVariable.dashboardTable != ""){
+                    $scope.dashboardVariable.dashboardTable.clear();
+                    $scope.dashboardVariable.dashboardTable.destroy();
+                }
                 for(var i=0;i< $scope.vehicles.length ; i++){
                     var dashboardTimer = {};
                     dashboardTimer.timerPromise = '';
@@ -145,14 +151,25 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 }
                 hidePreloader({},function(){
                     $timeout(function(){
-                        $('#dashboardtable-table').DataTable();
+                        $scope.dashboardVariable.dashboardTable = $('#dashboardtable-table').DataTable();
                         $rootScope.initSelect();
                         triggerMapResize();
                     },0,true);
                 });
             }else if(status == "EMPTY"){
                 Materialize.toast('Add a vehicle first',1000);
-                $location.path('/vehicles');
+                $scope.vehicles = [];
+                if($scope.dashboardVariable.dashboardTable != ""){
+                    $scope.dashboardVariable.dashboardTable.clear();
+                    $scope.dashboardVariable.dashboardTable.destroy();
+                }
+                hidePreloader({},function(){
+                    $timeout(function(){
+                        $scope.dashboardVariable.dashboardTable = $('#dashboardtable-table').DataTable();
+                        $rootScope.initSelect();
+                        triggerMapResize();
+                    },0,true);
+                });
             }else if(status == "FAILED" || status == "ERROR"){
                 Materialize.toast('Session expired,login again',1000);
                 $rootScope.logout();

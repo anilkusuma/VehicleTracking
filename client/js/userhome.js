@@ -173,58 +173,58 @@ if(selector == null || validator== null || userID == null || userType == null ||
                 templateUrl: '/modules/Dashboard/dashboard.html',
                 controller: 'dashboardCtr'
             })
-            .when('/history', {
-                templateUrl: '/modules/History/history.html',
-                controller: 'historyCtr'
-            })
-            .when('/replay', {
-                templateUrl: '/modules/Replay/replay.html',
-                controller: 'replayCtr'
-            })
-            .when('/vehicles', {
-                templateUrl: '/modules/Create/vehicles.html',
-                controller: 'vehicleCtr'
-            })
-            .when('/points', {
-                templateUrl: '/modules/Create/pois.html',
-                controller: 'poiCtr'
-            })
-            .when('/users', {
-                templateUrl: '/modules/Create/users.html',
-                controller: 'userCtr'
-            })
-            .when('/drivers', {
-                templateUrl: '/modules/Create/drivers.html',
-                controller: 'driverCtr'
-            })
-            .when('/fences', {
-                templateUrl: '/modules/Create/geofence.html',
-                controller: 'fenceCtr'
-            })
-            .when('/reports/general', {
-                templateUrl: '/modules/Reports/generalDayReports.html',
-                controller: 'generalCtr'
-            })
-            .when('/reports/detail', {
-                templateUrl: '/modules/Reports/detailDayReports.html',
-                controller: 'detailCtr'
-            })
-            .when('/reports/overspeed', {
-                templateUrl: '/modules/Reports/overSpeedReports.html',
-                controller: 'overSpeedCtr'
-            })
-            .when('/reports/stoppage', {
-                templateUrl: '/modules/Reports/stoppageReports.html',
-                controller: 'stoppageCtr'
-            })
-            .when('/reports/geofence', {
-                templateUrl: '/modules/Reports/geoFenceReports.html',
-                controller: 'geoReportsCtr'
-            })
-            .when('/reports/distance', {
-                templateUrl: '/modules/Reports/distanceReports.html',
-                controller: 'distanceReportsCtr'
-            })
+            // .when('/history', {
+            //     templateUrl: '/modules/History/history.html',
+            //     controller: 'historyCtr'
+            // })
+            // .when('/replay', {
+            //     templateUrl: '/modules/Replay/replay.html',
+            //     controller: 'replayCtr'
+            // })
+            // .when('/vehicles', {
+            //     templateUrl: '/modules/Create/vehicles.html',
+            //     controller: 'vehicleCtr'
+            // })
+            // .when('/points', {
+            //     templateUrl: '/modules/Create/pois.html',
+            //     controller: 'poiCtr'
+            // })
+            // .when('/users', {
+            //     templateUrl: '/modules/Create/users.html',
+            //     controller: 'userCtr'
+            // })
+            // .when('/drivers', {
+            //     templateUrl: '/modules/Create/drivers.html',
+            //     controller: 'driverCtr'
+            // })
+            // .when('/fences', {
+            //     templateUrl: '/modules/Create/geofence.html',
+            //     controller: 'fenceCtr'
+            // })
+            // .when('/reports/general', {
+            //     templateUrl: '/modules/Reports/generalDayReports.html',
+            //     controller: 'generalCtr'
+            // })
+            // .when('/reports/detail', {
+            //     templateUrl: '/modules/Reports/detailDayReports.html',
+            //     controller: 'detailCtr'
+            // })
+            // .when('/reports/overspeed', {
+            //     templateUrl: '/modules/Reports/overSpeedReports.html',
+            //     controller: 'overSpeedCtr'
+            // })
+            // .when('/reports/stoppage', {
+            //     templateUrl: '/modules/Reports/stoppageReports.html',
+            //     controller: 'stoppageCtr'
+            // })
+            // .when('/reports/geofence', {
+            //     templateUrl: '/modules/Reports/geoFenceReports.html',
+            //     controller: 'geoReportsCtr'
+            // })
+            // .when('/reports/distance', {
+            //     templateUrl: '/modules/Reports/distanceReports.html',
+            //     controller: 'distanceReportsCtr'
+            // })
             .when('/profile', {
                 templateUrl: '/modules/Profile/profile.html',
                 controller: 'profileCtr'
