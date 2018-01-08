@@ -909,8 +909,8 @@ ul.side-nav.leftside-navigation hr {
   padding: 0;
 }
 .side-nav a {
-  line-height: 42px;
-  height: 42px;
+  line-height: 42px !important;
+  height: 42px !important;
 }
 #left-sidebar-nav {
   position: fixed;
