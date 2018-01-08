@@ -121,7 +121,23 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 selectPacket(packet);
             },0,true);
         } );
-        if($rootScope.userDetails.userType == 'COMPANY'){
+        if($rootScope.userDetails.userType == 'ADMIN'){
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+            $rootScope.getAllCompanies(function(status,customers){
+                if(status == "SUCCESS"){
+                    $scope.customers = $scope.customers.concat(customers);
+                }else if(status=="EMPTY"){
+                }
+                else if(status == "FAILED"){
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+                $scope.selectedCustomer = $scope.customers[0];
+                $rootScope.currentCustomer = $scope.selectedCustomer;
+                refreshReport();
+                $rootScope.initSelect();
+            });
+        }else if($rootScope.userDetails.userType == 'COMPANY'){
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);

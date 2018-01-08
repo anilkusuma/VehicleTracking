@@ -47,7 +47,7 @@ if(selector == null || validator== null || userID == null || userType == null ||
                 templateUrl: '/modules/Create/geofence.html',
                 controller: 'fenceCtr'
             })
-            .when('/customers', {
+            .when('/admins', {
                 templateUrl: '/modules/Create/customers.html',
                 controller: 'customerCtr'
             })
@@ -66,6 +66,10 @@ if(selector == null || validator== null || userID == null || userType == null ||
             .when('/reports/stoppage', {
                 templateUrl: '/modules/Reports/stoppageReports.html',
                 controller: 'stoppageCtr'
+            })
+            .when('/settings', {
+                templateUrl: '/modules/Settings/settings.html',
+                controller: 'settingsCtr'
             })
             .when('/profile', {
                 templateUrl: '/modules/Profile/profile.html',
@@ -370,6 +374,16 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
                         $rootScope.userDetails.emailId = data.responseData[0].emailId;
                         $rootScope.userDetails.companyId = data.responseData[0].vtsLogin.companyId;
                         showPage();
+                    }else if(data.userType == "ADMIN"){
+                        $rootScope.adminType = true;
+                        $rootScope.userDetails.userType = "ADMIN";
+                        $rootScope.userDetails.userId = data.responseData[0].userId;
+                        $rootScope.userDetails.name = data.responseData[0].name;
+                        $rootScope.userDetails.address = data.responseData[0].address;
+                        $rootScope.userDetails.mobileNumber = data.responseData[0].mobileNumber;
+                        $rootScope.userDetails.emailId = data.responseData[0].emailId;
+                        $rootScope.userDetails.companyId = data.responseData[0].vtsLogin.companyId;
+                        showPage();
                     }
                 }
                 else{
@@ -433,7 +447,19 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
         },function errorCallback(response) {
             callback("ERROR");  
         });
-    };  
+    }; 
+
+    $rootScope.getAllCompanies = function(callback){
+        var url = '/api/VtsUsers/GetAllCompanies';
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function successCallback(response) {
+            callback(response.data.returnStatus,response.data.responseData);
+        },function errorCallback(response) {
+            callback("ERROR");  
+        });
+    }; 
 
     $rootScope.geoDecode = function(myLatLng,callback){
         var geocoder = new google.maps.Geocoder();

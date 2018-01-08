@@ -152,6 +152,43 @@ module.exports = function(VtsUsers) {
         }
     );
 
+    VtsUsers.getAllCompanies = function(req,res,next){
+        customLib.validateCookies(req,function(validated,user){
+            if(validated){
+                var user = JSON.parse(user);
+                var userID = user.userId;
+                var userType = user.vtsLogin.userType;
+                app.models.VtsLogin.find({where:{'userType':"COMPANY"},'include':['vtsUsers']},function(err,instance){
+                    if(instance.length!=0){
+                        result.userType = userType;
+                        result.responseData = instance;
+                        result.returnStatus = "SUCCESS";
+                        res.send(result);
+                    }else{
+                        result = {};
+                        result.returnStatus="EMPTY";
+                        res.send(result);
+                    }
+                });
+            }else{
+                result = {};
+                result.returnStatus="FAILED";
+                res.send(result);
+            }
+        });
+    };
+    VtsUsers.remoteMethod(
+        'getAllCompanies',
+        {
+            isStatice:true,
+            accepts:[
+                { arg:'req' ,type:'object','http':{source:'req'}},
+                { arg:'res' ,type:'object','http':{source:'res'}},
+            ],
+            http:{path:'/GetAllCompanies',verb:'get'}
+        }
+    );
+
     VtsUsers.inActivateUser = function(req,res,next){
         customLib.validateCookies(req,function(validated,user){
             if(validated){
@@ -284,7 +321,10 @@ module.exports = function(VtsUsers) {
 	                login.userName = object.username;
 	                var password = crypto.createHash('sha1').update(object.userInformation).digest('Hex');
 	                login.userInformation = password;
-	                login.userType = "USER";
+                    if(userType == "COMPANY")
+	                   login.userType = "USER";
+                   else if(userType == "ADMIN")
+                        login.userType = "COMPANY";
 	                login.companyId = userID;
 	            }else{
 	            	result = {}
@@ -337,7 +377,7 @@ module.exports = function(VtsUsers) {
                         res.send(result);
                         return;
                     }else{
-
+                        console.log('Creating user for login '+JSON.stringify(login));
                         app.models.VtsLogin.create(login,function(err,obj){
                             if(err){
                                 result = {}
@@ -351,6 +391,22 @@ module.exports = function(VtsUsers) {
                                 return;
                             }else{ 
                                 details.userId = obj.userId;
+
+                                if(userType == "ADMIN"){
+                                   var temp = {};
+                                    temp.companyId = obj.userId;
+                                    obj.updateAttributes(temp,function(err,obj){
+                                        if(err){
+                                            result = {};
+                                            result.returnStatus="ERROR";
+                                            res.send(result);
+                                        }else if(obj == null){
+                                            result = {};
+                                            result.returnStatus="ERROR";
+                                            res.send(result);
+                                        }
+                                    }); 
+                                }
                                 VtsUsers.create(details,function(err,obj){
                                     if(err){
                                         result = {}

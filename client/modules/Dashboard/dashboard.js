@@ -68,7 +68,23 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         $timeout(function(){
             loadDashboardMap();
         },0,true);
-        if($rootScope.userDetails.userType == 'COMPANY'){
+        if($rootScope.userDetails.userType == 'ADMIN'){
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+            $rootScope.getAllCompanies(function(status,customers){
+                if(status == "SUCCESS"){
+                    $scope.customers = $scope.customers.concat(customers);
+                }else if(status=="EMPTY"){
+                }
+                else if(status == "FAILED"){
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+                $scope.selectedCustomer = $scope.customers[0];
+                $rootScope.currentCustomer = $scope.selectedCustomer;
+                refreshDashboard();
+                $rootScope.initSelect();
+            });
+        }else if($rootScope.userDetails.userType == 'COMPANY'){
             $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){

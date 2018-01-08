@@ -62,9 +62,11 @@ module.exports = function(VtsDevices) {
 			if(validated){
                 var user = JSON.parse(user);
                 var userType = user.vtsLogin.userType;
-                if(userType == "COMPANY")
+                if(userType == "ADMIN")
                     var userId = req.body.userId;
-                else if(userType == "USER")
+                else if(userType == "COMPANY")
+                    var userId = req.body.userId;
+                else
                     var userId = user.userId;
 
                 var companyId = user.vtsLogin.companyId;
@@ -101,7 +103,11 @@ module.exports = function(VtsDevices) {
                     device.comments = null;
                 }
                 device.deviceId = object.deviceId
-                device.companyId = companyId;
+                if(userType == "ADMIN"){
+                    device.companyId = userId;
+                }else{
+                    device.companyId = companyId;
+                }
                 device.userId = userId;
                 device.vehicleType = object.vehicleType;
                 device.driverId = object.driver.driverId;
@@ -188,24 +194,43 @@ module.exports = function(VtsDevices) {
 			if(validated){
                 var user = JSON.parse(user);
                 var userType = user.vtsLogin.userType;
-                if(userType == "COMPANY")
+                if(userType == "COMPANY" )
                 	var userId = req.query.userId;
                 else if(userType == "USER")
                 	var userId = user.userId;
 
-                var companyId = user.vtsLogin.companyId;
-				VtsDevices.find({where:{'and':[{'companyId':companyId},{'userId':userId}]}},function(err,instance){
-					if(instance.length!=0){
-						result = {};
-						result.responseData = instance;
-						result.returnStatus = "SUCCESS";
-						res.send(result);
-					}else{
-						result = {};
-						result.returnStatus="EMPTY";
-						res.send(result);
-					}
-				});
+                if(userType == "ADMIN"){
+                    var userId = req.query.userId;
+                    var companyId = req.query.companyId;
+                    console.log("Company id is "+companyId+", UserId is "+ userId);
+                    VtsDevices.find({where:{'and':[{'companyId':companyId},{'userId':userId}]}},function(err,instance){
+                        if(instance.length!=0){
+                            result = {};
+                            result.responseData = instance;
+                            result.returnStatus = "SUCCESS";
+                            res.send(result);
+                        }else{
+                            result = {};
+                            result.returnStatus="EMPTY";
+                            console.log("undefined error is"+err);
+                            res.send(result);
+                        }
+                    });
+                }else{
+                    var companyId = user.vtsLogin.companyId;
+                    VtsDevices.find({where:{'and':[{'companyId':companyId},{'userId':userId}]}},function(err,instance){
+                        if(instance.length!=0){
+                            result = {};
+                            result.responseData = instance;
+                            result.returnStatus = "SUCCESS";
+                            res.send(result);
+                        }else{
+                            result = {};
+                            result.returnStatus="EMPTY";
+                            res.send(result);
+                        }
+                    }); 
+                }
 			}else{
 				result = {};
 				result.returnStatus="FAILED";
@@ -273,9 +298,11 @@ module.exports = function(VtsDevices) {
 			if(validated){
                 var user = JSON.parse(user);
                 var userType = user.vtsLogin.userType;
-                if(userType == "COMPANY")
+                if(userType == "ADMIN")
+                    var userId = req.body.userId;
+                else if(userType == "COMPANY")
                 	var userId = req.body.userId;
-                else if(userType == "USER")
+                else 
                 	var userId = user.userId;
 
                 var userLoginName = user.vtsLogin.userName;
@@ -315,8 +342,11 @@ module.exports = function(VtsDevices) {
                 }else{
 	            	device.comments = null;
 	            }
-
-	            device.companyId = companyId;
+                if(userType == "ADMIN"){
+                    device.companyId = userId;
+                }else{
+                    device.companyId = companyId;
+                }
                 device.userId = userId;
 	            device.vehicleType = object.vehicleType;
 	            device.driverId = object.driver.driverId;

@@ -159,9 +159,14 @@
                                                 <i class="mdi-social-people"></i>Users
                                             </a>
                                         </li> -->
-                                        <li class="nav-li customers-li bold" ng-if="adminType || companyType ">
+                                        <li class="nav-li customers-li bold" ng-if="companyType ">
                                             <a id="customers" href="customers" class="waves-effect waves-cyan">
                                                 <i class="fa fa-university"></i>Clients
+                                            </a>
+                                        </li>
+                                        <li class="nav-li customers-li bold" ng-if="adminType">
+                                            <a id="admins" href="admins" class="waves-effect waves-cyan">
+                                                <i class="fa fa-university"></i>Admins
                                             </a>
                                         </li>
 		                            </ul>

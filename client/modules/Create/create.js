@@ -35,20 +35,37 @@ app.controller('customerCtr',['$scope','$rootScope','$timeout','CreateService','
         });
     };
     var refreshCustomers = function(){
-        CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
-            if(status == "SUCCESS"){
-                Materialize.toast('Success',1000);
-                $scope.customers = customers;
-                hidePreloader();
-            }else if(status=="EMPTY"){
-                hidePreloader();
-                Materialize.toast('No customers, add one',1000);
-            }
-            else if(status == "FAILED"){
-                Materialize.toast('Session expired');
-                $rootScope.logout();
-            }
-        });
+        if($rootScope.userDetails.userType == 'ADMIN'){
+            CreateService.getAllAdmins(function(status,customers){
+                if(status == "SUCCESS"){
+                    Materialize.toast('Success',1000);
+                    $scope.customers = customers;
+                    hidePreloader();
+                }else if(status=="EMPTY"){
+                    hidePreloader();
+                    Materialize.toast('No customers, add one',1000);
+                }
+                else if(status == "FAILED"){
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+            });
+        }else if($rootScope.userDetails.userType == 'COMPANY'){
+            CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
+                if(status == "SUCCESS"){
+                    Materialize.toast('Success',1000);
+                    $scope.customers = customers;
+                    hidePreloader();
+                }else if(status=="EMPTY"){
+                    hidePreloader();
+                    Materialize.toast('No customers, add one',1000);
+                }
+                else if(status == "FAILED"){
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+            });
+        }
     }  
     var initialize = function(){
         $timeout(function(){
@@ -89,17 +106,17 @@ app.controller('createCustomerCtr',['$scope','$rootScope','$timeout','CreateServ
             $scope.userNameTimer = $timeout(checkUsername(function(status){
                 if(!status){
                     var html = 'Username is not available';
-                    $('#UserName,#UserName-error').removeClass('success');
-                    $('#UserName-error,#UserName').addClass('error');
-                    $('#UserName-error').text(html);
-                    $('.errorNameUserName').show();
+                    $('#CreateUserName,#CreateUserName-error').removeClass('success');
+                    $('#CreateUserName-error,#CreateUserName').addClass('error');
+                    $('#CreateUserName-error').text(html);
+                    $('.errorNameCreateUserName').show();
                     validated = false;
                 }else{
                     var html = 'Username available';
-                    $('#UserName,#UserName-error').removeClass('error');
-                    $('#UserName-error,#UserName').addClass('success');
-                    $('#UserName-error').text(html);
-                    $('.errorNameUserName').show();
+                    $('#CreateUserName,#CreateUserName-error').removeClass('error');
+                    $('#CreateUserName-error,#CreateUserName').addClass('success');
+                    $('#CreateUserName-error').text(html);
+                    $('.errorNameCreateUserName').show();
                 }
             }),200,true);        
         }
@@ -120,69 +137,69 @@ app.controller('createCustomerCtr',['$scope','$rootScope','$timeout','CreateServ
         var validated = true;
         if(!$scope.newCustomer.username.replace(/\s/g, '').length){
             var html = 'Please enter username.';
-            $('#UserName,#UserName-error').removeClass('success');
-            $('#UserName-error,#UserName').addClass('error');
-            $('#UserName-error').text(html);
-            $('.errorNameUserName').show();
+            $('#CreateUserName,#CreateUserName-error').removeClass('success');
+            $('#CreateUserName-error,#CreateUserName').addClass('error');
+            $('#CreateUserName-error').text(html);
+            $('.errorNameCreateUserName').show();
             validated = false;
         }else {
             checkUsername(function(status){
                 if(!status){
                     var html = 'Username is not available';
-                    $('#UserName,#UserName-error').removeClass('success');
-                    $('#UserName-error,#UserName').addClass('error');
-                    $('#UserName-error').text(html);
-                    $('.errorNameUserName').show();
+                    $('#CreateUserName,#CreateUserName-error').removeClass('success');
+                    $('#CreateUserName-error,#CreateUserName').addClass('error');
+                    $('#CreateUserName-error').text(html);
+                    $('.errorNameCreateUserName').show();
                     validated = false;
                 }else{
                     var html = 'Username available';
-                    $('#UserName,#UserName-error').removeClass('error');
-                    $('#UserName-error,#UserName').addClass('success');
-                    $('#UserName-error').text(html);
-                    $('.errorNameUserName').show();
+                    $('#CreateUserName,#CreateUserName-error').removeClass('error');
+                    $('#CreateUserName-error,#CreateUserName').addClass('success');
+                    $('#CreateUserName-error').text(html);
+                    $('.errorNameCreateUserName').show();
                 }
             });
         }
         if(!$scope.newCustomer.userInformation.replace(/\s/g, '').length){
             var html = 'Please enter password';
-            $('#UserPassword-error,#UserPassword ').addClass('error');
-            $("#UserPassword-error").text(html);
-            $('.errorNameUserPassword').show();
+            $('#CreateUserPassword-error,#CreateUserPassword ').addClass('error');
+            $("#CreateUserPassword-error").text(html);
+            $('.errorNameCreateUserPassword').show();
             validated = false;
         }
         if(!$scope.newCustomer.name.replace(/\s/g, '').length){
             var html = 'Please enter name';
-            $('#CustomerName-error,#CustomerName ').addClass('error');
-            $('#CustomerName-error').text(html);
-            $('.errorNameCustomerName').show();
+            $('#CreateCustomerName-error,#CreateCustomerName ').addClass('error');
+            $('#CreateCustomerName-error').text(html);
+            $('.errorNameCreateCustomerName').show();
             validated = false;
         }
         if(!$scope.newCustomer.emailId.replace(/\s/g, '').length){
             var html = 'Please enter email id';
-            $('#EmailId-error,#EmailId ').addClass('error');
-            $('#EmailId-error').text(html);
-            $('.errorNameEmailId').show();
+            $('#CreateEmailId-error,#CreateEmailId ').addClass('error');
+            $('#CreateEmailId-error').text(html);
+            $('.errorNameCreateEmailId').show();
             validated = false;
         }else if(!validateEmail($scope.newCustomer.emailId)){
             var html = 'Enter a valid email id';
-            $('#EmailId-error,#EmailId').addClass('error');
-            $('#EmailId-error').text(html);
-            $('.errorNameEmailId').show();
+            $('#CreateEmailId-error,#CreateEmailId').addClass('error');
+            $('#CreateEmailId-error').text(html);
+            $('.errorNameCreateEmailId').show();
             valid = false;
         }
         if(!$scope.newCustomer.mobileNumber.replace(/\s/g, '').length){
             var html = 'Please enter phone number';
-            $('#MobileNumber-error,#MobileNumber ').addClass('error');
-            $('#MobileNumber-error').text(html);
-            $('.errorNameMobileNumber').show();
+            $('#CreateMobileNumber-error,#CreateMobileNumber ').addClass('error');
+            $('#CreateMobileNumber-error').text(html);
+            $('.errorNameCreateMobileNumber').show();
             validated = false;
         }else{
             $scope.newCustomer.mobileNumber = $scope.newCustomer.mobileNumber.replace(/[^0-9]/g, '');
             if($scope.newCustomer.mobileNumber.length != 10) { 
                 var html = 'Enter valid phone number';
-                $('#MobileNumber-error,#MobileNumber ').addClass('error');
-                $('#MobileNumber-error').text(html);
-                $('.errorNameMobileNumber').show();
+                $('#CreateMobileNumber-error,#CreateMobileNumber ').addClass('error');
+                $('#CreateMobileNumber-error').text(html);
+                $('.errorNameCreateMobileNumber').show();
                 validated = false;
             }
         }
@@ -348,7 +365,8 @@ app.controller('vehicleCtr',['$scope','$timeout','CreateService','Upload','$root
     };
 
     var refreshVehicles = function(){
-        CreateService.getVehcilesOfUser($rootScope.userDetails.companyId,$rootScope.currentCustomer.userId,function(status,vehicles){
+        CreateService.getVehcilesOfUser($rootScope.currentCustomer.companyId,$rootScope.currentCustomer.userId,function(status,vehicles){
+            console.log($rootScope.currentCustomer.companyId + ","+$rootScope.currentCustomer.userId+","+status);
             if(status == "SUCCESS"){
                 $scope.vehicles = vehicles;
                 hidePreloader();
@@ -372,8 +390,24 @@ app.controller('vehicleCtr',['$scope','$timeout','CreateService','Upload','$root
             $('#create').trigger("click.collapse");
             $('.vehicles-li').addClass('active');
         },0,false);
-        if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        if($rootScope.userDetails.userType == 'ADMIN'){
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+            $rootScope.getAllCompanies(function(status,customers){
+                if(status == "SUCCESS"){
+                    $scope.customers = $scope.customers.concat(customers);
+                }else if(status=="EMPTY"){
+                }
+                else if(status == "FAILED"){
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+                $scope.selectedCustomer = $scope.customers[0];
+                $rootScope.currentCustomer = $scope.selectedCustomer;
+                refreshVehicles();
+                $rootScope.initSelect();
+            });
+        }else if($rootScope.userDetails.userType == 'COMPANY'){
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0,'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
@@ -439,13 +473,30 @@ app.controller('createVehicleCtr',['$scope','$rootScope','$timeout','CreateServi
         $scope.newDevice.driver = {'driverId':0,'name':'None'};
         $scope.newDevice.selectUser = {};
         $scope.newDevice.userId = '';
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0,'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
 
         CreateService.getDriversOfUser($rootScope.userDetails.companyId,$rootScope.currentCustomer.userId,function(status,drivers){
             if(status == "SUCCESS"){
                 $scope.newDevice.drivers = $scope.newDevice.drivers.concat(drivers);
             }
-            if($rootScope.userDetails.userType == "COMPANY"){
+            if($rootScope.userDetails.userType == "ADMIN"){
+                CreateService.getAllAdmins(function(status,customers){
+                    if(status == "SUCCESS"){
+                        $scope.customers = $scope.customers.concat(customers);
+                    }else if(status=="EMPTY"){
+                    }
+                    else if(status == "FAILED"){
+                        Materialize.toast('Session expired');
+                        $rootScope.logout();
+                    }
+                    $scope.newDevice.selectUser = $rootScope.currentCustomer;
+
+                    $('#createVehicleModel').openModal({dismissible: false},1);
+                    $timeout(function(){
+                        $('select').material_select();
+                    },0,true);
+                });
+            }else if($rootScope.userDetails.userType == "COMPANY"){
                 CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                     if(status == "SUCCESS"){
                         $scope.customers = $scope.customers.concat(customers);
@@ -568,7 +619,9 @@ app.controller('createVehicleCtr',['$scope','$rootScope','$timeout','CreateServi
                 }else{
                     $scope.closeModel();
 
-                    if($rootScope.userDetails.userType == "COMPANY")
+                    if($rootScope.userDetails.userType == "ADMIN")
+                        $scope.newDevice.userId = $scope.newDevice.selectUser.userId;
+                    else if($rootScope.userDetails.userType == "COMPANY")
                         $scope.newDevice.userId = $scope.newDevice.selectUser.userId;
                     else
                         $scope.newDevice.userId = $rootScope.userDetails.userId;
@@ -625,7 +678,7 @@ app.controller('editVehicleCtr',['$scope','$rootScope','$timeout','CreateService
         $scope.openedDevice.drivers = [{'driverId':0,'name':'None'}];
         $scope.openedDevice.selectUser = {};
         $scope.openedDevice.userId = '';
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
 
         CreateService.getDriversOfUser($rootScope.userDetails.companyId,$rootScope.currentCustomer.userId,function(status,drivers){
             if(status == "SUCCESS"){
@@ -646,7 +699,28 @@ app.controller('editVehicleCtr',['$scope','$rootScope','$timeout','CreateService
                     $scope.openedDevice.driver = {'driverId':0,'name':'None'};
                 }
             }
-            if($rootScope.userDetails.userType == "COMPANY"){
+            if($rootScope.userDetails.userType == "ADMIN"){
+                CreateService.getAllAdmins(function(status,customers){
+                    if(status == "SUCCESS"){
+                        $scope.customers = $scope.customers.concat(customers);
+                    }else if(status=="EMPTY"){
+                    }
+                    else if(status == "FAILED"){
+                        Materialize.toast('Session expired');
+                        $rootScope.logout();
+                    }
+                    $scope.openedDevice.selectUser = $rootScope.currentCustomer;
+
+                    $('#editVehicleModel').openModal({dismissible: false},1);
+                    $timeout(function(){
+                        $('#editVehicleModel .input-field label').addClass('active');
+                        $('#editVehicleModel input,#editVehicleModel select,#editVehicleModel textarea').removeClass('error');
+                        $('#editVehicleModel input,#editVehicleModel select,#editVehicleModel textarea').removeClass('success');
+                        $('#editVehicleModel input,#editVehicleModel select,#editVehicleModel textarea').attr('disabled','disabled');
+                        $('select').material_select();
+                    },0,false);
+                });
+            }else if($rootScope.userDetails.userType == "COMPANY"){
                 CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                     if(status == "SUCCESS"){
                         $scope.customers = $scope.customers.concat(customers);
@@ -776,8 +850,9 @@ app.controller('editVehicleCtr',['$scope','$rootScope','$timeout','CreateService
                     return;
                 }else{
                     $scope.closeModel();
-
-                    if($rootScope.userDetails.userType == "COMPANY")
+                    if($rootScope.userDetails.userType == "ADMIN")
+                        $scope.openedDevice.userId = $scope.openedDevice.selectUser.userId;
+                    else if($rootScope.userDetails.userType == "COMPANY")
                         $scope.openedDevice.userId = $scope.openedDevice.selectUser.userId;
                     else
                         $scope.openedDevice.userId = $rootScope.userDetails.userId;
@@ -877,7 +952,7 @@ app.controller('driverCtr',['$scope','$rootScope','$timeout','CreateService','$h
             $('.drivers-li').addClass('active');
         },0,false);
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0,'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
@@ -2351,11 +2426,23 @@ app.controller('editFenceCtr',['$scope','$rootScope','$timeout','CreateService',
 
 
 
+
 app.factory('CreateService',['$http','$rootScope','$cookies',function($http,$rootScope,$cookies){
     var CreateServices = {};
 
     CreateServices.getUsersOfCompany = function(companyId,callback){
         var url = '/api/VtsUsers/GetCompanyUsers?companyId='+companyId;
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function successCallback(response) {
+            callback(response.data.returnStatus,response.data.responseData);
+        },function errorCallback(response) {
+            callback("ERROR");  
+        });
+    };  
+    CreateServices.getAllAdmins = function(callback){
+        var url = '/api/VtsUsers/GetAllCompanies';
         $http({
             method: 'GET',
             url: url
