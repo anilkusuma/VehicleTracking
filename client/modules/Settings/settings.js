@@ -100,7 +100,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             $('.detaildayreport-li').addClass('active');
         },0,false);
         loadMap();
-        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+        $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
         $scope.dataTabel = $('#detailday-table').DataTable({
                                "filter": true,
                                "destroy": true,
@@ -122,7 +122,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             },0,true);
         } );
         if($rootScope.userDetails.userType == 'ADMIN'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':0}];
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getAllCompanies(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
@@ -138,6 +138,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 $rootScope.initSelect();
             });
         }else if($rootScope.userDetails.userType == 'COMPANY'){
+            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
