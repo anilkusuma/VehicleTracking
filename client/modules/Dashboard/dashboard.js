@@ -353,7 +353,10 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
     };
     var updateInfoBox = function(vehiclev){
         //"<div class='content'>Last Onlie : " + vehiclev.packetTime + "</div>" +
-        var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" + "<div class='content'>Distance travelled today : " + vehiclev.odometer  + " Km" + "</div>" ;
+        if($rootScope.userDetails.userType != 'USER')
+            var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" + "<div class='content'>Distance travelled today : " + vehiclev.odometer  + " Km" + "</div>" ;
+        else
+            var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" ;
         vehiclev.infobox.setContent(content);
         vehiclev.infobox.setPosition(vehiclev.vehicleMarker.getPosition());
     };

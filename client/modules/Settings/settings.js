@@ -213,7 +213,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 });
             }else if(status == "EMPTY"){
                 Materialize.toast('No vehicles, add vehicles to watch replay',2000);
-                $location.path('/vehicles');
+                //$location.path('/vehicles');
             }else if(status == "FAILED" || status == "ERROR"){
                 Materialize.toast('Session expired,login again',1000);
                 $rootScope.logout();

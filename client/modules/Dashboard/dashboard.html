@@ -21,7 +21,7 @@
                                 <th data-field="vehicle_number">vehicle Number</th>
                                 <th data-field="vehicle_location">vehicle Location</th>
                                 <th data-field="vehicle_speed">Vehicle Speed (Km/Hr)</th>
-                                <th data-field="vehicle_odomer">Distance Covered Today (Km)</th>
+                                <th data-field="vehicle_odomer" ng-if="userDetails.userType!='USER'">Distance Covered Today (Km)</th>
                                 <th data-field="packet_time" ng-if="userDetails.userType!='USER'">Last Updated Time</th>
                             </tr>
                         </thead>
@@ -36,7 +36,7 @@
                                 <td class="vehicle_number">{{vehicle.deviceName}}</td>
                                 <td class="vehicle_location">{{vehicle.vehicleLocation}}</td>
                                 <td class="vehicle_speed">{{vehicle.speed}}</td>
-                                <td class="vehicle_odometer">{{vehicle.odometer}}</td>
+                                <td class="vehicle_odometer" ng-if="userDetails.userType!='USER'">{{vehicle.odometer}}</td>
                                 <td class="packet_time" ng-if="userDetails.userType!='USER'">{{vehicle.packetTime}}</td>
                             </tr>
                         </tbody>
