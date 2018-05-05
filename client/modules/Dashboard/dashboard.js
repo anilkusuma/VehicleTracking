@@ -149,6 +149,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                     $scope.vehicles[i].vehicleMarker = "";
                     $scope.vehicles[i].epolyImage = "";
                     $scope.vehicles[i].deltaPoint= "";
+                    $scope.vehicles[i].infobox = "";
                     getLocationDetails($scope.vehicles[i]);
                 }
                 hidePreloader({},function(){
