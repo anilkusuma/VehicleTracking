@@ -96,6 +96,7 @@ app.start = function() {
                                 if(deviceImei == packet.substring(5,20)){
                                     if(customLib.checkCRC(packet.substring(0,packet.length-4)) == packet.substring(packet.length-4,packet.length)){
                                         loginStatus = true;
+                                        var login = {};
                                         if(packetLength == "11"){
                                             timeZone = customLib.convertTimeZone(packet.substring(24,28));
                                         }else{
