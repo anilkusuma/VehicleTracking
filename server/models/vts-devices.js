@@ -201,35 +201,67 @@ module.exports = function(VtsDevices) {
 
                 if(userType == "ADMIN"){
                     var userId = req.query.userId;
-                    var companyId = req.query.companyId;
-                    console.log("Company id is "+companyId+", UserId is "+ userId);
-                    VtsDevices.find({where:{'and':[{'companyId':companyId},{'userId':userId}]}},function(err,instance){
-                        if(instance.length!=0){
-                            result = {};
-                            result.responseData = instance;
-                            result.returnStatus = "SUCCESS";
-                            res.send(result);
-                        }else{
-                            result = {};
-                            result.returnStatus="EMPTY";
-                            console.log("undefined error is"+err);
-                            res.send(result);
-                        }
-                    });
+                    if(userId == 'ALL'){
+                        VtsDevices.find(function(err,instance){
+                            if(instance.length!=0){
+                                result = {};
+                                result.responseData = instance;
+                                result.returnStatus = "SUCCESS";
+                                res.send(result);
+                            }else{
+                                result = {};
+                                result.returnStatus="EMPTY";
+                                console.log(" error is "+err);
+                                res.send(result);
+                            }
+                        });
+                    } else {
+                        var companyId = req.query.userId;
+                        console.log("Company id is "+companyId+", UserId is "+ userId);
+                        VtsDevices.find({where:{'companyId':companyId}},function(err,instance){
+                            if(instance.length!=0){
+                                result = {};
+                                result.responseData = instance;
+                                result.returnStatus = "SUCCESS";
+                                res.send(result);
+                            }else{
+                                result = {};
+                                result.returnStatus="EMPTY";
+                                console.log("error is"+err);
+                                res.send(result);
+                            }
+                        });
+                    }
                 }else{
-                    var companyId = user.vtsLogin.companyId;
-                    VtsDevices.find({where:{'and':[{'companyId':companyId},{'userId':userId}]}},function(err,instance){
-                        if(instance.length!=0){
-                            result = {};
-                            result.responseData = instance;
-                            result.returnStatus = "SUCCESS";
-                            res.send(result);
-                        }else{
-                            result = {};
-                            result.returnStatus="EMPTY";
-                            res.send(result);
-                        }
-                    }); 
+                    if(userId == 'ALL') {
+                        var companyId = user.vtsLogin.companyId;
+                        VtsDevices.find({where:{'companyId':companyId}},function(err,instance){
+                            if(instance.length!=0){
+                                result = {};
+                                result.responseData = instance;
+                                result.returnStatus = "SUCCESS";
+                                res.send(result);
+                            }else{
+                                result = {};
+                                result.returnStatus="EMPTY";
+                                res.send(result);
+                            }
+                        }); 
+                    } else {
+                        var companyId = user.vtsLogin.companyId;
+                        VtsDevices.find({where:{'and':[{'companyId':companyId},{'userId':userId}]}},function(err,instance){
+                            if(instance.length!=0){
+                                result = {};
+                                result.responseData = instance;
+                                result.returnStatus = "SUCCESS";
+                                res.send(result);
+                            }else{
+                                result = {};
+                                result.returnStatus="EMPTY";
+                                res.send(result);
+                            }
+                        }); 
+                    }
                 }
 			}else{
 				result = {};

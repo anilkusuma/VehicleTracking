@@ -10,9 +10,9 @@ module.exports = {
         "connector": "mysql"
     },
     "GoogleMySqlDB": {
-        "host": "35.187.153.164",
+        "host": "35.234.15.75",
         "port": 3306,
-        "url": "mysql://anilkusuma:anilkusuma@35.187.153.164/db_ads",
+        "url": "mysql://anilkusuma:anilkusuma@35.234.15.75/db_ads",
         "database": "db_ads",
         "password": "anilkusuma",
         "name": "GoogleMySqlDB",

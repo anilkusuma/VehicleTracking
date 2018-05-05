@@ -136,6 +136,7 @@ module.exports = {
                     console.log('Alarm Packet Success returned object '+JSON.stringify(obj));
                     var alertId = obj.alertId;
                     deviceGps.alertId = alertId;
+                    callback(true);
                     // app.models.DeviceGps.create(deviceGps,function(err,obj){
                     //     if(err){
                     //         console.log('Alarm Gps Store Failed '+err);

@@ -71,7 +71,8 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             loadDashboardMap();
         },0,true);
         if($rootScope.userDetails.userType == 'ADMIN'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
+                {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getAllCompanies(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
@@ -87,7 +88,8 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 $rootScope.initSelect();
             });
         }else if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
+            {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
