@@ -38,12 +38,8 @@ app.controller('customerCtr',['$scope','$rootScope','$timeout','CreateService','
         if($rootScope.userDetails.userType == 'ADMIN'){
             CreateService.getAllAdmins(function(status,customers){
                 if(status == "SUCCESS"){
+                    $scope.customers = customers;
                     Materialize.toast('Success',1000);
-                    $scope.customers = [];
-                    for(var i=0; i < customers.length; i++) {
-                        if(customers[i].accountActive == 'Y')
-                            $scope.customers = $scope.customers.concat(customers[i]);
-                    }
                     hidePreloader();
                 }else if(status=="EMPTY"){
                     hidePreloader();
@@ -57,12 +53,8 @@ app.controller('customerCtr',['$scope','$rootScope','$timeout','CreateService','
         }else if($rootScope.userDetails.userType == 'COMPANY'){
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
+                    $scope.customers = customers;
                     Materialize.toast('Success',1000);
-                    $scope.customers = [];
-                    for(var i=0; i < customers.length; i++) {
-                        if(customers[i].accountActive == 'Y')
-                            $scope.customers = $scope.customers.concat(customers[i]);
-                    }
                     hidePreloader();
                 }else if(status=="EMPTY"){
                     hidePreloader();
@@ -496,7 +488,6 @@ app.controller('createVehicleCtr',['$scope','$rootScope','$timeout','CreateServi
             if($rootScope.userDetails.userType == "ADMIN"){
                 CreateService.getAllAdmins(function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = [];
                         for(var i=0; i < customers.length; i++) {
                             if(customers[i].accountActive == 'Y')
                                 $scope.customers = $scope.customers.concat(customers[i]);
@@ -517,7 +508,6 @@ app.controller('createVehicleCtr',['$scope','$rootScope','$timeout','CreateServi
             }else if($rootScope.userDetails.userType == "COMPANY"){
                 CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = [];
                         for(var i=0; i < customers.length; i++) {
                             if(customers[i].accountActive == 'Y')
                                 $scope.customers = $scope.customers.concat(customers[i]);
@@ -724,7 +714,6 @@ app.controller('editVehicleCtr',['$scope','$rootScope','$timeout','CreateService
             if($rootScope.userDetails.userType == "ADMIN"){
                 CreateService.getAllAdmins(function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = [];
                         for(var i=0; i < customers.length; i++) {
                             if(customers[i].accountActive == 'Y')
                                 $scope.customers = $scope.customers.concat(customers[i]);
@@ -749,7 +738,6 @@ app.controller('editVehicleCtr',['$scope','$rootScope','$timeout','CreateService
             }else if($rootScope.userDetails.userType == "COMPANY"){
                 CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = [];
                         for(var i=0; i < customers.length; i++) {
                             if(customers[i].accountActive == 'Y')
                                 $scope.customers = $scope.customers.concat(customers[i]);
