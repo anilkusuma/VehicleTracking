@@ -75,7 +75,10 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getAllCompanies(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -92,7 +95,10 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){

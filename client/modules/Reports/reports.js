@@ -155,7 +155,10 @@ app.controller('generalCtr',['$rootScope','$scope','ReportsService','$timeout','
         if($rootScope.userDetails.userType == 'COMPANY'){
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -331,7 +334,10 @@ app.controller('detailCtr',['$rootScope','$scope','ReportsService','$timeout','$
         if($rootScope.userDetails.userType == 'COMPANY'){
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -500,7 +506,10 @@ app.controller('overSpeedCtr',['$rootScope','$scope','ReportsService','$timeout'
         if($rootScope.userDetails.userType == 'COMPANY'){
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -674,7 +683,10 @@ app.controller('stoppageCtr',['$rootScope','$scope','ReportsService','$timeout',
         if($rootScope.userDetails.userType == 'COMPANY'){
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -841,7 +853,10 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         if($rootScope.userDetails.userType == 'COMPANY'){
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -1266,7 +1281,10 @@ app.controller('distanceReportsCtr',['$rootScope','$scope','ReportsService','$ti
         if($rootScope.userDetails.userType == 'COMPANY'){
             $rootScope.getUsersOfCompany(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){

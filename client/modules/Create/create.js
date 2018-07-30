@@ -39,7 +39,10 @@ app.controller('customerCtr',['$scope','$rootScope','$timeout','CreateService','
             CreateService.getAllAdmins(function(status,customers){
                 if(status == "SUCCESS"){
                     Materialize.toast('Success',1000);
-                    $scope.customers = customers;
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                     hidePreloader();
                 }else if(status=="EMPTY"){
                     hidePreloader();
@@ -54,7 +57,10 @@ app.controller('customerCtr',['$scope','$rootScope','$timeout','CreateService','
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
                     Materialize.toast('Success',1000);
-                    $scope.customers = customers;
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                     hidePreloader();
                 }else if(status=="EMPTY"){
                     hidePreloader();
@@ -394,7 +400,10 @@ app.controller('vehicleCtr',['$scope','$timeout','CreateService','Upload','$root
             $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             $rootScope.getAllCompanies(function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -410,7 +419,10 @@ app.controller('vehicleCtr',['$scope','$timeout','CreateService','Upload','$root
             $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
             CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < customers.length; i++) {
+                        if(customers[i].accountActive == 'Y')
+                            $scope.customers = $scope.customers.concat(customers[i]);
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -482,7 +494,10 @@ app.controller('createVehicleCtr',['$scope','$rootScope','$timeout','CreateServi
             if($rootScope.userDetails.userType == "ADMIN"){
                 CreateService.getAllAdmins(function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = $scope.customers.concat(customers);
+                        for(var i=0; i < customers.length; i++) {
+                            if(customers[i].accountActive == 'Y')
+                                $scope.customers = $scope.customers.concat(customers[i]);
+                        }
                     }else if(status=="EMPTY"){
                     }
                     else if(status == "FAILED"){
@@ -499,7 +514,10 @@ app.controller('createVehicleCtr',['$scope','$rootScope','$timeout','CreateServi
             }else if($rootScope.userDetails.userType == "COMPANY"){
                 CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = $scope.customers.concat(customers);
+                        for(var i=0; i < customers.length; i++) {
+                            if(customers[i].accountActive == 'Y')
+                                $scope.customers = $scope.customers.concat(customers[i]);
+                        }
                     }else if(status=="EMPTY"){
                     }
                     else if(status == "FAILED"){
@@ -702,7 +720,10 @@ app.controller('editVehicleCtr',['$scope','$rootScope','$timeout','CreateService
             if($rootScope.userDetails.userType == "ADMIN"){
                 CreateService.getAllAdmins(function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = $scope.customers.concat(customers);
+                        for(var i=0; i < customers.length; i++) {
+                            if(customers[i].accountActive == 'Y')
+                                $scope.customers = $scope.customers.concat(customers[i]);
+                        }
                     }else if(status=="EMPTY"){
                     }
                     else if(status == "FAILED"){
@@ -723,7 +744,10 @@ app.controller('editVehicleCtr',['$scope','$rootScope','$timeout','CreateService
             }else if($rootScope.userDetails.userType == "COMPANY"){
                 CreateService.getUsersOfCompany($rootScope.userDetails.companyId,function(status,customers){
                     if(status == "SUCCESS"){
-                        $scope.customers = $scope.customers.concat(customers);
+                        for(var i=0; i < customers.length; i++) {
+                            if(customers[i].accountActive == 'Y')
+                                $scope.customers = $scope.customers.concat(customers[i]);
+                        }
                     }else if(status=="EMPTY"){
                     }
                     else if(status == "FAILED"){
