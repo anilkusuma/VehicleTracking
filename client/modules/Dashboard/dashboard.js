@@ -41,7 +41,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
     $rootScope.AndroidText = 'Customers';
     showPreloader();
     $scope.img = new Image();
-    $scope.img.src = "./images/Truck Top View ex 1X1 50 pix.png";
+    $scope.img.src = "./images/SchoolBus.png";
     //$scope.img.src = "./images/BikeTopView2.png";
 	var resetAllDashboardVariables = function(){
         $scope.dashboardVariable = {};

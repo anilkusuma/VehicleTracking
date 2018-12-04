@@ -82,7 +82,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
                                                 strokeWeight: 1
                                             });
     $scope.img = new Image();
-    $scope.img.src = "./images/Truck Top View ex 1X1 50 pix.png";
+    $scope.img.src = "./images/SchoolBus.png";
 
     $scope.showMapActions = false;
     $scope.showPlayButton = false;

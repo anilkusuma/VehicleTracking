@@ -77,7 +77,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
                                                     icon : $scope.endIcon
                                                 });
     $scope.img = new Image();
-    $scope.img.src = "./images/Truck Top View ex 1X1 50 pix.png";
+    $scope.img.src = "./images/SchoolBus.png";
     $scope.inputFocused = function(type){
         $('.errorName').hide();
     };

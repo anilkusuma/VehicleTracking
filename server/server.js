@@ -223,6 +223,57 @@ app.start = function() {
                 }
             });     
         });
+        tcpServer_BSTPL = net.createServer();
+        tcpServer_BSTPL.listen({host:'0.0.0.0', port:7836}, function(){
+            console.log('Server BSTPL listening on ' + tcpServer_BSTPL.address().address +':'+ tcpServer_BSTPL.address().port);
+        });
+        tcpServer_BSTPL.on('connection', function(sock) {
+            console.log("Connection received for DeviceType BSTPL "+ sock.remoteAddress +':'+ sock.remotePort);
+            sock.on('data', function(data) {
+                console.log(' Received data from BSTPL device  ' + data);
+                var deviceImei = '';
+                var dataString='';
+                var timeZone = '+05:30';
+                var startPattern = "GTPL $1";
+                var endPattern = "#";
+
+                dataString = dataString+data.toString();
+                while(1) {
+                    if((dataString.indexOf(startPattern) == -1) || (dataString.indexOf(endPattern) == -1)){
+                        break;
+                    }else{
+                        var packet = dataString.substring(dataString.indexOf(startPattern), dataString.indexOf(endPattern));
+                        packet = packet.split(',');
+                        if(packet[2] == "A") {
+                            console.log('location packet from BSTPL is : '+ packet.toString());
+                            var location = {};
+
+                            location.deviceImei = packet[1];
+                            location.packetType = '12';
+                            location.timeZone = timeZone;
+                            var date = packet[3].substring(4,6)+'-'+packet[3].substring(2,4)+'-'+packet[3].substring(0,2);
+                            var time = packet[4].substring(0,2) + ':' + packet[4].substring(2,4) + ':' + packet[4].substring(4,6);
+                            location.packetTime = date+ ' '+time;
+                            location.noOfSat = packet[12];
+                            location.latitude = packet[5];
+                            location.longitude = packet[7];
+                            location.speed= packet[9];
+                            location.direction = packet[10];
+                            location.packetSerialNumber = 0;
+                            location.alertId = null;
+
+                            app.models.Packets.create(location, function(err,obj){
+                                if(err)
+                                    console.log(err);
+                            });
+                            var fileAppendString = '*'+JSON.stringify(location)+'#';
+                            fs.appendFileSync(path.resolve('./packetData.txt'),fileAppendString);
+                        }
+                        dataString = dataString.slice(dataString.indexOf(endPattern)+1);
+                    }
+                }
+            });
+        });
     }   
 };
 boot(app, __dirname, function(err) {

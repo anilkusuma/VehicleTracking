@@ -49,10 +49,6 @@
         "dataSource": "MySqlDB",
         "public": true
     },
-    "TestDeviceGps": {
-        "dataSource": "GoogleMySqlDB",
-        "public": true
-    },
     "DeviceAlerts": {
         "dataSource": "MySqlDB",
         "public": true
