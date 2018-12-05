@@ -249,16 +249,18 @@ app.start = function() {
                             var location = {};
 
                             location.deviceImei = packet[1];
-                            location.packetType = '12';
+                            location.packetType = '$1';
                             location.timeZone = timeZone;
                             var date = packet[3].substring(4,6)+'-'+packet[3].substring(2,4)+'-'+packet[3].substring(0,2);
                             var time = packet[4].substring(0,2) + ':' + packet[4].substring(2,4) + ':' + packet[4].substring(4,6);
                             location.packetTime = date+ ' '+time;
+                            console.log(" Odomoter of vehicle "+location.deviceImei+" is "+packet[10]);
+                            location.odometer = packet[10];
                             location.noOfSat = packet[12];
                             location.latitude = packet[5];
                             location.longitude = packet[7];
                             location.speed= packet[9];
-                            location.direction = packet[10];
+                            location.direction = packet[11];
                             location.packetSerialNumber = 0;
                             location.alertId = null;
 

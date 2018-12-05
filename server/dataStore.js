@@ -86,6 +86,42 @@ module.exports = {
             });
         });
     },
+    saveGpsPacketForBSTPL : function(gpsPacket,callback){
+        var app = require('./server.js');
+        var customLib = require('./customlib.js');
+        var moment = require('moment');
+        var deviceGps = {
+                            "deviceImei":gpsPacket.deviceImei,
+                            "packetTime":gpsPacket.packetTime,
+                            "noOfSat":gpsPacket.noOfSat,
+                            "latitude":gpsPacket.latitude,
+                            "longitude":gpsPacket.longitude,
+                            "speed":gpsPacket.speed,
+                            "direction":gpsPacket.direction.toString(),
+                            "odometer":gpsPacket.odometer,
+                            "packetSerialNumber":parseInt(gpsPacket.packetSerialNumber),
+                            "alertId":gpsPacket.alertId
+                        };
+        app.models.VtsDevices.find({'where':{'deviceImei':deviceGps.deviceImei}},function(err,vehicles){
+            if(vehicles.length != 0){
+                deviceGps.vehicleId = vehicles[0].deviceId;
+                deviceGps.userId = vehicles[0].userId;
+                deviceGps.companyId = vehicles[0].companyId;
+            }
+            app.models.DeviceGps.create(deviceGps,function(err,obj){
+                if(err){
+                    console.log('Data Store Failed '+err);
+                    callback(false);
+                }else if(obj == null){
+                    //console.log('Data Store Failed returned object is null'+err);
+                    callback(false);
+                }else{
+                    console.log('Data Store Success for BSTPL returned object '+JSON.stringify(obj));
+                    callback(true);
+                }
+            });
+        });
+    },
     saveAlertPacket : function(alaram,callback){
         var app = require('./server.js');
         var moment = require('moment');
@@ -207,6 +243,10 @@ module.exports = {
             }
             if(packet.packetType == "12" || packet.packetType == "22"){
                 DataStore.saveGpsPacket(packet,function(status){
+                    callback(status);
+                });
+            }else if(packet.packetType == "$1"){
+                DataStore.saveGpsPacketForBSTPL(packet,function(status){
                     callback(status);
                 });
             }else if(packet.packetType == "13"){
