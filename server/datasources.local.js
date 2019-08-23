@@ -14,7 +14,10 @@ module.exports = {
         "port": 27017,
         "database": "PagonVts",
         "name": "MongoDB",
-        "connector": "mongodb"
+        "connector": "mongodb",
+        "user" : "anilkusuma",
+        "password" : "anilkusuma",
+        "authSource" : "admin"
     }
 };
 //104.199.169.245

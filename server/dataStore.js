@@ -32,7 +32,7 @@ module.exports = {
                     deviceGps.odometer = parseFloat(instance[0].odometer)+customLib.distanceBwLatLng(instance[0].latitude,instance[0].longitude,deviceGps.latitude,deviceGps.longitude);
                     deviceGps.odometer = deviceGps.odometer.toFixed(4).substring(0,15);
                 }else{
-                    if(deviceGps.odometer == '')
+                    if(deviceGps.odometer === '')
                         deviceGps.odometer = '0';
                 }
                 app.models.DeviceGps.find({where:{and:[{'deviceImei':deviceGps.deviceImei},{'packetTime':{gt:currentPacketTime}}]},order:'packetTime ASC'},function(ascerr,ascinstance){

@@ -57,6 +57,7 @@ module.exports = function(VtsDevices) {
             http:{path:'/QueryDevices',verb:'get'}
         }
     );
+
     VtsDevices.updateDevice = function(req,res,next){
 		customLib.validateCookies(req,function(validated,user){
 			if(validated){
