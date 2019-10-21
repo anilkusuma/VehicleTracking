@@ -12,7 +12,8 @@ if(selector == null || validator== null || userID == null || userType == null ||
             $sceDelegateProvider.resourceUrlWhitelist([
                 'self',
                 'https://drive.google.com/**',
-                'https://www.youtube.com/**'
+                'https://www.youtube.com/**',
+                'http://apis.mapmyindia.com/**'
             ]);
             $routeProvider
             .when('/live', {
@@ -85,7 +86,8 @@ if(selector == null || validator== null || userID == null || userType == null ||
             $sceDelegateProvider.resourceUrlWhitelist([
                 'self',
                 'https://drive.google.com/**',
-                'https://www.youtube.com/**'
+                'https://www.youtube.com/**',
+                'http://apis.mapmyindia.com/**'
             ]);
             $routeProvider
             .when('/live', {
@@ -166,7 +168,8 @@ if(selector == null || validator== null || userID == null || userType == null ||
             $sceDelegateProvider.resourceUrlWhitelist([
                 'self',
                 'https://drive.google.com/**',
-                'https://www.youtube.com/**'
+                'https://www.youtube.com/**',
+                'http://apis.mapmyindia.com/**'
             ]);
             $routeProvider
             .when('/live', {
@@ -297,7 +300,7 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
         if($rootScope.userDetails.userType == 'ADMIN'){
             $scope.userRoal = 'Admin';
         }else if ($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.userRoal = 'Agency'; 
+            $scope.userRoal = 'Agency';
         }else{
             $scope.userRoal = 'User';
         }
@@ -319,10 +322,10 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
             $rootScope.userDetailsDone = true;
             $timeout(function(){
                 $('.collapsible').collapsible({
-                    accordion : true 
+                    accordion : true
                 });
                 $rootScope.$broadcast('DetailsDone');
-            },0,true);    
+            },0,true);
         });
     };
 
@@ -395,7 +398,7 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
                         $cookies.remove('companyId');
                         window.location = '/login';
                     });
-                }  
+                }
             },function errorCallback(response) {
                 Materialize.toast('Unexpected Error.Please Login Again',2000,'rounded',function(){
                     $cookies.remove('selector');
@@ -445,9 +448,9 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
-    }; 
+    };
 
     $rootScope.getAllCompanies = function(callback){
         var url = '/api/VtsUsers/GetAllCompanies';
@@ -457,9 +460,9 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
-    }; 
+    };
 
     $rootScope.geoDecode = function(myLatLng,callback){
         var geocoder = new google.maps.Geocoder();
@@ -471,7 +474,7 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
                 }else {
                     result = myLatLng.lat().toFixed(5)+','+myLatLng.lng().toFixed(5);
                 }
-            } 
+            }
             else {
                 result = myLatLng.lat().toFixed(5)+','+myLatLng.lng().toFixed(5);
             }

@@ -8,7 +8,7 @@ app.factory('DashboardService',['$http','$rootScope',function($http,$rootScope){
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     DashboardServices.getVehicleLatestPacket = function(imei,callback){
@@ -19,7 +19,7 @@ app.factory('DashboardService',['$http','$rootScope',function($http,$rootScope){
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     DashboardServices.getTodayOdometer = function(imei,callback){
@@ -30,7 +30,7 @@ app.factory('DashboardService',['$http','$rootScope',function($http,$rootScope){
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData.distanceCovered);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     }
     return DashboardServices;
@@ -156,6 +156,12 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                     $scope.vehicles[i].epolyImage = "";
                     $scope.vehicles[i].deltaPoint= "";
                     $scope.vehicles[i].infobox = "";
+                    $scope.vehicles[i].mapIconImage = new Image();
+                    if($scope.vehicles[i].vehicleType == "Bus") {
+                        $scope.vehicles[i].mapIconImage.src = "./images/SchoolBus.png";
+                    } else {
+                        $scope.vehicles[i].mapIconImage.src = "./images/TruckTopView.png";
+                    }
                     getLocationDetails($scope.vehicles[i]);
                 }
                 hidePreloader({},function(){
@@ -237,7 +243,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         $scope.dashboardVariable.Map.mapTypes.set('map_style', styledMap);
         $scope.dashboardVariable.Map.setMapTypeId('map_style');
         google.maps.event.addListener($scope.dashboardVariable.Map, 'zoom_changed', function() {
-            zoomChangeBoundsListener = 
+            zoomChangeBoundsListener =
                 google.maps.event.addListener($scope.dashboardVariable.Map, 'bounds_changed', function(event) {
                     if (this.getZoom() > 10 && this.initialZoom == true) {
                         // Change max/min zoom here
@@ -297,7 +303,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             }
             vehicle.dashboardTimer.timerPromise  =   $timeout(function(){
                                                         getLocationDetails(vehicle);
-                                                    },2000,true);
+                                                    },60000,true);
         });
     };
     $scope.showFlagChange = function($index){
@@ -345,7 +351,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             $scope.dashboardVariable.bounds.extend(vehicle.vehicleMarker.getPosition());
             $scope.dashboardVariable.Map.fitBounds($scope.dashboardVariable.bounds);
             updateInfoBox(vehicle);
-            
+
         }
         else{
             if(vehicle.showFlag == true){
@@ -400,7 +406,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 var p0 = new google.maps.LatLng(vehicle.lastPacket.latitude,vehicle.lastPacket.longitude);
                 var p1 = new google.maps.LatLng(vehicle.currentPacket.latitude,vehicle.currentPacket.longitude);
                 var angle = dashboardCanvasFunctions.getBearing(p0,p1);
-                dashboardCanvasFunctions.plotImage(angle,canvas);
+                dashboardCanvasFunctions.plotImage(angle, canvas, vehicle.mapIconImage);
             }
         },
         getVehicleMarker : function(vehicle){
@@ -418,11 +424,11 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         getEpolyMarker : function(vehicle){
             var myLatLng = new google.maps.LatLng(vehicle.latitude,vehicle.longitude);
             var epolyMarker = new ELabel({
-                                    latlng: myLatLng, 
-                                    label: '<canvas id="dashboardCanvas'+vehicle.deviceId+'" width="50" height="50"></canvas>', 
-                                    classname: 'markerdcanvas', 
-                                    offset: new google.maps.Size(-25,-25), 
-                                    opacity: 100, 
+                                    latlng: myLatLng,
+                                    label: '<canvas id="dashboardCanvas'+vehicle.deviceId+'" width="50" height="50"></canvas>',
+                                    classname: 'markerdcanvas',
+                                    offset: new google.maps.Size(-25,-25),
+                                    opacity: 100,
                                     overlap: true,
                                     clicktarget: false,
                                     callbackTarget : dashboardMapFunctions.drawEployMaker
@@ -488,11 +494,11 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 dashboardTransistionFunction.animateStep(vehicle,(new Date()).getTime());
             }
         },
-        animateStep : function(vehicle, startTime) {            
+        animateStep : function(vehicle, startTime) {
             var ellapsedTime = (new Date()).getTime() - startTime;
             var durationRatio = ellapsedTime/5000; // 0 - 1
             var easingDurationRatio = durationRatio;
-            
+
             if (durationRatio < 1) {
                 var deltaPosition = new google.maps.LatLng(parseFloat(vehicle.AT_startPosition_lat) + parseFloat(parseFloat(vehicle.newPosition_lat - vehicle.AT_startPosition_lat)*easingDurationRatio),
                                                               parseFloat(vehicle.AT_startPosition_lng) + parseFloat(parseFloat(vehicle.newPosition_lng - vehicle.AT_startPosition_lng)*easingDurationRatio));
@@ -503,16 +509,16 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 }
                 vehicle.AT_animationHandler =   $timeout(function(){
                                                     dashboardTransistionFunction.animateStep(vehicle, startTime)
-                                                },0,false); 
+                                                },0,false);
             }else {
                 vehicle.vehicleMarker.setPosition(new google.maps.LatLng(vehicle.newPosition_lat,vehicle.newPosition_lng));
                 if(vehicle.epolyImage != null){
                     dashboardMapFunctions.drawEployMaker(vehicle);
                     vehicle.epolyImage.setPoint(new google.maps.LatLng(vehicle.newPosition_lat,vehicle.newPosition_lng));
                 }
-            }            
+            }
         },
-        drawTransistionEployMaker : function(vehicle,newDelta){
+        drawTransistionEployMaker : function(vehicle, newDelta){
             canvas = document.getElementById('dashboardCanvas'+vehicle.deviceId);
             if(canvas!= null){
                 canvas = canvas.getContext('2d');
@@ -522,9 +528,9 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                     var p0 = vehicle.deltaPoint;
                 var p1 = newDelta;
                 var angle = dashboardCanvasFunctions.getBearing(p0,p1);
-                dashboardCanvasFunctions.plotImage(angle,canvas);
+                dashboardCanvasFunctions.plotImage(angle, canvas, vehicle.mapIconImage);
             }
-            vehicle.deltaPoint = newDelta;   
+            vehicle.deltaPoint = newDelta;
         },
     };
 
@@ -543,14 +549,14 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             angle = angle+Math.PI;
             return angle;
         },
-        plotImage : function(angle,canvas){
+        plotImage : function(angle, canvas, image){
             var cosa = Math.cos(angle);
             var sina = Math.sin(angle);
             canvas.clearRect(0,0,50,50);
             canvas.save();
             canvas.rotate(angle);
             canvas.translate(25*sina+25*cosa,25*cosa-25*sina);
-            canvas.drawImage($scope.img,-25,-25);
+            canvas.drawImage(image,-25,-25);
             canvas.restore();
         }
     };

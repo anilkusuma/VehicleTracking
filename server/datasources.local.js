@@ -12,7 +12,7 @@ module.exports = {
     "MongoDB": {
         "host": "localhost",
         "port": 27017,
-        "database": "PagonVts",
+        "database": "VehicleTracking",
         "name": "MongoDB",
         "connector": "mongodb",
         "user" : "anilkusuma",

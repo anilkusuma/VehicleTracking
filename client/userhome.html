@@ -19,10 +19,10 @@
     <link href="/libs/font-awesome/css/font-awesome.css" type="text/css" rel="stylesheet" media="screen">
     <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="/libs/Odometer/odometer-theme-car.css" type="text/css" rel="stylesheet" media="screen,porjection">
-    <link href="/libs/speed/css/speedometer.css" type="text/css" rel="stylesheet" media="screen,porjection"> 
+    <link href="/libs/speed/css/speedometer.css" type="text/css" rel="stylesheet" media="screen,porjection">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/dt/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.css"/>
- 
+
 
     <link href="/css/homesa.css" type="text/css" rel="stylesheet" media="screen,projection">
 
@@ -46,17 +46,17 @@
     <header id="header" class="page-topbar" style="display:none">
         <div class="navbar-fixed">
             <nav class="indigo darken-4">
-                <div class="nav-wrapper">                     
-                    <ul class="left">                      
+                <div class="nav-wrapper">
+                    <ul class="left">
                       <li><h1 class="logo-wrapper"><a href="/" class="brand-logo darken-1"><img src="./images/logo-title.png" alt="Pagon logo"></a><span class="logo-text">Pagon</span></h1></li>
                     </ul>
                     <div class="header-search-wrapper hide-on-med-and-down">
                         <i class="mdi-action-search"></i>
                         <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Search Page"/>
                     </div>
-                    <ul class="right hide-on-med-and-down">                        
+                    <ul class="right hide-on-med-and-down">
                         <li><a class="waves-effect waves-block account-icon waves-light"><i class="mdi-action-account-circle"></i></a>
-                        </li>                        
+                        </li>
                         <li><a data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse"><i class="mdi-social-notifications"><span class="count-badge">4</span></i></a>
                         </li>
                         <li><a id="logout_button" ng-click="logout()" class="waves-effect waves-block waves-light"><i class="mdi-hardware-keyboard-tab"></i></a>
@@ -90,7 +90,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="wrapper">
             <aside id="left-sidebar-nav">
                 <ul id="slide-out" class="side-nav fixed z-depth-3 leftside-navigation">
@@ -119,10 +119,8 @@
 		                            <ul>
 		                                <li class="nav-li live-li active" ng-if="userType || adminType || companyType"><a href="live" id="liveTracking"><i class="mdi-maps-my-location"></i>Live</a>
 		                                </li>
-		                                <li class="nav-li history-li" ng-if="adminType || companyType"><a id="historyTracking" href="history"><i class="mdi-action-history"></i>History</a>
+		                                <li class="nav-li history-li" ng-if="adminType || companyType  || userType"><a id="historyTracking" href="history"><i class="mdi-action-history"></i>History</a>
 		                                </li>
-		                                <li class="nav-li Replay-li" ng-if="adminType || companyType"><a id="replayTracking" href="replay"><i class="mdi-av-videocam"></i>Playback</a>
-		                                </li
 		                            </ul>
 		                        </div>
 		                    </li>
@@ -174,7 +172,7 @@
 		                    </li>
 		                </ul>
 		            </li>
-                    <li class="no-padding" ng-if="adminType || companyType">
+                    <li class="no-padding" ng-if="adminType || companyType  || userType">
 	                    <ul class="collapsible" data-collapsible="accordian">
 		                    <li class="nav-li bold reports-li">
 		                    	<a id="reprots" class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-chart"></i>Reports</a>
@@ -197,7 +195,7 @@
 		                    </li>
 		                </ul>
                     </li>
-                    <li class="nav-li settings-li bold" ng-if="adminType || companyType ">
+                    <li class="nav-li settings-li bold" ng-if="adminType">
                         <a id="settings" href="/settings" class="waves-effect waves-cyan">
                             <i class="fa fa-pencil"></i>Settings
                         </a>
@@ -218,8 +216,8 @@
 
             <div class="container">
                 <div ng-view class="page-content">
-                    
-                
+
+
                 </div>
                 <div class="toastWithPreloader" ng-show="showPreloaderToast">
                     <div class="preloader-div valign-wrapper toast-preloaderDiv" ng-show="showPreloaderInPreloaderToast">
@@ -256,13 +254,13 @@
     </footer>
 
 
-    
+
      <!-- ================================================
     Scripts
     ================================================ -->
-    
+
     <!-- jQuery Library -->
-    <script type="text/javascript" src="./libs/jquery/jquery-3.1.1.min.js"></script> 
+    <script type="text/javascript" src="./libs/jquery/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="/js/js.cookie.js"></script>
     <!-- Materialize Library-->
     <script type="text/javascript" src="/libs/materialize/js/materialize.js"></script>
@@ -282,14 +280,14 @@
     <script src="./libs/jqueryformmater/dist/jquery.formatter.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/u/dt/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-flash-1.2.1,b-html5-1.2.1,b-print-1.2.1,r-2.1.0/datatables.min.js"></script>
     <script type="text/javascript" src="/libs/scDateTime/sc-date-time.js"></script>
-    
+
 
     <script type="text/ecmascript" src="/libs/Odometer/odometer.js"></script>
     <script type="text/ecmascript" src="/libs/speed/js/speedometer.js"></script>
 
-    
+
     <!-- google maps libraries -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-EebnhIDEI7KFI_7JYUcjDYm2CT_mRJc"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZMIdfLoJQBuKrXBxd9EnT_0jboxWlrwk"></script>
     <script type="text/javascript" src="/libs/map/epoly.js"></script>
     <script type="text/javascript" src="/libs/map/ELabel.js"></script>
     <script type="text/javascript" src="/libs/map/SlidingMarker.min.js"></script>
@@ -316,7 +314,7 @@
     <script type="text/ecmascript" src="/js/configurations.js"></script>
     <script type="text/ecmascript" src="/modules/Create/create.js"></script>
     <script type="text/javascript" src="/modules/Replay/replay.js"></script>
-    <script type="text/javascript" src="/modules/History/history.js"></script> 
+    <script type="text/javascript" src="/modules/History/history.js"></script>
     <script type="text/javascript" src="/modules/Reports/reports.js"></script>
     <script type="text/javascript" src="/modules/Profile/profile.js"></script>
     <script type="text/javascript" src="/modules/Settings/settings.js"></script>
