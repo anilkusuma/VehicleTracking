@@ -38,12 +38,12 @@
     padding-left: 10px;
 }
 .number_labels{
-	
+
 	padding : 2px;
 	border : 1px solid #030F54;
 	opacity : 1 !important;
 	margin-top : -41px !important;
-	margin-left : 13px !important; 
+	margin-left : 13px !important;
 	font-style:italic;
 	font-weight:bold;
 }
@@ -85,7 +85,7 @@
     background-color: rgba(247, 247, 247, 0.9) !important;
     height: 84px;
 }
-    
+
 
 .dashboard-minimize-button{
     position: relative;
@@ -172,7 +172,7 @@ speedometerWraper-dashboard_speedometer,.dashboard-speedometer-div{
     background-color: #4B78E2;
 }
 .vehicles-card .card-content{
-    
+
 background-color: #E05084;
 }
 
@@ -194,7 +194,6 @@ background-color: #E05084;
     left : -15px;
     padding: 10px;
     height: 100px;
-    
 }
 .drivers-card-p {
     position: relative;
@@ -202,4 +201,119 @@ background-color: #E05084;
 }
 .drivers-count {
     font-size: 45px;
+}
+
+#DashboardListView .card-main-content {
+    display: flex;
+    flex-direction: row;
+}
+
+#DashboardListView .card-details-content {
+    flex: 1 0;
+}
+
+#DashboardListView .card-vehicle-image {
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+#DashboardListView .vehicle-image {
+    font-size: x-large;
+    text-align: center;
+}
+
+#DashboardListView .card-vehicle-title {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#DashboardListView .vehicle-name {
+    font-family: 'Merriweather', serif;
+    font-size: x-large;
+    font-weight: 500;
+}
+
+#DashboardListView .vehicle-image i:before {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+#DashboardListView .card-details-content .vehicle-details span {
+    font-family: 'Merriweather', serif;
+    font-size: small;
+    font-weight: 400;
+    color: #212121;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#DashboardListView .dashboard-list-view-col {
+    margin-bottom: 0px !important;
+}
+
+#DashboardListView .dashboard-list-view-card {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#DashboardListView .card-main-content {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+#DashboardListView .vehicle-image .red {
+    color: red;
+    background-color: white !important;
+}
+
+#DashboardListView .vehicle-image .yellow {
+    color: yellow;
+    background-color: white !important;
+}
+
+#DashboardListView .vehicle-image .green {
+    color: green;
+    background-color: white !important;
+}
+
+#DashboardMapView .dashboard-map-view-row {
+    margin: 0px !important;
+    margin-bottom: 15px !important;
+    margin-top: 5px !important;
+}
+
+#DashboardMapView .dashboard-map-view-row .row, #DashboardMapView .dashboard-map-view-row .col,
+        #DashboardMapView .dashboard-map-view-row .card {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+.filterRow{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dashboard-view .dashboard-top-filter-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dashboard-view .map-list-toggle-button-div {
+    flex: 1 0;
+}
+
+.dashboard-view .map-list-toggle-button {
+    padding: 0px 15px;
+    font-weight: 500;
 }

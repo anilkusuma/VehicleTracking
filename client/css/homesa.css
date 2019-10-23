@@ -107,10 +107,13 @@ body {
     min-height: 100vh;
     overflow-y: overlay;
     max-height: 100vh;
-    padding-bottom: 110px;
+    padding-bottom: 60px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
 
-    
+.users-select {
+    margin: 0px !important;
+    margin-bottom: 10px !important;
+}

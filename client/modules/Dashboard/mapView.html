@@ -1,0 +1,64 @@
+<link href="/modules/Dashboard/dashboard.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="DashboardMapView dashboard-view top-id-div" id="DashboardMapView">
+    <div class="dashboard-map-view-main main-div">
+        <div class="dashboard-top-filter-row">
+            <div class="map-list-toggle-button-div">
+                <a class="waves-light white-text teal map-list-toggle-button darken-2 btn"  ng-click="showListView()"></i>List</a>
+            </div>
+            <div class="users-select">
+                <div class="input-field user-select-div">
+                    <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row dashboard-map-view-row">
+            <div class="DashboardMap">
+                <div class="row">
+                    <div class="col s12 DashboardMapCol">
+                        <div class="card dashboardmapcard">
+                            <div class="row dashboardStatusRow">
+                                <div class="col s12 statusIndicator">
+                                    <div class="orange_status statusDiv">
+                                        <span class="colorBox">
+                                        </span>
+                                        <span class="colorIndicator">
+			    					        No Gps
+			    				        </span>
+                                    </div>
+                                    <div class="green_status statusDiv">
+                                        <span class="colorBox">
+                                        </span>
+                                        <span class="colorIndicator">
+                                            Running
+                                        </span>
+                                    </div>
+                                    <div class="yellow_status statusDiv">
+                                        <span class="colorBox">
+                                        </span>
+                                        <span class="colorIndicator">
+                                            Idle
+                                        </span>
+                                    </div>
+                                    <div class="red_status statusDiv">
+                                        <span class="colorBox">
+                                        </span>
+                                        <span class="colorIndicator">
+                                            Offline
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row dashboardMapRow">
+                                <div class="col s12 dashboardMapCol">
+                                    <div class="DashboardMapCard" id="DashboardMapContent">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

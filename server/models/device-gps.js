@@ -41,7 +41,7 @@ module.exports = function(DeviceGps) {
             ],
             http:{path:'/LatestPackets',verb:'get'}
         }
-    );   
+    );
     DeviceGps.replayPackets = function(req,res,next){
         var result = {};
         result.responseData = {};
@@ -105,7 +105,7 @@ module.exports = function(DeviceGps) {
                         numberOfStops = count;
                         distanceCovered = Math.round(distanceCovered*100)/100;
                         averageSpeed = Math.round(averageSpeed*100)/100;
-                            
+
                         result.responseData.deviceId = req.query.deviceId;
                         result.responseData.deviceImei = req.query.imei;
                         result.responseData.startLocation = startLocation;
@@ -141,12 +141,12 @@ module.exports = function(DeviceGps) {
             ],
             http:{path:'/GetReplay',verb:'get'}
         }
-    );  
+    );
 
     DeviceGps.getTodayPackets = function(req,res,next){
         var result = {};
         result.responseData={};
-        
+
         var start_time = null;
         var end_time = null;
         var startLocation = null;
@@ -209,7 +209,7 @@ module.exports = function(DeviceGps) {
                         numberOfStops = count;
                         distanceCovered = Math.round(distanceCovered*100)/100;
                         averageSpeed = Math.round(averageSpeed*100)/100;
-                            
+
                         result.responseData.deviceId = req.query.deviceId;
                         result.responseData.deviceImei = req.query.imei;
                         result.responseData.startLocation = startLocation;
@@ -467,7 +467,7 @@ module.exports = function(DeviceGps) {
                             }else if(packets[i].speed != 0){
                                 if(ac == 1){
                                     ed = moment(packets[i].packetTime,'ddd MMM DD YYYY HH:mm:ss');
-                                    diference = ed.diff(sd,'minutes',false);    
+                                    diference = ed.diff(sd,'minutes',false);
                                     if(diference > speed) {
                                         sp.stoppedFor = diference+' minutes';
                                         sp.startTime = packets[i].packetTime;
@@ -738,19 +738,16 @@ module.exports = function(DeviceGps) {
                     }else if(instance.length>1){
                         result.responseData.instance = instance;
                         var found = false;
-                        for(var i=0;i<instance.length;i++){
+                        for(var i=0; i< instance.length; i++){
                             if(instance[i].speed > 0){
-                                start_time = moment(instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss');
+                                end_time = moment(instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss');
                                 found = true;
                                 break;
                             }
                         }
                         for(var i=(instance.length-1);i>=0;i--){
-                            if(instance[i].speed>0){
-                                if(i== (instance.length-1))
-                                    end_time = moment(instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss');
-                                else
-                                    end_time = moment(instance[i+1].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss');
+                            if(instance[i].speed > 0){
+                                start_time = moment(instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss');
                                 found =true;
                                 break;
                             }
@@ -770,7 +767,7 @@ module.exports = function(DeviceGps) {
                         }else{
                             result.returnStatus = "EMPTY";
                             res.send(result);
-                        } 
+                        }
                     }else{
                         result.returnStatus = "EMPTY";
                         res.send(result);
@@ -794,7 +791,7 @@ module.exports = function(DeviceGps) {
             ],
             http:{path:'/DistanceReport',verb:'get'}
         }
-    ); 
+    );
 
 
     DeviceGps.createPacket = function(req,res,next){
@@ -871,7 +868,7 @@ module.exports = function(DeviceGps) {
             ],
             http:{path:'/CreatePacket',verb:'post'}
         }
-    ); 
+    );
 
     DeviceGps.updatePacket = function(req,res,next){
         customLib.validateCookies(req,function(validated,user){
@@ -987,7 +984,7 @@ module.exports = function(DeviceGps) {
                         result = {};
                         result.returnStatus = "ERROR";
                         res.send(result);
-                    }else{ 
+                    }else{
                         result = {};
                         result.returnStatus = "SUCCESS";
                         res.send(result);

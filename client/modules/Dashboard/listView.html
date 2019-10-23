@@ -1,0 +1,76 @@
+<link href="/modules/Dashboard/dashboard.css" type="text/css" rel="stylesheet" media="screen,projection">
+<div class="DashboardListView dashboard-view top-id-div" id="DashboardListView">
+    <div class="dashboard-list-view-main main-div">
+        <div class="dashboard-top-filter-row">
+            <div class="map-list-toggle-button-div">
+                <a class="waves-light white-text teal map-list-toggle-button darken-2 btn"  ng-click="showMapView()"></i>Map</a>
+            </div>
+            <div class="users-select">
+                <div class="input-field user-select-div">
+                    <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!--div class="filter-row">
+            <div class="row vehicle-filter-row">
+                <div class="input-field vehicle-field col s12 m8 l10">
+                    <div class="autocomplete" id="multiple">
+                        <div class="ac-input">
+                            <input type="text" id="vehicle-name" placeholder="Search" data-activates="AutoSuggestDropDown" data-beloworigin="true" autocomplete="off" ng-model="vehicleFilterSettings['filter']" ng-focus="filterInputFocused()" ng-keyup="filterInputChanged($event)">
+                        </div>
+                        <div class="ac-vehicles">
+                            <div class="chip" ng-repeat="selected in vehicleFilterSettings.filteredVehicles track by $index">
+                                {{selected.deviceName}}
+                                <i class="mdi-content-clear close" ng-click="filterChipClosed($index)"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <ul id="AutoSuggestDropDown" class="dropdown-content ac-dropdown" ng-mouseleave="filterAutoSuggestSelected($index)">
+                        <li class="ac-item" ng-hide="vehicleFilterSettings.hideDropDown" ng-repeat="vehicle in vehicleFilterSettings.allVehicles track by vehicle.deviceId" ng-mousedown="filterAutoSuggestClicked($index)">
+                            <div class="checkboxInput">
+                                <input type="checkbox" class="checkBoxSelect filled-in" id="checkBoxSelect{{vehicle.deviceId}}" ng-model="vehicle.selected" />
+                                <label for="checkBoxSelect"></label>
+                            </div>
+                            <div class="inputname">
+                                <a href="javascript:void(0)">{{vehicle.deviceName}}</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div-->
+        <div class="row dashboard-list-view-row">
+
+            <div class="col s12 m4 l4 dashboard-list-view-col" ng-repeat="vehicle in vehicles track by vehicle.deviceId">
+                <div class="card hoverable dashboard-list-view-card object-card" >
+                    <div class="card-contents" ng-click="trackVehicleOnMap(vehicle)">
+                        <div class="card-vehicle-title">
+                            <span class="vehicle-name">{{vehicle.deviceName}}</span>
+                        </div>
+                        <div class="card-main-content card-vehicle-content">
+                            <div class="card-details-content">
+                                <div class="vehicle-details">
+                                    <div class="vehicle-location">
+                                        <span>{{vehicle.vehicleLocation}}</span>
+                                    </div>
+                                    <div class="vehicle-last-update-time">
+                                        <span>{{vehicle.packetTime}}</span>
+                                    </div>
+                                    <div class="vehicle-speed">
+                                        <span>Speed : {{vehicle.speed}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-vehicle-image-div">
+                                <span class="vehicle-image">
+                                    <i class="mdi-maps-local-shipping {{vehicle.statusColor}}"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
