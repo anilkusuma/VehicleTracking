@@ -2,27 +2,41 @@
 <div class="Customers top-id-div" id="Customers">
     <div class="customers-main main-div">
         <div class="row customers-row">
-            <div class="col s6 m4 l3 customers-col" ng-repeat="customer in customers track by customer.userId">
-                <div class="card hoverable customer-card object-card" >   
+            <div class="col s6 m4 l3 customers-col" ng-repeat="customer in customers track by customer.id">
+                <div class="card hoverable customer-card object-card" >
                     <div class="deleteDiv">
                         <div class="deletButton">
-                            <a class="btn-floating btn waves-effect waves-light green accent-3  button-link delete-customer-button" ng-if="customer.accountActive == 'Y'" ng-click="deActivate(customer.userId)">
+                            <a class="btn-floating btn waves-effect waves-light green accent-3  button-link delete-customer-button"
+                                    ng-if="customer.status == 'ACTIVE' || customer.login.status == 'ACTIVE'" ng-click="deActivate(customer.id)">
                                 <i class="fa fa-check"></i>
                             </a>
-                            <a class="btn-floating btn waves-effect waves-light red button-link delete-customer-button" ng-if="customer.accountActive == 'N'" ng-click="activate(customer.userId)">
+                            <a class="btn-floating btn waves-effect waves-light red button-link delete-customer-button"
+                                    ng-if="customer.status == 'INACTIVE' || customer.login.status == 'INACTIVE'" ng-click="activate(customer.id)">
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
                     </div>
-                    <div class="cardContents" ng-click="clickCustomer(customer)">
+                    <div class="cardContents" ng-click="clickCustomer(customer)" ng-if="userDetails.userType == 'COMPANY'">
                         <div class="card-title-div">
                             <span class="customer_username">{{customer.userName}}</span>
                         </div>
                         <div class="customer-details-div">
                             <div class="card-content-div">
-                                <div class="customername"><span class="customernameValue">{{customer.vtsUsers.name}}</span></div>
-                                <div class="customeremail"><span class="customeremailValue">{{customer.vtsUsers.emailId}}</span></div>
-                                <div class="customerphone"><span class="customerphoneValue">{{customer.vtsUsers.mobileNumber}}</span></div>
+                                <div class="customername"><span class="customernameValue">{{customer.firstName}}</span></div>
+                                <div class="customeremail"><span class="customeremailValue">{{customer.emailId}}</span></div>
+                                <div class="customerphone"><span class="customerphoneValue">{{customer.mobileNumber}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cardContents" ng-click="clickCustomer(customer)" ng-if="userDetails.userType == 'ADMIN'">
+                        <div class="card-title-div">
+                            <span class="customer_username">{{customer.name}}</span>
+                        </div>
+                        <div class="customer-details-div">
+                            <div class="card-content-div">
+                                <div class="customername"><span class="customernameValue">{{customer.users.length}}</span></div>
+                                <div class="customeremail"><span class="customeremailValue">{{customer.emailId}}</span></div>
+                                <div class="customerphone"><span class="customerphoneValue">{{customer.mobileNumber}}</span></div>
                             </div>
                         </div>
                     </div>

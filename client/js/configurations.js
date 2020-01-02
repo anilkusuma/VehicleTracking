@@ -28,7 +28,7 @@ var clearContent = function(){
 
 
 function toggleFullScreen(elem) {
-    
+
     console.log("elem valus is :"+elem);
     elem = document.getElementById(elem);
     console.log("elem valus afer is :"+elem);
@@ -85,7 +85,7 @@ var map_styles = [
             }
         ]
     },
-    
+
     {
         "featureType": "road.highway",
         "elementType": "all",
@@ -126,14 +126,25 @@ var map_styles = [
         ]
     }
 ];
+
 var styledMap = new google.maps.StyledMapType(map_styles, {
     name: "Styled Map"
 });
 
+var endpoints = {
+    development: {
+        COMMONS_URL : 'http://0.0.0.0:7102/',
+        PACKET_RECEIVER_URL: 'http://0.0.0.0:7101/',
+        VTS_URL: 'http://0.0.0.0:7103/',
+        SMS_URL: 'http://0.0.0.0:7104/'
+    },
+    production: {
+        COMMONS_URL : 'http://commons.curvecube.in/',
+        PACKET_RECEIVER_URL: 'http://packet.curvecube.in/',
+        VTS_URL: 'http://vts.curvecube.com',
+        SMS_URL: 'http://sms.curvecube.com'
+    }
+};
 
-    
-
-
-    
-
+var environment = "development";
 

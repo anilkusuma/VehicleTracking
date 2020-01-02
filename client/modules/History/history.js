@@ -1,47 +1,54 @@
 app.factory('HistorySerive',['$http','$rootScope',function($http,$rootScope){
     var HistorySerives = {};
-    HistorySerives.getUserVehicles = function(userId,callback){
-        var url = '/api/VtsDevices/VehiclesOfUser?userId='+userId;
+    HistorySerives.getUserVehicles = function(userId, accountId, callback){
+        let queryString = '';
+        if(accountId) {
+            queryString = queryString + '?accountId='+accountId;
+        }
+        if(userId) {
+            queryString = queryString + '&userId='+userId;
+        }
+        var url = 'http://0.0.0.0:7101/api/Vehicles/GetVehicles' + queryString;
         $http({
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
-            callback(response.data.returnStatus,response.data.responseData);
+            callback(response.data.returnStatus, response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     HistorySerives.getVehicleLatestPacket = function(imei,callback){
-        var url = '/api/DeviceGps/LatestPackets?imei='+imei;
+        var url = 'http://packets.pagon.in:7101/api/Packets/LatestPackets?imei='+imei;
         $http({
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     HistorySerives.getVehicleHistory = function(imei,startTime,endTime,callback){
-        var url = '/api/DeviceGps/GetReplay?imei='+imei+'&startTime='+startTime+'&endTime='+endTime;
+        var url = 'http://packets.pagon.in:7101/api/Packets/GetReplay?imei='+imei+'&startTime='+startTime+'&endTime='+endTime;
         $http({
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
-    }; 
+    };
     HistorySerives.getTodayHistory = function(imei,callback){
-        var url = '/api/DeviceGps/GetTodayPackets?imei='+imei;
+        var url = 'http://packets.pagon.in:7101/api/Packets/GetTodayPackets?imei='+imei;
         $http({
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     return HistorySerives;
@@ -81,8 +88,9 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
     $scope.inputFocused = function(type){
         $('.errorName').hide();
     };
-    var init = function(){
-        $timeout(function(){
+    var init = function() {
+
+        $timeout(function() {
             $('li.active a.active').trigger('click.collapse');
             $('li.nav-li').removeClass('active');
             $('#tracking').trigger("click.collapse");
@@ -91,11 +99,47 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
         $timeout(function(){
             loadMap();
         },0,true);
+
         if($rootScope.userDetails.userType == 'ADMIN'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getAllCompanies(function(status,customers){
+            $scope.customers = [{'name':'None','userId':$rootScope.userDetails.userId,
+                'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getAllAccounts(function(status, accounts){
+                if(status == "SUCCESS") {
+                    for(var i=0; i < accounts.length; i++) {
+                        if(accounts[i].status == 'ACTIVE') {
+                            let account = {};
+                            account.name = accounts[i].displayName;
+                            account.id = accounts[i].id;
+                            account.accountId = accounts[i].id;
+                            $scope.customers.push(account);
+                        }
+                    }
+                } else if(status=="EMPTY") {
+
+                } else if(status == "FAILED") {
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+                $scope.selectedCustomer = $scope.customers[0];
+                $rootScope.currentCustomer = $scope.selectedCustomer;
+                refreshHistory();
+                $rootScope.initSelect();
+            });
+        } else if($rootScope.userDetails.userType == 'COMPANY') {
+            $scope.customers = [{'name':'None', 'userId':$rootScope.userDetails.userId,
+                'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getUsersOfAccount(function(status, users){
                 if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
+                    for(var i=0; i < users.length; i++) {
+                        if(users[i].type == 'VTS_USER') {
+                            let user = {};
+                            user.name = users[i].firstName;
+                            user.id = users[i].id;
+                            user.userId = users[i].id;
+                            user.accountId = users[i].accountId;
+                            $scope.customers.push(user);
+                        }
+                    }
                 }else if(status=="EMPTY"){
                 }
                 else if(status == "FAILED"){
@@ -107,23 +151,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
                 refreshHistory();
                 $rootScope.initSelect();
             });
-        }else if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getUsersOfCompany(function(status,customers){
-                if(status == "SUCCESS"){
-                    $scope.customers = $scope.customers.concat(customers);
-                }else if(status=="EMPTY"){
-                }
-                else if(status == "FAILED"){
-                    Materialize.toast('Session expired');
-                    $rootScope.logout();
-                }
-                $scope.selectedCustomer = $scope.customers[0];
-                $rootScope.currentCustomer = $scope.selectedCustomer;
-                refreshHistory();
-                $rootScope.initSelect();
-            });
-        }else if($rootScope.userDetails.userType == 'USER'){
+        } else if($rootScope.userDetails.userType == 'USER'){
             $scope.selectedCustomer = $rootScope.userDetails;
             $rootScope.currentCustomer = $scope.selectedCustomer;
             refreshHistory();
@@ -140,7 +168,8 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
         $timeout(function(){
             loadMap();
         },0,true);
-        HistorySerive.getUserVehicles($rootScope.currentCustomer.userId,function(status,vehicles){
+        HistorySerive.getUserVehicles($rootScope.currentCustomer.userId, $rootScope.currentCustomer.accountId,
+                function(status,vehicles) {
             if(status == "SUCCESS"){
                 $scope.vehicles = vehicles;
                 $scope.selectedVehicle = $scope.vehicles[0];
@@ -153,7 +182,12 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
                 $scope.vehicleChanged();
             }else if(status == "EMPTY"){
                 Materialize.toast('No vehicles, add vehicles to watch replay',2000);
-                $location.path('/vehicles');
+                hidePreloader({},function(){
+                    $timeout(function(){
+                        $rootScope.initSelect();
+                        triggerMapResize();
+                    },0,true);
+                });
             }else if(status == "FAILED" || status == "ERROR"){
                 Materialize.toast('Session expired,login again',1000);
                 $rootScope.logout();
@@ -165,8 +199,9 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
     };
     var loadTodayHistory = function(){
         showPreloader();
+        clearMap();
         $scope.submittedVehicle = $scope.selectedVehicle;
-        HistorySerive.getTodayHistory($scope.selectedVehicle.deviceImei,function(status,history){
+        HistorySerive.getTodayHistory($scope.selectedVehicle.imei,function(status,history){
             if(status == "SUCCESS"){
                 $scope.submittedVehicle.history = history;
                 var startLatLng = new google.maps.LatLng($scope.submittedVehicle.history.startLocation.substring(0,$scope.submittedVehicle.history.startLocation.indexOf(",")),$scope.submittedVehicle.history.startLocation.substring($scope.submittedVehicle.history.startLocation.indexOf(",")+1,$scope.submittedVehicle.history.startLocation.length));
@@ -198,7 +233,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
         });
     };
     var loadMap = function(){
-        var mapOptions ={   
+        var mapOptions ={
                             center: new google.maps.LatLng(17.473075,78.482160),
                             zoom:15,
                             mapTypeControl:true,
@@ -245,7 +280,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
             showPreloader();
             $scope.startTime = moment(startDate).format('YYYY-MM-DD HH:mm:SS');
             $scope.endTime = moment(endDate).format('YYYY-MM-DD HH:mm:SS');
-            HistorySerive.getVehicleHistory($scope.selectedVehicle.deviceImei,$scope.startTime,$scope.endTime,function(status,history){
+            HistorySerive.getVehicleHistory($scope.selectedVehicle.imei,$scope.startTime,$scope.endTime,function(status,history){
                 if(status == "SUCCESS"){
                     $scope.submittedVehicle.history = history;
                     var startLatLng = new google.maps.LatLng($scope.submittedVehicle.history.startLocation.substring(0,$scope.submittedVehicle.history.startLocation.indexOf(",")),$scope.submittedVehicle.history.startLocation.substring($scope.submittedVehicle.history.startLocation.indexOf(",")+1,$scope.submittedVehicle.history.startLocation.length));
@@ -279,10 +314,10 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
     };
     var displayHistory = function(vehicle){
         var history = vehicle.history.instance;
-        for(var i=0;i<history.length;i++){
+        for(var i=0; i< history.length; i++) {
             var point = new google.maps.LatLng(history[i].latitude,history[i].longitude);
             if(parseInt(history[i].speed) > parseInt(40)){
-                if($scope.lastPoint == ""){
+                if($scope.lastPoint == "") {
                     $scope.lastPoint = point;
                 }
                 var overSpeedPolyLine = new google.maps.Polyline({
@@ -292,7 +327,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
                                                         zIndex:100
                                                     });
                 $scope.overSpeedPolyLine.push(overSpeedPolyLine);
-            }else if(parseInt(history[i].speed) <= parseInt(40)){
+            } else if(parseInt(history[i].speed) <= parseInt(40)){
                 if($scope.lastPoint == ""){
                     $scope.lastPoint = point;
                 }
@@ -332,9 +367,18 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
             }
             $scope.lastPoint = point;
         }
-        
-        hidePreloader({},function(){
-            setVariableToMap();
+
+        setVariableToMap();
+
+        hidePreloader({},function() {
+            $timeout(function(){
+                var latlngbounds = new google.maps.LatLngBounds();
+                for (var i = 0; i < $scope.pointMarkers.length; i++) {
+                    latlngbounds.extend($scope.pointMarkers[i].getPosition());
+                    $scope.HistoryMap.fitBounds(latlngbounds);
+                }
+                triggerMapResize();
+            },0,true);
         });
     };
     var createInfoBox = function(markerv){
@@ -369,17 +413,17 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
         });
         return ib;
     };
-    
+
     var updateInfoBox = function(ibv,i,vehicle){
-        var content = "Vehicle Number : " +vehicle.deviceName+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer + "<br/>";
+        var content = "Vehicle Number : " +vehicle.name+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].epochTime).format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer + "<br/>";
         ibv.setContent(content);
     };
     var updateStartInfoBox = function(ibv,i,vehicle){
-        var content = "Vehicle trip started at this position in the time selected <br/>"+"Vehicle Number : " +vehicle.deviceName+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer + "<br/>";
+        var content = "Vehicle trip started at this position in the time selected <br/>"+"Vehicle Number : " +vehicle.name+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].epochTime).format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer + "<br/>";
         ibv.setContent(content);
     };
     var updateEndInfoBox = function(ibv,i,vehicle){
-        var content = "Vehicle trip ended at this position in the time selected</br>"+"Vehicle Number : " + vehicle.deviceName+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer+ "<br/>";
+        var content = "Vehicle trip ended at this position in the time selected</br>"+"Vehicle Number : " + vehicle.name+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].epochTime).format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer+ "<br/>";
         ibv.setContent(content);
     };
     var setVariableToMap = function(){
@@ -402,7 +446,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
         for(var i=0;i<$scope.pointMarkers.length;i++){
             if($scope.pointMarkers[i]!=undefined){
                 $scope.pointMarkers[i].setMap($scope.HistoryMap);
-            }   
+            }
         }
         $timeout(function(){
             var latlngbounds = new google.maps.LatLngBounds();
@@ -410,7 +454,7 @@ app.controller('historyCtr',['$rootScope','$scope','HistorySerive','$timeout','$
                 latlngbounds.extend($scope.pointMarkers[i].getPosition());
                 $scope.HistoryMap.fitBounds(latlngbounds);
             }
-        },0,true); 
+        },0,true);
     };
 
     var clearMap = function(){

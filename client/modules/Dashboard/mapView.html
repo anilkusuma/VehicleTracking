@@ -7,7 +7,7 @@
             </div>
             <div class="users-select">
                 <div class="input-field user-select-div">
-                    <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                    <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.name for customer in customers track by customer.id" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
                     </select>
                 </div>
             </div>

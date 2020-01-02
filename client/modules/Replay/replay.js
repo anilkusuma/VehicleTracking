@@ -8,31 +8,31 @@ app.factory('ReplaySerive',['$http','$rootScope',function($http,$rootScope){
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReplaySerives.getVehicleLatestPacket = function(imei,callback){
-        var url = '/api/DeviceGps/LatestPackets?imei='+imei;
+        var url = 'http://packets.pagon.in:7101/api/Packets/LatestPackets?imei='+imei;
         $http({
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReplaySerives.getVehicleHistory = function(imei,startTime,endTime,callback){
-        var url = '/api/DeviceGps/GetReplay?imei='+imei+'&startTime='+startTime+'&endTime='+endTime;
+        var url = 'http://packets.pagon.in:7101/api/Packets/GetReplay?imei='+imei+'&startTime='+startTime+'&endTime='+endTime;
         $http({
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
-    }; 
+    };
     return ReplaySerives;
 }]);
 
@@ -131,7 +131,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
         midNobH:3,// indicator mid nob height
         noOfSmallDiv:4,// no of small div between main div
         eventListenerType: 'speedchange',// no of small div between main div
-    }); 
+    });
 
     var init = function(){
         $timeout(function(){
@@ -145,7 +145,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
         },0,true);
         if($rootScope.userDetails.userType == 'COMPANY'){
             $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
                 }else if(status=="EMPTY"){
@@ -209,7 +209,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
     }
 
     var loadEditMap = function(){
-        var mapOptions ={   
+        var mapOptions ={
                             center: new google.maps.LatLng(17.473075,78.482160),
                             zoom:15,
                             mapTypeControl:true,
@@ -234,11 +234,11 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
         $(".minimize-button").css('opacity','1');
         $(".maximize-button").css('opacity','0');
     };
-            
-                
 
 
-    
+
+
+
     var animateToNewPosition = function(currentPoint,nextPoint){
         $scope.AT_startPosition_lat = currentPoint.lat();
         $scope.AT_startPosition_lng = currentPoint.lng();
@@ -268,8 +268,8 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
             var deltaPosition = new google.maps.LatLng(parseFloat($scope.d_lat),parseFloat($scope.d_lng));
             if($scope.busMarker != ""){
                 $timeout(function(){
-                   $scope.busMarker.setPoint(deltaPosition); 
-                },0,true) 
+                   $scope.busMarker.setPoint(deltaPosition);
+                },0,true)
             }
             $scope.frameCount = $scope.frameCount+1;
             $rootScope.ReplayTimeOutVariable = $timeout(function(){
@@ -282,7 +282,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
                     animate();
                 },0,true);
             }
-        }            
+        }
     }
     $scope.inputFocused = function(type){
         $('.errorName').hide();
@@ -359,11 +359,11 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
         $scope.path = path;
         $scope.submittedVehicle.history.instance = $scope.submittedVehicle.history.instance.reverse();
         $scope.busMarker =  new ELabel({
-                                            latlng: $scope.path[0], 
-                                            label: '<canvas id="carcanvas'+vehicle.deviceId+'" width="50" height="50"></canvas>', 
-                                            classname: 'carcanvas', 
-                                            offset: new google.maps.Size(-25,-25), 
-                                            opacity: 100, 
+                                            latlng: $scope.path[0],
+                                            label: '<canvas id="carcanvas'+vehicle.deviceId+'" width="50" height="50"></canvas>',
+                                            classname: 'carcanvas',
+                                            offset: new google.maps.Size(-25,-25),
+                                            opacity: 100,
                                             overlap: true,
                                             clicktarget: false,
                                             callbackTarget : drawEpolyMarker
@@ -381,7 +381,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
         $scope.endFlag.setMap($scope.ReplayMap);
     };
     var drawEpolyMarker = function(vehicle){
-        if (checkSupportsCanvas()) {   
+        if (checkSupportsCanvas()) {
             $scope.canvas = document.getElementById("carcanvas"+vehicle.deviceId).getContext('2d');
             var p0 = $scope.path[0];
             var p1 = $scope.path[1];
@@ -389,7 +389,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
             plotImage(angle);
         }
         $scope.i = parseInt(0);
-        animate();                               
+        animate();
     };
     var animate = function() {
         var vehicle = $scope.submittedVehicle;
@@ -410,7 +410,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
                     return;
                 }else if(history[$scope.i-1].speed > 0){
                     $scope.ac = 1;
-                    $scope.sd = moment(history[$scope.i].packetTime,'ddd MMM DD YYYY HH:mm:ss');
+                    $scope.sd = moment(history[$scope.i].epochTime);
                     $scope.busStoppedPosition = $scope.i;
                     var marker = new google.maps.Marker( {
                            icon     : {
@@ -442,8 +442,8 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
                 }
             }else if(history[$scope.i].speed !== 0){
                 if($scope.ac == 1){
-                    var ed = moment(history[$scope.i].packetTime,'ddd MMM DD YYYY HH:mm:ss');
-                    var diference = ed.diff($scope.sd,'minutes',false);                    
+                    var ed = moment(history[$scope.i].epochTime);
+                    var diference = ed.diff($scope.sd,'minutes',false);
                     if(diference > 1) {
                         var marker = new google.maps.Marker( {
                                icon     : {
@@ -466,7 +466,7 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
                         });
                         $scope.stopageMarkers.push(marker);
                         var ibvs = createInfoBox(marker,vehicle);
-                        var content = "Stopped at : " + moment(history[$scope.busStoppedPosition].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Stopped for : " +diference+" Minutes<br/>";
+                        var content = "Stopped at : " + moment(history[$scope.busStoppedPosition].epochTime).format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Stopped for : " +diference+" Minutes<br/>";
                         ibvs.setContent(content);
                     }
                     $scope.ac = -1;
@@ -550,13 +550,13 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
             ib.close();
         });
         return ib;
-        
+
     };
-    
+
     var updateInfoBox = function(ibv,i,vehicle){
-        var content = "VehicleID : " + vehicle.deviceName+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer + "<br/>";
+        var content = "VehicleID : " + vehicle.deviceName+ "<br/>" + "Speed : " + vehicle.history.instance[i].speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(vehicle.history.instance[i].epochTime).format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +vehicle.history.instance[i].odometer + "<br/>";
         ibv.setContent(content);
-    }; 
+    };
     var updateOdometerAndSpeed = function(id){
         var vehicle = $scope.submittedVehicle;
         $scope.el.innerHTML = vehicle.history.instance[id].odometer;
@@ -701,4 +701,3 @@ app.controller('replayCtr',['$rootScope','$scope','ReplaySerive','$timeout','$lo
                                 });
     };
 }]);
-    

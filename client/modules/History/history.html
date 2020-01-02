@@ -3,7 +3,7 @@
 <div id="History" class="History">
     <div class="row users-select">
         <div class="input-field user-select-div">
-            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.name for customer in customers track by customer.id" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
             </select>
         </div>
     </div>
@@ -32,7 +32,7 @@
                     <div class="col s12 m4 l3 vehicleSelect">
                         <div class="input-field  vehicle-select-div">
                                <label for="vehicle_number" id="vehicleNumberLabel" class="active">Select Vehicle</label>
-                               <select class="vehicle-select" id="replayVehicleNumberSelect" ng-model="selectedVehicle" ng-options="vehicle as vehicle.deviceName for vehicle in vehicles track by vehicle.deviceId" ng-change="vehicleChanged()">
+                               <select class="vehicle-select" id="replayVehicleNumberSelect" ng-model="selectedVehicle" ng-options="vehicle as vehicle.name for vehicle in vehicles track by vehicle.vehicleId" ng-change="vehicleChanged()">
                                </select>
                          </div>
                     </div>
@@ -67,7 +67,7 @@
                         <tbody>
                             <tr class="data-row">
                                 <th data-field="Sno">1</th>
-                                <th data-field="vehicle_number">{{selectedVehicle.deviceName}}</th>
+                                <th data-field="vehicle_number">{{selectedVehicle.name}}</th>
                                 <th data-field="start_time">{{selectedVehicle.history.startTime}}</th>
                                 <th data-field="start_location">{{selectedVehicle.history.startLocation}}</th>
                                 <th data-field="maximum_speed">{{selectedVehicle.history.maximumSpeed}}</th>

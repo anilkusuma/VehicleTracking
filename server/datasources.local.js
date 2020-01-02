@@ -18,6 +18,16 @@ module.exports = {
         "user" : "anilkusuma",
         "password" : "anilkusuma",
         "authSource" : "admin"
+    },
+    "CurveCubeCommons": {
+        "host": "prod.curvecube.com",
+        "port": 7001,
+        "database": "CurveCubeCommons",
+        "name": "MongoDB",
+        "connector": "mongodb",
+        "user" : "anilkusuma",
+        "password" : "anilkusuma",
+        "authSource" : "admin"
     }
 };
 //104.199.169.245

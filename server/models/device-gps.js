@@ -3,6 +3,7 @@ module.exports = function(DeviceGps) {
     var app = require('../../server/server.js');
     var moment = require('moment-timezone');
     var bodyParser = require('body-parser').urlencoded({extended: true});
+    const request = require('request');
     DeviceGps.lastTwoPacketsOfVehicles = function(req,res,next){
         var result = {};
 		customLib.validateCookies(req,function(status,user){
@@ -730,7 +731,7 @@ module.exports = function(DeviceGps) {
                 var userLoginName = user.vtsLogin.userName;
                 var companyId = user.vtsLogin.companyId;
 
-                DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:req.query.startTime}},{'packetTime':{lte:todayEnd}},{'packetTime':{lte:req.query.endTime}},{'userId':userId},{'companyId':companyId}]},order:'packetTime DESC'},function(err,instance){
+                DeviceGps.find({where:{and:[{'deviceImei':req.query.imei},{'packetTime':{gte:req.query.startTime}},{'packetTime':{lte:todayEnd}},{'packetTime':{lte:req.query.endTime}}]},order:'packetTime DESC'},function(err,instance){
                     if(err){
                         result = {};
                         result.returnStatus = "ERROR";
@@ -1007,6 +1008,56 @@ module.exports = function(DeviceGps) {
                 { arg:'res' ,type:'object','http':{source:'res'}},
             ],
             http:{path:'/deletePacket',verb:'get'}
+        }
+    );
+
+    DeviceGps.geoDecodePacket = function(req,res,next){
+        var result = {};
+        customLib.validateCookies(req,function(validated, user){
+            if(validated){
+                let url = "http://apis.mapmyindia.com/advancedmaps/v1/nbh4smiiddq5y5sbaomh36co5z2b46s3/rev_geocode?lat="+req.query.lat+"&lng="+req.query.lng;
+                request(url, { json: true }, (err, response, body) => {
+                    if (err) {
+                        console.log(err);
+                        result = {};
+                        result.returnStatus="FAILED";
+                        res.send(result);
+                    } if(response.body.responseCode == 200 && response.body.results.length > 0) {
+                        result = {};
+                        result.returnStatus="SUCCESS";
+                        let address = response.body.results[0];
+                        let addressList = [];
+                        addressList.push(address.poi);
+                        addressList.push(address.street);
+                        addressList.push(address.subLocality);
+                        addressList.push(address.city);
+                        addressList.push(address.state);
+
+                        result.responseData = addressList.join(", ")
+                        res.send(result);
+                    } else {
+                        result = {};
+                        result.returnStatus="FAILED";
+                        res.send(result);
+                    }
+                });
+            }
+            else{
+                result = {};
+                result.returnStatus="FAILED";
+                res.send(result);
+            }
+        });
+    };
+    DeviceGps.remoteMethod(
+        'geoDecodePacket',
+        {
+            isStatice:true,
+            accepts:[
+                { arg:'req' ,type:'object','http':{source:'req'}},
+                { arg:'res' ,type:'object','http':{source:'res'}},
+            ],
+            http:{path:'/GeoDecode',verb:'get'}
         }
     );
 

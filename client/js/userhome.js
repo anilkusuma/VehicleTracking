@@ -1,10 +1,10 @@
 var app = angular.module('Home', ['ngRoute','scDateTime','mgcrea.ngStrap','ngCookies','ngFileUpload','ng.deviceDetector','ngTouch']);
 var selector = Cookies.get('selector');
 var validator= Cookies.get('validator');
-var userID = Cookies.get('userID');
+var userId = Cookies.get('userId');
 var userType = Cookies.get('userType');
-var companyId = Cookies.get('companyId');
-if(selector == null || validator== null || userID == null || userType == null || companyId == null){
+var accountId = Cookies.get('accountId');
+if(selector == null || validator== null || userId == null || userType == null || accountId == null){
     window.location = '/login';
 }else{
     if(userType == 'ADMIN'){
@@ -44,10 +44,6 @@ if(selector == null || validator== null || userID == null || userType == null ||
                 templateUrl: '/modules/Create/vehicles.html',
                 controller: 'vehicleCtr'
             })
-            .when('/points', {
-                templateUrl: '/modules/Create/pois.html',
-                controller: 'poiCtr'
-            })
             .when('/users', {
                 templateUrl: '/modules/Create/users.html',
                 controller: 'userCtr'
@@ -61,6 +57,10 @@ if(selector == null || validator== null || userID == null || userType == null ||
                 controller: 'fenceCtr'
             })
             .when('/admins', {
+                templateUrl: '/modules/Create/customers.html',
+                controller: 'customerCtr'
+            })
+            .when('/customers', {
                 templateUrl: '/modules/Create/customers.html',
                 controller: 'customerCtr'
             })
@@ -93,101 +93,7 @@ if(selector == null || validator== null || userID == null || userType == null ||
             });
             $locationProvider.html5Mode(true);
         }]);
-    }else if(userType == 'COMPANY'){
-        app.config(['$routeProvider','$locationProvider','$provide','$sceDelegateProvider',function ($routeProvider,$locationProvider,$provide,$sceDelegateProvider) {
-            $sceDelegateProvider.resourceUrlWhitelist([
-                'self',
-                'https://drive.google.com/**',
-                'https://www.youtube.com/**',
-                'http://apis.mapmyindia.com/**'
-            ]);
-            $routeProvider
-            .when('/liveold', {
-                templateUrl: '/modules/Dashboard/dashboard.html',
-                controller: 'dashboardCtr'
-            })
-            .when('/live', {
-                templateUrl: '/modules/Dashboard/listView.html',
-                controller: 'dashboardListViewCtr'
-            })
-            .when('/live/map', {
-                templateUrl: '/modules/Dashboard/mapView.html',
-                controller: 'dashboardMapViewCtr'
-            })
-            .when('/live/map/:deviceId', {
-                templateUrl: '/modules/Dashboard/mapView.html',
-                controller: 'dashboardMapViewCtr'
-            })
-            .when('/history', {
-                templateUrl: '/modules/History/history.html',
-                controller: 'historyCtr'
-            })
-            .when('/replay', {
-                templateUrl: '/modules/Replay/replay.html',
-                controller: 'replayCtr'
-            })
-            .when('/vehicles', {
-                templateUrl: '/modules/Create/vehicles.html',
-                controller: 'vehicleCtr'
-            })
-            .when('/points', {
-                templateUrl: '/modules/Create/pois.html',
-                controller: 'poiCtr'
-            })
-            .when('/users', {
-                templateUrl: '/modules/Create/users.html',
-                controller: 'userCtr'
-            })
-            .when('/drivers', {
-                templateUrl: '/modules/Create/drivers.html',
-                controller: 'driverCtr'
-            })
-            .when('/fences', {
-                templateUrl: '/modules/Create/geofence.html',
-                controller: 'fenceCtr'
-            })
-            .when('/customers', {
-                templateUrl: '/modules/Create/customers.html',
-                controller: 'customerCtr'
-            })
-            .when('/reports/general', {
-                templateUrl: '/modules/Reports/generalDayReports.html',
-                controller: 'generalCtr'
-            })
-            .when('/reports/detail', {
-                templateUrl: '/modules/Reports/detailDayReports.html',
-                controller: 'detailCtr'
-            })
-            .when('/reports/overspeed', {
-                templateUrl: '/modules/Reports/overSpeedReports.html',
-                controller: 'overSpeedCtr'
-            })
-            .when('/reports/stoppage', {
-                templateUrl: '/modules/Reports/stoppageReports.html',
-                controller: 'stoppageCtr'
-            })
-            .when('/reports/geofence', {
-                templateUrl: '/modules/Reports/geoFenceReports.html',
-                controller: 'geoReportsCtr'
-            })
-            .when('/reports/distance', {
-                templateUrl: '/modules/Reports/distanceReports.html',
-                controller: 'distanceReportsCtr'
-            })
-            .when('/settings', {
-                templateUrl: '/modules/Settings/settings.html',
-                controller: 'settingsCtr'
-            })
-            .when('/profile', {
-                templateUrl: '/modules/Profile/profile.html',
-                controller: 'profileCtr'
-            })
-            .otherwise({
-                redirectTo :  '/live/map'
-            });
-            $locationProvider.html5Mode(true);
-        }]);
-    }else if(userType == 'USER'){
+    } else if(userType == 'VTS_USER'){
         app.config(['$routeProvider','$locationProvider','$provide','$sceDelegateProvider',function ($routeProvider,$locationProvider,$provide,$sceDelegateProvider) {
             $sceDelegateProvider.resourceUrlWhitelist([
                 'self',
@@ -341,76 +247,103 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
     $rootScope.getUserDetails = function(){
         var selector = $cookies.get('selector');
         var validator = $cookies.get('validator');
-        var userID = $cookies.get('userID');
+        var userId = $cookies.get('userId');
         var userType = $cookies.get('userType');
-        var companyId = $cookies.get('companyId');
+        var accountId = $cookies.get('accountId');
 
-        if(selector == null || validator == null || userID == null || userType == null || companyId == null){
+        if(selector == null || validator == null || userId == null || userType == null || accountId == null){
             $cookies.remove('selector');
             $cookies.remove('validator');
-            $cookies.remove('userID');
+            $cookies.remove('userId');
             $cookies.remove('userType');
-            $cookies.remove('companyId');
+            $cookies.remove('accountId');
             window.location = '/login';
         }else{
-            var url=$rootScope.baseUrl+ '/api/VtsUsers/bUserDetails';
+            var url='http://0.0.0.0:7102/api/Users/GetUser?userId='+userId;
             $http({
                 method: 'GET',
-                url: url
+                url: url,
+                withCredentials : true
             }).then(function successCallback(response) {
                 var data = response.data;
-                if(data.returnStatus == "SUCCESS"){
-                    $rootScope.userDetails.userId = userID;
-                    if(data.userType == "COMPANY"){
-                        $rootScope.companyType = true;
-                        $rootScope.userDetails.userType = "COMPANY";
-                        $rootScope.userDetails.userId = data.responseData[0].userId;
-                        $rootScope.userDetails.name = data.responseData[0].name;
-                        $rootScope.userDetails.address = data.responseData[0].address;
-                        $rootScope.userDetails.mobileNumber = data.responseData[0].mobileNumber;
-                        $rootScope.userDetails.emailId = data.responseData[0].emailId;
-                        $rootScope.userDetails.companyId = data.responseData[0].vtsLogin.companyId;
-                        showPage();
-                    }else if(data.userType == "USER"){
-                        $rootScope.userType = true;
-                        $rootScope.userDetails.userType = "USER";
-                        $rootScope.userDetails.userId = data.responseData[0].userId;
-                        $rootScope.userDetails.name = data.responseData[0].name;
-                        $rootScope.userDetails.address = data.responseData[0].address;
-                        $rootScope.userDetails.mobileNumber = data.responseData[0].mobileNumber;
-                        $rootScope.userDetails.emailId = data.responseData[0].emailId;
-                        $rootScope.userDetails.companyId = data.responseData[0].vtsLogin.companyId;
-                        showPage();
-                    }else if(data.userType == "ADMIN"){
+                var user = data.responseData;
+                if(data.returnStatus == "SUCCESS") {
+                    $rootScope.userDetails.userId = userId;
+
+                    if((user.account.type == "DEALER" || user.account.type == "CURVECUBE") && user.type == "ADMIN") {
+
                         $rootScope.adminType = true;
                         $rootScope.userDetails.userType = "ADMIN";
-                        $rootScope.userDetails.userId = data.responseData[0].userId;
-                        $rootScope.userDetails.name = data.responseData[0].name;
-                        $rootScope.userDetails.address = data.responseData[0].address;
-                        $rootScope.userDetails.mobileNumber = data.responseData[0].mobileNumber;
-                        $rootScope.userDetails.emailId = data.responseData[0].emailId;
-                        $rootScope.userDetails.companyId = data.responseData[0].vtsLogin.companyId;
+                        $rootScope.userDetails.userId = user.id;
+                        $rootScope.userDetails.name = user.firstName + ' ' + user.lastName;
+                        $rootScope.userDetails.address = user.address;
+                        $rootScope.userDetails.mobileNumber = user.mobileNumber;
+                        $rootScope.userDetails.emailId =  user.emailId;
+                        $rootScope.userDetails.accountId = user.accountId;
+
+                        $rootScope.userDetails.accountDetails = {};
+                        $rootScope.userDetails.accountDetails.accountId = user.accountId;
+                        $rootScope.userDetails.accountDetails.accountType = user.account.type;
+                        $rootScope.userDetails.accountDetails.parentAccountType = user.account.parentAccountType;
+                        $rootScope.userDetails.accountDetails.accountName = user.account.name;
+
+                        showPage();
+                    } else if(user.account.type == "TRANSPORT_COMPANY" && user.type == "ADMIN") {
+
+                        $rootScope.companyType = true;
+                        $rootScope.userDetails.userType = "COMPANY";
+                        $rootScope.userDetails.userId = user.id;
+                        $rootScope.userDetails.name = user.firstName + ' ' + user.lastName;
+                        $rootScope.userDetails.address = user.address;
+                        $rootScope.userDetails.mobileNumber = user.mobileNumber;
+                        $rootScope.userDetails.emailId = user.emailId;
+                        $rootScope.userDetails.accountId = user.accountId;
+
+                        $rootScope.userDetails.accountDetails = {};
+                        $rootScope.userDetails.accountDetails.accountId = user.accountId;
+                        $rootScope.userDetails.accountDetails.accountType = user.account.type;
+                        $rootScope.userDetails.accountDetails.parentAccountType = user.account.parentAccountType;
+                        $rootScope.userDetails.accountDetails.accountName = user.account.name;
+
+                        showPage();
+                    }else if(user.account.type == "TRANSPORT_COMPANY" && data.userType == "VTS_USER"){
+
+                        $rootScope.userType = true;
+                        $rootScope.userDetails.userType = "USER";
+                        $rootScope.userDetails.userId = user.id;
+                        $rootScope.userDetails.name = user.firstName + ' ' + user.lastName;
+                        $rootScope.userDetails.address = user.address;
+                        $rootScope.userDetails.mobileNumber = user.mobileNumber;
+                        $rootScope.userDetails.emailId = user.emailId;
+                        $rootScope.userDetails.accountId = user.accountId;
+
+                        $rootScope.userDetails.accountDetails = {};
+                        $rootScope.userDetails.accountDetails.accountId = user.accountId;
+                        $rootScope.userDetails.accountDetails.accountType = user.account.type;
+                        $rootScope.userDetails.accountDetails.parentAccountType = user.account.parentAccountType;
+                        $rootScope.userDetails.accountDetails.accountName = user.account.name;
+
                         showPage();
                     }
                 }
                 else{
                     Materialize.toast('Unexpected Error.Please Login Again',2000,'rounded',function(){
-                        $cookies.remove('selector');
-                        $cookies.remove('validator');
-                        $cookies.remove('userID');
-                        $cookies.remove('userType');
-                        $cookies.remove('companyId');
-                        window.location = '/login';
+                        // $cookies.remove('selector');
+                        // $cookies.remove('validator');
+                        // $cookies.remove('userId');
+                        // $cookies.remove('userType');
+                        // $cookies.remove('companyId');
+                        // window.location = '/login';
                     });
                 }
             },function errorCallback(response) {
                 Materialize.toast('Unexpected Error.Please Login Again',2000,'rounded',function(){
-                    $cookies.remove('selector');
-                    $cookies.remove('validator');
-                    $cookies.remove('userID');
-                    $cookies.remove('userType');
-                    $cookies.remove('companyId');
-                    window.location = '/login';
+                    // $cookies.remove('selector');
+                    // $cookies.remove('validator');
+                    // $cookies.remove('userId');
+                    // $cookies.remove('userType');
+                    // $cookies.remove('companyId');
+                    // window.location = '/login';
                 });
             });
         }
@@ -432,56 +365,64 @@ app.controller('HomeMain',['$scope','$rootScope','$http','$location','$window','
         }
     }
     $rootScope.logout = function(){
-        $cookies.remove('selector');
-        $cookies.remove('validator');
-        $cookies.remove('userID');
-        $cookies.remove('userType');
-        $cookies.remove('companyId');
-        window.location = '/login';
+        // $cookies.remove('selector');
+        // $cookies.remove('validator');
+        // $cookies.remove('userId');
+        // $cookies.remove('userType');
+        // $cookies.remove('companyId');
+        // window.location = '/login';
     }
     $rootScope.initSelect = function(){
         $timeout(function(){
             $('select').material_select();
         },0,false);
     };
-    $rootScope.getUsersOfCompany = function(callback){
-        var url = '/api/VtsUsers/GetCompanyUsers';
+    $rootScope.getUsersOfAccount = function(callback) {
+        var url = 'http://0.0.0.0:7102/api/Users/GetUsersOfAccount?accountId='+$rootScope.userDetails.accountId;
         $http({
             method: 'GET',
-            url: url
+            url: url,
+            withCredentials : true
         }).then(function successCallback(response) {
-            callback(response.data.returnStatus,response.data.responseData);
+            callback(response.data.returnStatus, response.data.responseData);
         },function errorCallback(response) {
             callback("ERROR");
         });
     };
 
-    $rootScope.getAllCompanies = function(callback){
-        var url = '/api/VtsUsers/GetAllCompanies';
+    $rootScope.getAllAccounts = function(callback) {
+        var url = 'http://0.0.0.0:7102/api/Accounts/ChildAccounts?accountId='+$rootScope.userDetails.accountId;
         $http({
             method: 'GET',
-            url: url
+            url: url,
+            withCredentials : true
         }).then(function successCallback(response) {
-            callback(response.data.returnStatus,response.data.responseData);
+            callback(response.data.returnStatus, response.data.responseData);
         },function errorCallback(response) {
             callback("ERROR");
         });
     };
 
-    $rootScope.geoDecode = function(myLatLng,callback){
-        var geocoder = new google.maps.Geocoder();
+    $rootScope.geoDecode = function(myLatLng, callback){
+        result = myLatLng.lat().toFixed(5)+','+myLatLng.lng().toFixed(5);
+        callback(result);
+        return
+
         var result = '';
-        geocoder.geocode({'location': myLatLng}, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-                if (results[0]) {
-                    result = results[0].formatted_address;
-                }else {
-                    result = myLatLng.lat().toFixed(5)+','+myLatLng.lng().toFixed(5);
-                }
-            }
-            else {
+        var url = '/api/DeviceGps/GeoDecode?lat='+myLatLng.lat().toFixed(5)+'&lng='+myLatLng.lng().toFixed(5);
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function successCallback(response) {
+            console.log(response);
+            if(response.data.returnStatus == "SUCCESS") {
+                result = response.data.responseData;
+            } else {
                 result = myLatLng.lat().toFixed(5)+','+myLatLng.lng().toFixed(5);
             }
+            callback(result);
+        },function errorCallback(response) {
+            result = myLatLng.lat().toFixed(5)+','+myLatLng.lng().toFixed(5);
             callback(result);
         });
     };

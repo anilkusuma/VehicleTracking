@@ -3,29 +3,29 @@
     <div class="vehicles-main main-div">
         <div class="row users-select">
             <div class="input-field user-select-div">
-                <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.name for customer in customers track by customer.id" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
                 </select>
             </div>
         </div>
         <div class="row vehicles-row">
-            <div class="col s6 m4 l3 vehicles-col" ng-repeat="vehicle in vehicles track by vehicle.deviceId">
-                <div class="card hoverable vehicle-card object-card" >   
+            <div class="col s6 m4 l3 vehicles-col" ng-repeat="vehicle in vehicles track by vehicle.vehicleId">
+                <div class="card hoverable vehicle-card object-card" >
                     <div class="deleteDiv">
                         <div class="deletButton">
-                            <a class="btn-floating btn waves-effect waves-light red button-link delete-vehicle-button" ng-click="deleteVehicle(vehicle.deviceId)">
+                            <a class="btn-floating btn waves-effect waves-light red button-link delete-vehicle-button" ng-click="deleteVehicle(vehicle.vehicleId)">
                                 <i class="mdi-action-delete"></i>
                             </a>
                         </div>
                     </div>
                     <div class="cardContents" ng-click="editVehicle(vehicle)">
                         <div class="card-title-div">
-                            <span class="vehicle_name">{{vehicle.deviceName}}</span>
+                            <span class="vehicle_name">{{vehicle.name}}</span>
                         </div>
                         <div class="vehicle-details-div">
                             <div class="card-content-div">
-                                <div class="deviceImei"><span class="deviceImeiValue">{{vehicle.deviceImei}}</span></div>
-                                <div class="deviceSim"><span class="deviceSimValue">{{vehicle.deviceSim}}</span></div>
-                                <div class="deviceType"><span class="deviceTypeValue">{{vehicle.vehicleType}}</span></div>
+                                <div class="deviceImei"><span class="deviceImeiValue">{{vehicle.imei}}</span></div>
+                                <div class="deviceSim"><span class="deviceSimValue">{{vehicle.device.simNumber}}</span></div>
+                                <div class="deviceType"><span class="deviceTypeValue">{{vehicle.type}}</span></div>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="fixed-action-btn fab-new-customer" style="bottom: 45px; right: 45px;">
         <a class="btn-floating btn-large waves-effect waves-light red button-link add-button" ng-click="addVehicle()">
             <i class="large mdi-content-add"></i>

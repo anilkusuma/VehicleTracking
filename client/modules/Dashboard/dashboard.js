@@ -1,18 +1,25 @@
 app.factory('DashboardService',['$http','$rootScope',function($http,$rootScope){
     var DashboardServices = {};
-    DashboardServices.getUserVehicles = function(userId,callback){
-        var url = '/api/VtsDevices/VehiclesOfUser?userId='+userId;
+    DashboardServices.getVehicles = function(userId, accountId, callback) {
+        let queryString = '';
+        if(accountId) {
+            queryString = queryString + '?accountId='+accountId;
+        }
+        if(userId) {
+            queryString = queryString + '&userId='+userId;
+        }
+        var url = 'http://0.0.0.0:7101/api/Vehicles/GetVehicles' + queryString;
         $http({
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
-            callback(response.data.returnStatus,response.data.responseData);
+            callback(response.data.returnStatus, response.data.responseData);
         },function errorCallback(response) {
             callback("ERROR");
         });
     };
     DashboardServices.getVehicleLatestPacket = function(imei,callback){
-        var url = '/api/DeviceGps/LatestPackets?imei='+imei;
+        var url = 'http://packets.pagon.in:7101/api/Packets/LatestPackets?imei='+imei;
         $http({
             method: 'GET',
             url: url
@@ -23,7 +30,7 @@ app.factory('DashboardService',['$http','$rootScope',function($http,$rootScope){
         });
     };
     DashboardServices.getTodayOdometer = function(imei,callback){
-        var url = '/api/DeviceGps/TodaysOdometer?imei='+imei;
+        var url = 'http://packets.pagon.in:7101/api/Packets/TodaysOdometer?imei='+imei;
         $http({
             method: 'GET',
             url: url
@@ -51,14 +58,44 @@ app.controller('dashboardListViewCtr',['$rootScope','$scope','DashboardService',
         },0,false);
 
         if($rootScope.userDetails.userType == 'ADMIN'){
-            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
-                {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+            $scope.customers = [{'name':'None','userId':$rootScope.userDetails.userId,
+                    'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getAllAccounts(function(status, accounts){
+                if(status == "SUCCESS") {
+                    for(var i=0; i < accounts.length; i++) {
+                        if(accounts[i].status == 'ACTIVE') {
+                            let account = {};
+                            account.name = accounts[i].displayName;
+                            account.id = accounts[i].id;
+                            account.accountId = accounts[i].id;
+                            $scope.customers.push(account);
+                        }
+                    }
+                } else if(status=="EMPTY") {
 
-            $rootScope.getAllCompanies(function(status,customers){
+                } else if(status == "FAILED") {
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+                $scope.selectedCustomer = $scope.customers[0];
+                $rootScope.currentCustomer = $scope.selectedCustomer;
+                refreshDashboard();
+                $rootScope.initSelect();
+            });
+        } else if($rootScope.userDetails.userType == 'COMPANY') {
+            $scope.customers = [{'name':'None', 'userId':$rootScope.userDetails.userId,
+                'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getUsersOfAccount(function(status, users){
                 if(status == "SUCCESS"){
-                    for(var i=0; i < customers.length; i++) {
-                        if(customers[i].accountActive == 'Y')
-                            $scope.customers = $scope.customers.concat(customers[i]);
+                    for(var i=0; i < users.length; i++) {
+                        if(users[i].type == 'VTS_USER') {
+                            let user = {};
+                            user.name = users[i].firstName;
+                            user.id = users[i].id;
+                            user.userId = users[i].id;
+                            user.accountId = users[i].accountId;
+                            $scope.customers.push(user);
+                        }
                     }
                 }else if(status=="EMPTY"){
                 }
@@ -71,27 +108,7 @@ app.controller('dashboardListViewCtr',['$rootScope','$scope','DashboardService',
                 refreshDashboard();
                 $rootScope.initSelect();
             });
-        }else if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
-                {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getUsersOfCompany(function(status,customers){
-                if(status == "SUCCESS"){
-                    for(var i=0; i < customers.length; i++) {
-                        if(customers[i].accountActive == 'Y')
-                            $scope.customers = $scope.customers.concat(customers[i]);
-                    }
-                }else if(status=="EMPTY"){
-                }
-                else if(status == "FAILED"){
-                    Materialize.toast('Session expired');
-                    $rootScope.logout();
-                }
-                $scope.selectedCustomer = $scope.customers[0];
-                $rootScope.currentCustomer = $scope.selectedCustomer;
-                refreshDashboard();
-                $rootScope.initSelect();
-            });
-        }else if($rootScope.userDetails.userType == 'USER'){
+        } else if($rootScope.userDetails.userType == 'USER'){
             $scope.selectedCustomer = $rootScope.userDetails;
             $rootScope.currentCustomer = $scope.selectedCustomer;
             refreshDashboard();
@@ -103,15 +120,16 @@ app.controller('dashboardListViewCtr',['$rootScope','$scope','DashboardService',
         refreshDashboard();
     };
     var refreshDashboard = function() {
-        DashboardService.getUserVehicles($rootScope.currentCustomer.userId, function(status, vehicles){
+        DashboardService.getVehicles($rootScope.currentCustomer.userId, $rootScope.currentCustomer.accountId,
+            function(status, vehicles){
             if(status == "SUCCESS"){
                 $scope.vehicles = vehicles;
 
                 for(var i=0;i< $scope.vehicles.length ; i++) {
                     var dashboardTimer = {};
                     dashboardTimer.timerPromise = '';
-                    dashboardTimer.vehicle = $scope.vehicles[i];
                     $rootScope.dashboardTimers.push(dashboardTimer);
+
                     $scope.vehicles[i].dashboardTimer = dashboardTimer;
                     $scope.vehicles[i].latitude = '';
                     $scope.vehicles[i].longitude = '';
@@ -147,9 +165,9 @@ app.controller('dashboardListViewCtr',['$rootScope','$scope','DashboardService',
     }
 
     var getLocationDetails = function(vehicle){
-        DashboardService.getVehicleLatestPacket(vehicle.deviceImei, function(status, location){
+        DashboardService.getVehicleLatestPacket(vehicle.imei, function(status, location){
             if(status == "SUCCESS"){
-                if(moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm') != vehicle.packetTime || vehicle.packetTime == ""){
+                if(moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm') != vehicle.packetTime || vehicle.packetTime == "") {
                     vehicle.latitude = location[0].latitude;
                     vehicle.longitude = location[0].longitude;
                     vehicle.speed = location[0].speed;
@@ -158,8 +176,8 @@ app.controller('dashboardListViewCtr',['$rootScope','$scope','DashboardService',
                     if(vehicle.packetTime != '')
                         vehicle.previousPacketTime = vehicle.packetTime;
                     else
-                        vehicle.previousPacketTime = moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm');
-                    vehicle.packetTime = moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm');
+                        vehicle.previousPacketTime = moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm');
+                    vehicle.packetTime = moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm');
                     if(vehicle.currentPacket == '')
                         vehicle.oldPacket = location[0];
                     else
@@ -177,7 +195,7 @@ app.controller('dashboardListViewCtr',['$rootScope','$scope','DashboardService',
                                 vehicle.vehicleLocation = address;
                             },0,true);
                         });
-                        DashboardService.getTodayOdometer(vehicle.deviceImei,function(status,odometer){
+                        DashboardService.getTodayOdometer(vehicle.imei,function(status,odometer){
                             if(status == "SUCCESS" || status == "EMPTY"){
                                 vehicle.odometer = odometer;
                             }
@@ -224,215 +242,8 @@ app.controller('dashboardListViewCtr',['$rootScope','$scope','DashboardService',
     }
 
     $scope.trackVehicleOnMap = function (vehicle) {
-        $location.path('/live/map/'+vehicle.deviceId);
+        $location.path('/live/map/' + vehicle.vehicleId);
     }
-
-    // $scope.vehicleFilterSettings = {};
-    // $scope.vehicleFilterSettings.filteredVehicles = [];
-    // $scope.vehicleFilterSettings.filterString = '';
-    // $scope.vehicleFilterSettings.hideDropDown=true;
-    // $scope.vehicleFilterSettings.searchVehiclesResult=[];
-    //
-    // $scope.filterInputFocused = function($index){
-    //     if(!$scope.vehicleFilterSettings.filterString.replace(/\s/g, '').length){
-    //         $scope.vehicleFilterSettings.hideDropDown = true;
-    //         $scope.vehicleFilterSettings.searchVehiclesResult = [];
-    //         return false;
-    //     }else{
-    //         $scope.autoSuggestPopulate($index);
-    //     }
-    // };
-    //
-    // $scope.filterInputBlurred = function($index){
-    //     console.log('input blurred '+$index);
-    //     $scope.vehicleFilterSettings.hideDropDown = true;
-    //     $scope.vehicleFilterSettings.searchVehiclesResult = [];
-    // };
-    //
-    // $scope.filterInputChanged = function($event,$index){
-    //     var keyCode = $event.keyCode;
-    //     if(!$scope.vehicleFilterSettings.filterString.replace(/\s/g, '').length){
-    //         $scope.vehicleFilterSettings.hideDropDown = true;
-    //         $scope.vehicleFilterSettings.searchVehiclesResult = [];
-    //         return;
-    //     }
-    //     //BACKSPACE KEY
-    //     if (keyCode == '8' && $scope.vehicleFilterSettings.filterString=='') {
-    //         if (!$scope.vehicleFilterSettings.filteredVehicles.length) {
-    //             return true;
-    //         }
-    //         $scope.vehicleFilterSettings.filteredVehicles.pop();
-    //         return false;
-    //     }
-    //     $scope.filterAutoSuggestPopulate($index);
-    // };
-    //
-    // $scope.filterAutoSuggestPopulate = function($index){
-    //
-    //     $scope.queryString = $scope.vehicleFilterSettings.filterString;
-    //     $timeout.cancel($scope.timer);
-    //     $scope.timer = $timeout(function(){
-    //
-    //         if($scope.vehicleFilterSettings.filteredVehicles.length > 0) {
-    //             if(($scope.vehicleFilterSettings.filteredVehicles[0].id == -1)
-    //                     || ($scope.vehicleFilterSettings.filteredVehicles[0].name == "ALL")){
-    //                 Materialize.toast('All vehicles are already added.', 1000);
-    //                 return false;
-    //             }
-    //         }
-    //
-    //             InboxAjaxService.getStudents($scope.queryString, function(status,data){
-    //                 if(status=="SUCCESS"){
-    //                     $scope.toEmails[$index].responseData=[];
-    //
-    //                     if($scope.queryString.toUpperCase() == 'ALL' || $scope.queryString.toUpperCase() == 'A' || $scope.queryString.toUpperCase() == 'AL'){
-    //                         var responseObject = {};
-    //                         responseObject.id=$scope.toEmails[$index].responseData.length;
-    //                         responseObject.name = 'ALL';
-    //                         responseObject.studentId = -1;
-    //                         responseObject.section = '';
-    //                         responseObject.selected = false;
-    //                         $scope.toEmails[$index].responseData.push(responseObject);
-    //                         $scope.toEmails[$index].hideDropDown = false;
-    //                     }
-    //
-    //                     for(var j=0;j<data.classes.length;j++){
-    //                         var responseObject = {};
-    //                         responseObject.id=$scope.toEmails[$index].responseData.length;
-    //                         responseObject.name=data.classes[j].className;
-    //                         responseObject.classId = data.classes[j].classId;
-    //                         responseObject.type = "CLASS"
-    //                         responseObject.section = '';
-    //                         responseObject.selected = false;
-    //                         $scope.toEmails[$index].responseData.push(responseObject);
-    //                     }
-    //
-    //                     for(var k=0;k<data.sections.length;k++){
-    //                         var responseObject = {};
-    //                         responseObject.id=$scope.toEmails[$index].responseData.length;
-    //                         responseObject.name=data.sections[k].sectionName;
-    //                         responseObject.type = "SECTION"
-    //                         responseObject.sectionId = data.sections[k].sectionId;
-    //                         responseObject.classId = data.sections[k].classId;
-    //                         responseObject.section = '';
-    //                         responseObject.selected = false;
-    //                         $scope.toEmails[$index].responseData.push(responseObject);
-    //                     }
-    //
-    //                     for(var i=0;i<data.students.length;i++){
-    //                         var responseObject = {};
-    //                         responseObject.id=$scope.toEmails[$index].responseData.length;
-    //                         responseObject.name=data.students[i].first_name+' '+data.students[i].last_name;
-    //                         responseObject.firstName = data.students[i].first_name;
-    //                         responseObject.lastName = data.students[i].last_name;
-    //                         responseObject.userId = data.students[i].student_id;
-    //                         responseObject.userType='STUDENT';
-    //                         responseObject.userName = data.students[i].user_name;
-    //                         responseObject.emailId = data.students[i].student_email_id;
-    //                         responseObject.studentId = data.students[i].student_id;
-    //                         responseObject.class = data.students[i].class_name;
-    //                         responseObject.section = data.students[i].section_name;
-    //                         responseObject.phoneNumber = data.students[i].phone_number;
-    //                         responseObject.sectionId = data.students[i].section_id;
-    //                         responseObject.classId = data.students[i].class_id;
-    //                         responseObject.type = "STUDENT";
-    //                         responseObject.selected = false;
-    //                         //responseObject.dataObject = data[i];
-    //                         $scope.toEmails[$index].responseData.push(responseObject);
-    //                     }
-    //
-    //
-    //                     $scope.toEmails[$index].hideDropDown = false;
-    //                 }
-    //             });
-    //         }
-    //     }, 200);
-    // };
-    //
-    //
-    // $scope.filterAutoSuggestSelected = function($index){
-    //     //console.log('input blurred '+$index);
-    //     $timeout(function(){
-    //         $('#to_email').focus();
-    //     });
-    //     $scope.toEmails[$index].hideDropDown = true;
-    //     for(var mainLoop=0;mainLoop<$scope.toEmails[$index].responseData.length;mainLoop++){
-    //         if($scope.toEmails[$index].responseData[mainLoop].selected){
-    //             var id = mainLoop;
-    //             var valid = true;
-    //             if($scope.toEmails[$index].userType == "Students"){
-    //                 if($scope.toEmails[$index].responseData[id].studentId == -1){
-    //                     var spliceVariales = [];
-    //                     $scope.toEmails[$index].selected = [];
-    //                     for(var j=($scope.toEmails.length-1);j>=0;j--){
-    //                         if($scope.toEmails[j].userType == "Students"){
-    //                             $scope.toEmails[j].selected  = [];
-    //                             //$scope.toEmails.splice(j,1);
-    //                         }
-    //                     }
-    //                     $scope.toEmails[$index].selected  = [];
-    //                     var selected = {};
-    //                     selected.id = -1;
-    //                     selected.name = 'ALL';
-    //                     $scope.toEmails[$index].selected.push(selected);
-    //                     $scope.toEmails[$index].toUsers='';
-    //                     $scope.toEmails[$index].responseData = [];
-    //                     return false;
-    //                 }else{
-    //                     if($scope.toEmails[$index].responseData[id].type == "STUDENT"){
-    //                         for(var j=0;j<$scope.toEmails.length;j++){
-    //                             if($scope.toEmails[j].userType == "Students"){
-    //                                 for(var i=0;i<$scope.toEmails[j].selected.length;i++){
-    //                                     if($scope.toEmails[j].selected[i].type == "CLASS"){
-    //                                         if($scope.toEmails[j].selected[i].classId == $scope.toEmails[$index].responseData[id].classId){
-    //                                             Materialize.toast($scope.toEmails[j].selected[i].name+' already added.',3000);
-    //                                             valid = false;
-    //                                             break;
-    //                                             //return false;
-    //                                         }
-    //                                     }else if($scope.toEmails[j].selected[i].type == "SECTION"){
-    //                                         if($scope.toEmails[j].selected[i].sectionId == $scope.toEmails[$index].responseData[id].sectionId){
-    //                                             Materialize.toast($scope.toEmails[j].selected[i].name+' already added.',3000);
-    //                                             valid = false;
-    //                                             break;
-    //                                             //return false;
-    //                                         }
-    //                                     }else if($scope.toEmails[j].selected[i].type == "STUDENT"){
-    //                                         if($scope.toEmails[j].selected[i].studentId == $scope.toEmails[$index].responseData[id].studentId){
-    //                                             Materialize.toast($scope.toEmails[j].selected[i].name+' already added.',3000);
-    //                                             valid = false;
-    //                                             break;
-    //                                             //return false;
-    //                                         }
-    //                                     }
-    //                                 }
-    //                                 if(!valid)
-    //                                     break;
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //
-    //             if(valid){
-    //                 $scope.toEmails[$index].selected.push($scope.toEmails[$index].responseData[id]);
-    //             }
-    //         }
-    //     }
-    //     $scope.toEmails[$index].toUsers='';
-    //     $scope.toEmails[$index].responseData = [];
-    // };
-    // $scope.filterAutoSuggestClicked = function(id,$index){
-    //     if($scope.toEmails[$index].responseData[id].selected)
-    //         $scope.toEmails[$index].responseData[id].selected = false;
-    //     else
-    //         $scope.toEmails[$index].responseData[id].selected = true;
-    // };
-    //
-    //
-    // $scope.chipClosed = function($parentIndex,$index){
-    //     $scope.toEmails[$parentIndex].selected.splice($index,1);
-    // };
 }]);
 
 app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','$timeout','$location', '$routeParams' ,function($rootScope,$scope,DashboardService,$timeout,$location,$routeParams){
@@ -469,15 +280,45 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
             loadDashboardMap();
         },0,true);
 
-        if($rootScope.userDetails.userType == 'ADMIN'){
-            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
-                {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
+        if($rootScope.userDetails.userType == 'ADMIN') {
+            $scope.customers = [{'name':'None','userId':$rootScope.userDetails.userId,
+                'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getAllAccounts(function(status, accounts){
+                if(status == "SUCCESS") {
+                    for(var i=0; i < accounts.length; i++) {
+                        if(accounts[i].status == 'ACTIVE') {
+                            let account = {};
+                            account.name = accounts[i].displayName;
+                            account.id = accounts[i].id;
+                            account.accountId = accounts[i].id;
+                            $scope.customers.push(account);
+                        }
+                    }
+                } else if(status=="EMPTY") {
 
-            $rootScope.getAllCompanies(function(status,customers){
+                } else if(status == "FAILED") {
+                    Materialize.toast('Session expired');
+                    $rootScope.logout();
+                }
+                $scope.selectedCustomer = $scope.customers[0];
+                $rootScope.currentCustomer = $scope.selectedCustomer;
+                refreshDashboard();
+                $rootScope.initSelect();
+            });
+        } else if($rootScope.userDetails.userType == 'COMPANY') {
+            $scope.customers = [{'name':'None', 'userId':$rootScope.userDetails.userId,
+                'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getUsersOfAccount(function(status, users){
                 if(status == "SUCCESS"){
-                    for(var i=0; i < customers.length; i++) {
-                        if(customers[i].accountActive == 'Y')
-                            $scope.customers = $scope.customers.concat(customers[i]);
+                    for(var i=0; i < users.length; i++) {
+                        if(users[i].type == 'VTS_USER') {
+                            let user = {};
+                            user.name = users[i].firstName;
+                            user.id = users[i].id;
+                            user.userId = users[i].id;
+                            user.accountId = users[i].accountId;
+                            $scope.customers.push(user);
+                        }
                     }
                 }else if(status=="EMPTY"){
                 }
@@ -490,33 +331,14 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
                 refreshDashboard();
                 $rootScope.initSelect();
             });
-        }else if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
-                {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getUsersOfCompany(function(status,customers){
-                if(status == "SUCCESS"){
-                    for(var i=0; i < customers.length; i++) {
-                        if(customers[i].accountActive == 'Y')
-                            $scope.customers = $scope.customers.concat(customers[i]);
-                    }
-                }else if(status=="EMPTY"){
-                }
-                else if(status == "FAILED"){
-                    Materialize.toast('Session expired');
-                    $rootScope.logout();
-                }
-                $scope.selectedCustomer = $scope.customers[0];
-                $rootScope.currentCustomer = $scope.selectedCustomer;
-                refreshDashboard();
-                $rootScope.initSelect();
-            });
-        }else if($rootScope.userDetails.userType == 'USER'){
+        } else if($rootScope.userDetails.userType == 'USER'){
             $scope.selectedCustomer = $rootScope.userDetails;
             $rootScope.currentCustomer = $scope.selectedCustomer;
             refreshDashboard();
             $rootScope.initSelect();
         }
     };
+
     $scope.customerChanged = function(customer){
         $rootScope.currentCustomer = customer;
         refreshDashboard();
@@ -528,11 +350,11 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
 
         DashboardService.getUserVehicles($rootScope.currentCustomer.userId, function(status, vehicles){
             if(status == "SUCCESS") {
-                if($routeParams.deviceId) {
+                if($routeParams.vehicleId) {
                     $scope.vehicles = [];
                     let found = false;
                     for(var i=0; i < vehicles.length ; i++) {
-                        if(vehicles[i].deviceId == $routeParams.deviceId) {
+                        if(vehicles[i].vehicleId == $routeParams.vehicleId) {
                             $scope.vehicles[0] = vehicles[i];
                             found = true;
                             break;
@@ -549,7 +371,6 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
 
                     var dashboardTimer = {};
                     dashboardTimer.timerPromise = '';
-                    dashboardTimer.vehicle = $scope.vehicles[i];
                     $rootScope.dashboardTimers.push(dashboardTimer);
                     $scope.vehicles[i].dashboardTimer = dashboardTimer;
                     $scope.vehicles[i].showFlag = true;
@@ -571,7 +392,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
                     $scope.vehicles[i].deltaPoint= "";
                     $scope.vehicles[i].infobox = "";
                     $scope.vehicles[i].mapIconImage = new Image();
-                    if($scope.vehicles[i].vehicleType == "Bus") {
+                    if($scope.vehicles[i].type == "SCHOOL_BUS") {
                         $scope.vehicles[i].mapIconImage.src = "./images/SchoolBus.png";
                     } else {
                         $scope.vehicles[i].mapIconImage.src = "./images/TruckTopView.png";
@@ -600,9 +421,9 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
     }
 
     var getLocationDetails = function(vehicle){
-        DashboardService.getVehicleLatestPacket(vehicle.deviceImei, function(status, location){
+        DashboardService.getVehicleLatestPacket(vehicle.imei, function(status, location){
             if(status == "SUCCESS"){
-                if(moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm') != vehicle.packetTime || vehicle.packetTime == ""){
+                if(moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm') != vehicle.packetTime || vehicle.packetTime == ""){
                     vehicle.latitude = location[0].latitude;
                     vehicle.longitude = location[0].longitude;
                     vehicle.speed = location[0].speed;
@@ -611,8 +432,8 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
                     if(vehicle.packetTime != '')
                         vehicle.previousPacketTime = vehicle.packetTime;
                     else
-                        vehicle.previousPacketTime = moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm');
-                    vehicle.packetTime = moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm');
+                        vehicle.previousPacketTime = moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm');
+                    vehicle.packetTime = moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm');
                     if(vehicle.currentPacket == '')
                         vehicle.oldPacket = location[0];
                     else
@@ -630,7 +451,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
                                 vehicle.vehicleLocation = address;
                             },0,true);
                         });
-                        DashboardService.getTodayOdometer(vehicle.deviceImei,function(status,odometer){
+                        DashboardService.getTodayOdometer(vehicle.imei,function(status,odometer){
                             if(status == "SUCCESS" || status == "EMPTY"){
                                 vehicle.odometer = odometer;
                             }
@@ -745,7 +566,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
         var point = new google.maps.LatLng(vehicle.latitude,vehicle.longitude);
         if(vehicle.vehicleMarker == "" || vehicle.epolyImage == ""){
             vehicle.vehicleMarker = dashboardMapFunctions.getVehicleMarker(vehicle);
-            vehicle.vehicleMarker.set("labelClass","number_labels "+"markerLabel"+vehicle.deviceId);
+            vehicle.vehicleMarker.set("labelClass","number_labels "+"markerLabel"+vehicle.vehicleId);
             vehicle.epolyImage = dashboardMapFunctions.getEpolyMarker(vehicle);
             vehicle.epolyImage.setId(vehicle);
             vehicle.infobox = dashboardMapFunctions.createInfoBox(vehicle);
@@ -778,9 +599,9 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
     var updateInfoBox = function(vehiclev){
         //"<div class='content'>Last Onlie : " + vehiclev.packetTime + "</div>" +
         if($rootScope.userDetails.userType != 'USER')
-            var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" + "<div class='content'>Distance travelled today : " + vehiclev.odometer  + " Km" + "</div>" ;
+            var content = "<div class='content'>Vehicle Number : " + vehiclev.name+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" + "<div class='content'>Distance travelled today : " + vehiclev.odometer  + " Km" + "</div>" ;
         else
-            var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" ;
+            var content = "<div class='content'>Vehicle Number : " + vehiclev.name+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" ;
         vehiclev.infobox.setContent(content);
         vehiclev.infobox.setPosition(vehiclev.vehicleMarker.getPosition());
     };
@@ -790,15 +611,15 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
             var a = moment();
             var b = moment(vehicle.packetTime,'MMMM Do YYYY, HH:mm:ss');
             if(a.diff(b,'minutes')>30){
-                $('.markerLabel'+vehicle.deviceId).css('background-color','red');
-                $('.markerLabel'+vehicle.deviceId).css('color','white');
+                $('.markerLabel'+vehicle.vehicleId).css('background-color','red');
+                $('.markerLabel'+vehicle.vehicleId).css('color','white');
             }else if(vehicle.speed == 0){
-                $('.markerLabel'+vehicle.deviceId).css('background-color','yellow');
-                $('.markerLabel'+vehicle.deviceId).css('color','black');
+                $('.markerLabel'+vehicle.vehicleId).css('background-color','yellow');
+                $('.markerLabel'+vehicle.vehicleId).css('color','black');
             }
             else if(a.diff(b,'minutes') < 30){
-                $('.markerLabel'+vehicle.deviceId).css('background-color','green');
-                $('.markerLabel'+vehicle.deviceId).css('color','white');
+                $('.markerLabel'+vehicle.vehicleId).css('background-color','green');
+                $('.markerLabel'+vehicle.vehicleId).css('color','white');
             }
         }
     };
@@ -809,7 +630,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
         },
         drawEployMaker : function(vehicle){
             updateLabelBoxColor.updateColor(vehicle);
-            canvas = document.getElementById('dashboardCanvas'+vehicle.deviceId);
+            canvas = document.getElementById('dashboardCanvas'+vehicle.vehicleId);
             if(canvas!= null){
                 canvas = canvas.getContext('2d');
                 var p0 = new google.maps.LatLng(vehicle.lastPacket.latitude,vehicle.lastPacket.longitude);
@@ -823,7 +644,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
             var marker = new MarkerWithLabel({
                 position: myLatLng,
                 icon: " ",
-                labelContent:vehicle.deviceName,
+                labelContent:vehicle.name,
                 labelAnchor: new google.maps.Point(22, 0),
                 labelClass: "number_labels", // the CSS class for the label
                 labelStyle: {opacity: 0.75}
@@ -834,7 +655,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
             var myLatLng = new google.maps.LatLng(vehicle.latitude,vehicle.longitude);
             var epolyMarker = new ELabel({
                 latlng: myLatLng,
-                label: '<canvas id="dashboardCanvas'+vehicle.deviceId+'" width="50" height="50"></canvas>',
+                label: '<canvas id="dashboardCanvas'+vehicle.vehicleId+'" width="50" height="50"></canvas>',
                 classname: 'markerdcanvas',
                 offset: new google.maps.Size(-25,-25),
                 opacity: 100,
@@ -928,7 +749,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
             }
         },
         drawTransistionEployMaker : function(vehicle, newDelta){
-            canvas = document.getElementById('dashboardCanvas'+vehicle.deviceId);
+            canvas = document.getElementById('dashboardCanvas'+vehicle.vehicleId);
             if(canvas!= null){
                 canvas = canvas.getContext('2d');
                 if(vehicle.deltaPoint == "")
@@ -971,7 +792,7 @@ app.controller('dashboardMapViewCtr',['$rootScope','$scope','DashboardService','
     };
 
     $scope.showListView = function() {
-        $location.path('/livenew');
+        $location.path('/live');
     }
 
 }]);
@@ -1008,9 +829,9 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             loadDashboardMap();
         },0,true);
         if($rootScope.userDetails.userType == 'ADMIN'){
-            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
-                {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getAllCompanies(function(status,customers){
+            $scope.customers = [{'vtsUsers':{'name':'All'}, 'userId':'ALL', 'accountId':$rootScope.userDetails.accountId},
+                {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getAllAccounts(function(status,customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')
@@ -1028,9 +849,9 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 $rootScope.initSelect();
             });
         }else if($rootScope.userDetails.userType == 'COMPANY'){
-            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','companyId':$rootScope.userDetails.companyId},
-            {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $scope.customers = [{'vtsUsers':{'name':'All'},'userId':'ALL','accountId':$rootScope.userDetails.accountId},
+            {'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'accountId':$rootScope.userDetails.accountId}];
+            $rootScope.getUsersOfAccount(function(status, customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')
@@ -1073,7 +894,6 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                 for(var i=0;i< $scope.vehicles.length ; i++){
                     var dashboardTimer = {};
                     dashboardTimer.timerPromise = '';
-                    dashboardTimer.vehicle = $scope.vehicles[i];
                     $rootScope.dashboardTimers.push(dashboardTimer);
                     $scope.vehicles[i].dashboardTimer = dashboardTimer;
                     $scope.vehicles[i].showFlag = true;
@@ -1095,7 +915,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                     $scope.vehicles[i].deltaPoint= "";
                     $scope.vehicles[i].infobox = "";
                     $scope.vehicles[i].mapIconImage = new Image();
-                    if($scope.vehicles[i].vehicleType == "Bus") {
+                    if($scope.vehicles[i].type == "SCHOOL_BUS") {
                         $scope.vehicles[i].mapIconImage.src = "./images/SchoolBus.png";
                     } else {
                         $scope.vehicles[i].mapIconImage.src = "./images/TruckTopView.png";
@@ -1197,9 +1017,9 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         $scope.dashboardVariable.Map.initialZoom = true;
     };
     var getLocationDetails = function(vehicle){
-        DashboardService.getVehicleLatestPacket(vehicle.deviceImei,function(status,location){
+        DashboardService.getVehicleLatestPacket(vehicle.imei,function(status,location){
             if(status == "SUCCESS"){
-                if(moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') != vehicle.packetTime || vehicle.packetTime == ""){
+                if(moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm:ss') != vehicle.packetTime || vehicle.packetTime == ""){
                     vehicle.latitude = location[0].latitude;
                     vehicle.longitude = location[0].longitude;
                     vehicle.speed = location[0].speed;
@@ -1208,8 +1028,8 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                     if(vehicle.packetTime != '')
                         vehicle.previousPacketTime = vehicle.packetTime;
                     else
-                        vehicle.previousPacketTime = moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss');
-                    vehicle.packetTime = moment(location[0].packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss');
+                        vehicle.previousPacketTime = moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm:ss');
+                    vehicle.packetTime = moment(location[0].epochTime).format('MMMM Do YYYY, HH:mm:ss');
                     if(vehicle.currentPacket == '')
                         vehicle.oldPacket = location[0];
                     else
@@ -1227,7 +1047,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
                                 vehicle.vehicleLocation = address;
                             },0,true);
                         });
-                        DashboardService.getTodayOdometer(vehicle.deviceImei,function(status,odometer){
+                        DashboardService.getTodayOdometer(vehicle.imei,function(status,odometer){
                             if(status == "SUCCESS" || status == "EMPTY"){
                                 vehicle.odometer = odometer;
                             }
@@ -1274,7 +1094,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         var point = new google.maps.LatLng(vehicle.latitude,vehicle.longitude);
         if(vehicle.vehicleMarker == "" || vehicle.epolyImage == ""){
             vehicle.vehicleMarker = dashboardMapFunctions.getVehicleMarker(vehicle);
-            vehicle.vehicleMarker.set("labelClass","number_labels "+"markerLabel"+vehicle.deviceId);
+            vehicle.vehicleMarker.set("labelClass","number_labels "+"markerLabel"+vehicle.vehicleId);
             vehicle.epolyImage = dashboardMapFunctions.getEpolyMarker(vehicle);
             vehicle.epolyImage.setId(vehicle);
             vehicle.infobox = dashboardMapFunctions.createInfoBox(vehicle);
@@ -1307,9 +1127,9 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
     var updateInfoBox = function(vehiclev){
         //"<div class='content'>Last Onlie : " + vehiclev.packetTime + "</div>" +
         if($rootScope.userDetails.userType != 'USER')
-            var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" + "<div class='content'>Distance travelled today : " + vehiclev.odometer  + " Km" + "</div>" ;
+            var content = "<div class='content'>Vehicle Number : " + vehiclev.name+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" + "<div class='content'>Distance travelled today : " + vehiclev.odometer  + " Km" + "</div>" ;
         else
-            var content = "<div class='content'>Vehicle Number : " + vehiclev.deviceName+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" ;
+            var content = "<div class='content'>Vehicle Number : " + vehiclev.name+ "</div>" + "<div class='content'>Speed : " + vehiclev.speed + " KMPH" + "</div>" ;
         vehiclev.infobox.setContent(content);
         vehiclev.infobox.setPosition(vehiclev.vehicleMarker.getPosition());
     };
@@ -1319,15 +1139,15 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             var a = moment();
             var b = moment(vehicle.packetTime,'MMMM Do YYYY, HH:mm:ss');
             if(a.diff(b,'minutes')>30){
-                $('.markerLabel'+vehicle.deviceId).css('background-color','red');
-                $('.markerLabel'+vehicle.deviceId).css('color','white');
+                $('.markerLabel'+vehicle.vehicleId).css('background-color','red');
+                $('.markerLabel'+vehicle.vehicleId).css('color','white');
             }else if(vehicle.speed == 0){
-                $('.markerLabel'+vehicle.deviceId).css('background-color','yellow');
-                $('.markerLabel'+vehicle.deviceId).css('color','black');
+                $('.markerLabel'+vehicle.vehicleId).css('background-color','yellow');
+                $('.markerLabel'+vehicle.vehicleId).css('color','black');
             }
             else if(a.diff(b,'minutes') < 30){
-                $('.markerLabel'+vehicle.deviceId).css('background-color','green');
-                $('.markerLabel'+vehicle.deviceId).css('color','white');
+                $('.markerLabel'+vehicle.vehicleId).css('background-color','green');
+                $('.markerLabel'+vehicle.vehicleId).css('color','white');
             }
         }
     };
@@ -1338,7 +1158,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
         },
         drawEployMaker : function(vehicle){
             updateLabelBoxColor.updateColor(vehicle);
-            canvas = document.getElementById('dashboardCanvas'+vehicle.deviceId);
+            canvas = document.getElementById('dashboardCanvas'+vehicle.vehicleId);
             if(canvas!= null){
                 canvas = canvas.getContext('2d');
                 var p0 = new google.maps.LatLng(vehicle.lastPacket.latitude,vehicle.lastPacket.longitude);
@@ -1352,7 +1172,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             var marker = new MarkerWithLabel({
                 position: myLatLng,
                 icon: " ",
-                labelContent:vehicle.deviceName,
+                labelContent:vehicle.name,
                 labelAnchor: new google.maps.Point(22, 0),
                 labelClass: "number_labels", // the CSS class for the label
                 labelStyle: {opacity: 0.75}
@@ -1363,7 +1183,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             var myLatLng = new google.maps.LatLng(vehicle.latitude,vehicle.longitude);
             var epolyMarker = new ELabel({
                                     latlng: myLatLng,
-                                    label: '<canvas id="dashboardCanvas'+vehicle.deviceId+'" width="50" height="50"></canvas>',
+                                    label: '<canvas id="dashboardCanvas'+vehicle.vehicleId+'" width="50" height="50"></canvas>',
                                     classname: 'markerdcanvas',
                                     offset: new google.maps.Size(-25,-25),
                                     opacity: 100,
@@ -1457,7 +1277,7 @@ app.controller('dashboardCtr',['$rootScope','$scope','DashboardService','$timeou
             }
         },
         drawTransistionEployMaker : function(vehicle, newDelta){
-            canvas = document.getElementById('dashboardCanvas'+vehicle.deviceId);
+            canvas = document.getElementById('dashboardCanvas'+vehicle.vehicleId);
             if(canvas!= null){
                 canvas = canvas.getContext('2d');
                 if(vehicle.deltaPoint == "")

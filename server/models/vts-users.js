@@ -14,15 +14,15 @@ module.exports = function(VtsUsers) {
         customLib.validateCookies(req,function(validated,user){
             if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 result={};
                 var storage = multer.diskStorage({ //multers disk storage settings
                     destination: function (req, file, cb) {
-                        cb(null, __dirname+'/../../client/userimages/')  
+                        cb(null, __dirname+'/../../client/userimages/')
                     },
                     filename: function (req, file, cb) {
-                        cb(null,userID+'.jpg')
+                        cb(null,userId+'.jpg')
                     }
                 });
                 var upload = multer({
@@ -57,8 +57,8 @@ module.exports = function(VtsUsers) {
                         result.returnStatus = "SUCCESS";
                         res.send(result);
                         return;
-                    } 
-                });   
+                    }
+                });
             }else{
                 result = {};
                 result.returnStatus="FAILED";
@@ -76,14 +76,14 @@ module.exports = function(VtsUsers) {
             ],
             http:{path:'/UpdateProfilePic',verb:'post'}
         }
-    );  
+    );
     VtsUsers.userDetails = function(req,res,next){
 		customLib.validateCookies(req,function(validated,user){
 			if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
-				VtsUsers.find({where:{'userId':userID},'include':['vtsLogin']},function(err,instance){
+				VtsUsers.find({where:{'userId':userId},'include':['vtsLogin']},function(err,instance){
 					if(instance.length!=0){
 						result.userType = userType;
 						result.responseData = instance;
@@ -118,7 +118,7 @@ module.exports = function(VtsUsers) {
 		customLib.validateCookies(req,function(validated,user){
 			if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 var companyId = user.vtsLogin.companyId;
 				app.models.VtsLogin.find({where:{'and':[{'companyId':companyId},{'userId':{'neq':companyId}}]},'include':['vtsUsers']},function(err,instance){
@@ -156,7 +156,7 @@ module.exports = function(VtsUsers) {
         customLib.validateCookies(req,function(validated,user){
             if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 app.models.VtsLogin.find({where:{'userType':"COMPANY"},'include':['vtsUsers']},function(err,instance){
                     if(instance.length!=0){
@@ -193,7 +193,7 @@ module.exports = function(VtsUsers) {
         customLib.validateCookies(req,function(validated,user){
             if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 var companyId = user.vtsLogin.companyId;
 
@@ -251,7 +251,7 @@ module.exports = function(VtsUsers) {
         customLib.validateCookies(req,function(validated,user){
             if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 var companyId = user.vtsLogin.companyId;
 
@@ -307,7 +307,7 @@ module.exports = function(VtsUsers) {
         customLib.validateCookies(req,function(validated,user){
 			if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 var userLoginName = user.vtsLogin.userName;
                 var companyId = user.vtsLogin.companyId;
@@ -316,7 +316,7 @@ module.exports = function(VtsUsers) {
                 var details = {};
                 var object = req.body;
                 //console.log('obj is '+JSON.stringify(object));
-                
+
                 if(object.username != null || object.userInformation != null || object.username != undefined || object.userInformation != undefined  ){
 	                login.userName = object.username;
 	                var password = crypto.createHash('sha1').update(object.userInformation).digest('Hex');
@@ -325,15 +325,15 @@ module.exports = function(VtsUsers) {
 	                   login.userType = "USER";
                    else if(userType == "ADMIN")
                         login.userType = "COMPANY";
-	                login.companyId = userID;
+	                login.companyId = userId;
 	            }else{
 	            	result = {}
                     result.returnStatus = "ERROR";
                     res.send(result);
                     return;
 	            }
-                
-                
+
+
 	            if(object.name != null || object.name != undefined ){
                 	details.name = object.name;
                 }else{
@@ -389,7 +389,7 @@ module.exports = function(VtsUsers) {
                                 result.returnStatus = "ERROR";
                                 res.send(result);
                                 return;
-                            }else{ 
+                            }else{
                                 details.userId = obj.userId;
 
                                 if(userType == "ADMIN"){
@@ -405,7 +405,7 @@ module.exports = function(VtsUsers) {
                                             result.returnStatus="ERROR";
                                             res.send(result);
                                         }
-                                    }); 
+                                    });
                                 }
                                 VtsUsers.create(details,function(err,obj){
                                     if(err){
@@ -456,7 +456,7 @@ module.exports = function(VtsUsers) {
         customLib.validateCookies(req,function(validated,user){
             if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 var userLoginName = user.vtsLogin.userName;
                 var companyId = user.vtsLogin.companyId;
@@ -466,7 +466,7 @@ module.exports = function(VtsUsers) {
                 var object = req.body;
                 var userInformation = object.userInformation;
                 //console.log('obj is '+JSON.stringify(object));
-                
+
                 if(object.username != null || object.userInformation != null || object.username != undefined || object.userInformation != undefined  ){
                     login.userId = object.userId;
                     details.userId = object.userId;
@@ -479,8 +479,8 @@ module.exports = function(VtsUsers) {
                     res.send(result);
                     return;
                 }
-                
-                
+
+
                 if(object.name != null || object.name != undefined ){
                     details.name = object.name;
                 }else{
@@ -521,7 +521,7 @@ module.exports = function(VtsUsers) {
                         result.returnStatus = "ERROR";
                         res.send(result);
                         return;
-                    }else{ 
+                    }else{
                         if(obj.userInformation == userInformation)
                             login={};
                         obj.updateAttributes(login,function(err,instance){
@@ -544,7 +544,7 @@ module.exports = function(VtsUsers) {
                                         result.returnStatus = "ERROR";
                                         res.send(result);
                                         return;
-                                    }else{ 
+                                    }else{
                                         obj.updateAttributes(details,function(err,instance){
                                             if(err){
                                                 result = {}

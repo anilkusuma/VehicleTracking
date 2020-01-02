@@ -1,0 +1,36 @@
+{
+    "name": "Account",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "mongodb": {
+        "collection": "Account"
+    },
+    "properties": {
+        "id": {
+            "id": true,
+            "type": "String",
+            "required": false
+        },
+        "parentAccountId": {
+            "type": "String"
+        }
+    },
+    "validations": [],
+    "relations": {
+        "users": {
+            "type": "hasMany",
+            "model": "User",
+            "foreignKey": "accountId"
+        },
+        "childAccounts": {
+            "type": "hasMany",
+            "model": "Account",
+            "foreignKey": "parentAccountId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

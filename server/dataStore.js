@@ -28,7 +28,7 @@ module.exports = {
                 if(instance.length!=0){
                     var currentOdomter = instance[0].odometer;
                     var instanceTime = moment(instance[0].packetTime,'ddd MMM DD YYYY HH:mm:ss');
-                    
+
                     deviceGps.odometer = parseFloat(instance[0].odometer)+customLib.distanceBwLatLng(instance[0].latitude,instance[0].longitude,deviceGps.latitude,deviceGps.longitude);
                     deviceGps.odometer = deviceGps.odometer.toFixed(4).substring(0,15);
                 }else{
@@ -54,7 +54,7 @@ module.exports = {
                                 ascinstance[i].updateAttributes(temp,function(err,obj){
                                     if(err)
                                         console.log('Odometer earlier packets update failed '+err+JSON.stringify(obj));
-                                    
+
                                 });
                             }
                         }
@@ -128,11 +128,11 @@ module.exports = {
         var deviceGps = {
                             "deviceImei":alaram.deviceImei,
                             "packetTime":alaram.packetTime,
-                            "noOfSat":alaram.location.noOfSat,
-                            "latitude":alaram.location.latitude,
-                            "longitude":alaram.location.longitude,
-                            "speed":alaram.location.speed,
-                            "direction":alaram.location.direction.toString(),
+                            "noOfSat":alaram.noOfSat,
+                            "latitude":alaram.latitude,
+                            "longitude":alaram.longitude,
+                            "speed":alaram.speed,
+                            "direction":alaram.direction.toString(),
                             "odometer":'',
                             "packetSerialNumber":parseInt(alaram.packetSerialNumber),
                             "alertId":''
@@ -142,16 +142,16 @@ module.exports = {
                                 "deviceImei":alaram.deviceImei,
                                 "packetTime":alaram.packetTime,
                                 "packetSerialNumber":parseInt(alaram.packetSerialNumber),
-                                "oeStatus":alaram.alaramStatus.oeStatus,
-                                "gpsStatus":alaram.alaramStatus.activeStatus,
-                                "alarmStatus":alaram.alaramStatus.alaramStatus,
-                                "chargeStatus":alaram.alaramStatus.chargeStatus,
-                                "accStatus":alaram.alaramStatus.accStatus,
-                                "activeStatus":alaram.alaramStatus.activeStatus,
-                                "voltageLevel":alaram.alaramStatus.voltageLevel,
-                                "gsmSignalStrength":alaram.alaramStatus.gsmSignalStrength
+                                "oeStatus":alaram.oeConnectionStatus,
+                                "gpsStatus":alaram.activeStatus,
+                                "alarmStatus":alaram.alaramStatus,
+                                "chargeStatus":alaram.chargeStatus,
+                                "accStatus":alaram.accStatus,
+                                "activeStatus":alaram.activeStatus,
+                                "voltageLevel":alaram.voltageLevel,
+                                "gsmSignalStrength":alaram.gsmSignalPower
                             };
-                            
+
         app.models.VtsDevices.find({'where':{'deviceImei':deviceGps.deviceImei}},function(err,vehicles){
             if(vehicles.length != 0){
                 deviceGps.vehicleId = vehicles[0].deviceId;
@@ -196,14 +196,14 @@ module.exports = {
                                 "deviceImei":heartbeat.deviceImei,
                                 "packetTime":heartbeat.packetTime,
                                 "packetSerialNumber":parseInt(heartbeat.packetSerialNumber),
-                                "oeStatus":heartbeat.oeStatus,
+                                "oeStatus":heartbeat.oeConnectionStatus,
                                 "gpsStatus":heartbeat.activeStatus,
-                                "alarmStatus":heartbeat.alaramStatus,
+                                "alarmStatus":heartbeat.alarmStatus,
                                 "chargeStatus":heartbeat.chargeStatus,
                                 "accStatus":heartbeat.accStatus,
                                 "activeStatus":heartbeat.activeStatus,
                                 "voltageLevel":heartbeat.voltageLevel,
-                                "gsmSignalStrength":heartbeat.gsmSignalStrength
+                                "gsmSignalStrength":heartbeat.gsmSignalPower
                             };
 
         app.models.VtsDevices.find({'where':{'deviceImei':deviceStatus.deviceImei}},function(err,vehicles){
@@ -231,7 +231,7 @@ module.exports = {
         var app = require('./server.js');
         var DataStore = require('./dataStore.js');
 
-        //console.log("inside processReceivedPacket : "+packetString);
+        console.log("Inside processReceivedPacket : "+packetString);
 
         if(packetString){
             try{
@@ -241,6 +241,7 @@ module.exports = {
                 callback(false);
                 return;
             }
+            console.log("Packet type for the packet is " + packet.packetType);
             if(packet.packetType == "12" || packet.packetType == "22"){
                 DataStore.saveGpsPacket(packet,function(status){
                     callback(status);

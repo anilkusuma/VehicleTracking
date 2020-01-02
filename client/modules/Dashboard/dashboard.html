@@ -2,7 +2,7 @@
 <div class="Dashboard">
     <div class="row users-select">
         <div class="input-field user-select-div">
-            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+            <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.name for customer in customers track by customer.id" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
             </select>
         </div>
     </div>
@@ -27,10 +27,10 @@
                         </thead>
 
                         <tbody>
-                            <tr class="locationTable{{vehicle.deviceId}} data-row" ng-repeat="vehicle in vehicles track by $index">
+                            <tr class="locationTable{{vehicle.vehicleId}} data-row" ng-repeat="vehicle in vehicles track by $index">
                                 <td class="selectbox">
-                                    <input type="checkbox" class="checkboxrow" id="vehicleCheckbox{{vehicle.deviceId}}" ng-model="vehicle.showFlag" ng-change="showFlagChange($index)"/>
-                                    <label for="vehicleCheckbox{{vehicle.deviceId}}"></label>
+                                    <input type="checkbox" class="checkboxrow" id="vehicleCheckbox{{vehicle.vehicleId}}" ng-model="vehicle.showFlag" ng-change="showFlagChange($index)"/>
+                                    <label for="vehicleCheckbox{{vehicle.vehicleId}}"></label>
                                 </td>
                                 <td class="Sno">{{$index}}</td>
                                 <td class="vehicle_number">{{vehicle.deviceName}}</td>

@@ -225,14 +225,18 @@ background-color: #E05084;
 }
 
 #DashboardListView .card-vehicle-title {
-    text-align: center;
+    margin-left: 10px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
 }
 
 #DashboardListView .vehicle-name {
     font-family: 'Merriweather', serif;
     font-size: x-large;
     font-weight: 500;
+    flex: 1 0;
 }
 
 #DashboardListView .vehicle-image i:before {
@@ -241,8 +245,8 @@ background-color: #E05084;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
-    border-radius: 50%;
+    /*border: 1px solid black;*/
+    /*border-radius: 50%;*/
 }
 
 #DashboardListView .card-details-content .vehicle-details span {
@@ -256,11 +260,15 @@ background-color: #E05084;
 
 #DashboardListView .dashboard-list-view-col {
     margin-bottom: 0px !important;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 #DashboardListView .dashboard-list-view-card {
     margin-bottom: 5px;
     margin-top: 5px;
+    flex: 1 0;
 }
 
 #DashboardListView .card-main-content {
@@ -316,4 +324,27 @@ background-color: #E05084;
 .dashboard-view .map-list-toggle-button {
     padding: 0px 15px;
     font-weight: 500;
+}
+
+
+#DashboardListView .vehicle-location {
+    margin-bottom: 10px;
+    max-height: 100px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.vehicle-details {
+    margin-right: 10px;
+}
+
+.vehicle-last-update-time span, .vehicle-speed span {
+    color: #505050 !important;
+}
+
+.dashboard-list-view-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }

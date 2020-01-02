@@ -76,5 +76,17 @@
     "Role": {
         "dataSource": "db",
         "public": false
+    },
+    "Login": {
+        "dataSource":"CurveCubeCommons",
+        "public":true
+    },
+    "Account": {
+        "dataSource":"CurveCubeCommons",
+        "public":true
+    },
+    "User": {
+        "dataSource":"CurveCubeCommons",
+        "public":true
     }
 }

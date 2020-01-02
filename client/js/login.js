@@ -1,6 +1,6 @@
 var module = angular.module('VtsLogin',['ngCookies']);
 module.controller('loginForm',['$scope','$http','$window','$cookies','$timeout',function($scope,$http,$window,$cookies,$timeout){
-    $scope.baseUrl = '';
+    $scope.baseUrl = 'http://127.0.0.1:7102';
     $scope.userName='';
     $scope.password='';
     $scope.rememberMe = true;
@@ -24,39 +24,33 @@ module.controller('loginForm',['$scope','$http','$window','$cookies','$timeout',
             else {
                 rememberMe = 'N';
             }
-            
-            var url=$scope.baseUrl+ '/api/VtsLogins/login?userName='+$scope.userName+'&password='+$scope.password+"&rememberMe="+rememberMe;
+
+            var url=$scope.baseUrl+ '/api/Logins/Login?userName='+$scope.userName+'&password='+$scope.password+"&rememberMe="+rememberMe;
             $http({
               method: 'GET',
               url: url
             }).then(function successCallback(response) {
                 console.log(response.data);
                 var data = response.data;
-                if(data.loginStatus == "SUCCESS" && data.validatorStatus == "SUCCESS" ){
-                    if(rememberMe == 'Y'){
+                if(data.responseStatus) {
+                    if (rememberMe == 'Y') {
                         expireDate = new Date('2020');
-                    }else{
+                    } else {
                         expireDate = null;
                     }
                     $cookies.remove("selector");
                     $cookies.remove("validator");
-                    $cookies.remove("userID");
+                    $cookies.remove("userId");
                     $cookies.remove("userType");
-                    $cookies.remove("companyId");
-                    $cookies.put('selector',data.validator.selector,{expires:expireDate,path:'/'});
-                    $cookies.put('validator',data.validator.validator,{expires:expireDate,path:'/'});
-                    $cookies.put('userID',data.userId,{expires:expireDate,path:'/'});
-                    $cookies.put('userType',data.userType,{expires:expireDate,path:'/'});
-                    $cookies.put('companyId',data.companyId,{expires:expireDate,path:'/'});
+                    $cookies.remove("accountId");
+
+                    $cookies.put('selector', data.responseData.selector, {expires: expireDate, path: '/'});
+                    $cookies.put('validator', data.responseData.validator, {expires: expireDate, path: '/'});
+                    $cookies.put('userId', data.responseData.userId, {expires: expireDate, path: '/'});
+                    $cookies.put('userType', data.responseData.userType, {expires: expireDate, path: '/'});
+                    $cookies.put('accountId', data.responseData.accountId, {expires: expireDate, path: '/'});
                     $window.location = '/home';
-                }else if(data.loginStatus == "SUCCESS" && data.validatorStatus == "FAILED"){
-                    $cookies.remove("selector");
-                    $cookies.remove("validator");
-                    $cookies.remove("userID");
-                    $cookies.remove("userType");
-                    $cookies.remove("companyId");
-                    $window.location = '/home';
-                }else{
+                } else {
                    $scope.password = '';
                    $('#userName').removeClass('dirty');
                    $('#password').removeClass('dirty');

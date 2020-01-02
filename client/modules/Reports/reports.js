@@ -8,7 +8,7 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.getReport = function(vehicle,startTime,endTime,callback){
@@ -17,9 +17,9 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
             method: 'GET',
             url: url
         }).then(function successCallback(response) {
-            callback(response.data.returnStatus,response.data.responseData,vehicle);
+            callback(response.data.returnStatus, response.data.responseData,vehicle);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.getDistanceReport = function(vehicle,startTime,endTime,userId,callback){
@@ -30,10 +30,10 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData,vehicle);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
-    }; 
- 
+    };
+
     ReportsServices.getTodayReport = function(vehicle,callback){
         var url = '/api/DeviceGps/GetTodayPackets?imei='+vehicle.deviceImei;
         $http({
@@ -42,9 +42,9 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData,vehicle);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
-    }; 
+    };
     ReportsServices.getDetailReport = function(vehicle,selectedDate,callback){
         var url = '/api/DeviceGps/DetailedReport?imei='+vehicle.deviceImei+'&selDate='+selectedDate;
         $http({
@@ -53,7 +53,7 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData,vehicle);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.getOverSpeedReport = function(vehicle,startTime,endTime,minSpeed,callback){
@@ -64,7 +64,7 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData,vehicle);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.getStoppageReport = function(vehicle,startTime,endTime,minSpeed,callback){
@@ -75,7 +75,7 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData,vehicle);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.getGeoFenceReport = function(object,callback){
@@ -87,7 +87,7 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.searchVehicles = function(qs,userId,callback){
@@ -98,7 +98,7 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.searchFences = function(qs,userId,callback){
@@ -109,7 +109,7 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     ReportsServices.changeReportIcons = function(){
@@ -123,8 +123,8 @@ app.factory('ReportsService',['$http','$rootScope','$timeout',function($http,$ro
             $('.buttons-pdf').attr('id','pdf');
             $('.buttons-excel').attr('id','excel');
             $('.buttons-print').attr('id','print');
-            $('.dt-button').addClass('btn-floating waves-effect waves-light'); 
-        },0,true);        
+            $('.dt-button').addClass('btn-floating waves-effect waves-light');
+        },0,true);
     }
     return ReportsServices;
 }]);
@@ -153,7 +153,7 @@ app.controller('generalCtr',['$rootScope','$scope','ReportsService','$timeout','
                             });
         ReportsService.changeReportIcons();
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')
@@ -332,7 +332,7 @@ app.controller('detailCtr',['$rootScope','$scope','ReportsService','$timeout','$
                             });
         ReportsService.changeReportIcons();
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')
@@ -504,7 +504,7 @@ app.controller('overSpeedCtr',['$rootScope','$scope','ReportsService','$timeout'
                             });
         ReportsService.changeReportIcons();
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')
@@ -681,7 +681,7 @@ app.controller('stoppageCtr',['$rootScope','$scope','ReportsService','$timeout',
                             });
         ReportsService.changeReportIcons();
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')
@@ -851,7 +851,7 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
                             });
         ReportsService.changeReportIcons();
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')
@@ -1014,14 +1014,14 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         $('.errorName').hide();
         if(!$scope.geo.vehicleString.replace(/\s/g, '').length){
             $scope.geo.vResponseData = [];
-        }else{ 
+        }else{
             $scope.vAutoSuggestPopulate();
         }
     }
 
     $scope.vAutoSuggestPopulate = function(){
-        var queryString = $scope.geo.vehicleString; 
-        $timeout.cancel($scope.vTimer);   
+        var queryString = $scope.geo.vehicleString;
+        $timeout.cancel($scope.vTimer);
         $scope.vTimer = $timeout(function(){
             if($scope.geo.vehicles.length>0){
                 if(($scope.geo.vehicles[0].deviceId == -1) || ($scope.geo.vehicles[0].deviceName == "ALL")){
@@ -1041,8 +1041,8 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
                         responseObject.selected = false;
                         $scope.geo.vResponseData.push(responseObject);
                     }
-                    
-                    
+
+
                     for(var i=0;i<data.length;i++){
                         var responseObject = {};
                         responseObject.id=$scope.geo.vResponseData.length;
@@ -1073,9 +1073,9 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         else
             $scope.geo.vResponseData[id].selected = true;
     };
-    
+
     $scope.vInputChanged = function($event){
-        
+
         var keyCode = $event.keyCode;
         if (keyCode == '8' && $scope.geo.vehicleString=='') {
             if ($scope.geo.vehicles.length) {
@@ -1084,12 +1084,12 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         }
         if(!$scope.geo.vehicleString.replace(/\s/g, '').length){
             $scope.geo.vResponseData = [];
-        }else{ 
+        }else{
             $scope.vAutoSuggestPopulate();
         }
-        
+
     };
-    
+
     $scope.vAutoSuggestSelected = function(){
         for(var mainLoop=0;mainLoop<$scope.geo.vResponseData.length;mainLoop++){
             if($scope.geo.vResponseData[mainLoop].selected){
@@ -1120,7 +1120,7 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         $scope.geo.vehicleString='';
         $scope.geo.vResponseData = [];
     };
-    
+
     $scope.vChipClosed = function($index){
         $scope.geo.vehicles.splice($index,1);
     };
@@ -1138,8 +1138,8 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
     }
 
     $scope.fAutoSuggestPopulate = function(){
-        var queryString = $scope.geo.fenceString; 
-        $timeout.cancel($scope.fTimer);   
+        var queryString = $scope.geo.fenceString;
+        $timeout.cancel($scope.fTimer);
         $scope.fTimer = $timeout(function(){
             if($scope.geo.fences.length>0){
                 if(($scope.geo.fences[0].id == -1) || ($scope.geo.fences[0].id == "ALL")){
@@ -1151,15 +1151,15 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
                 if(status=="SUCCESS"){
                     $scope.geo.fResponseData=[];
 
-        
+
                     var responseObject = {};
                     responseObject.id=$scope.geo.fResponseData.length;
                     responseObject.geoFenceName = 'ALL';
                     responseObject.geoFenceId = -1;
                     responseObject.selected = false;
                     $scope.geo.fResponseData.push(responseObject);
-                    
-                    
+
+
                     for(var i=0;i<data.length;i++){
                         var responseObject = {};
                         responseObject.id=$scope.geo.fResponseData.length;
@@ -1192,9 +1192,9 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         else
             $scope.geo.fResponseData[id].selected = true;
     };
-    
+
     $scope.fInputChanged = function($event){
-        
+
         var keyCode = $event.keyCode;
         if (keyCode == '8' && $scope.geo.fenceString=='') {
             if ($scope.geo.fences.length) {
@@ -1206,9 +1206,9 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         }else{
             $scope.fAutoSuggestPopulate();
         }
-        
+
     };
-    
+
     $scope.fAutoSuggestSelected = function(){
         for(var mainLoop=0;mainLoop<$scope.geo.fResponseData.length;mainLoop++){
             if($scope.geo.fResponseData[mainLoop].selected){
@@ -1239,7 +1239,7 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
         $scope.geo.fenceString='';
         $scope.geo.fResponseData = [];
     };
-    
+
     $scope.fChipClosed = function($index){
         $scope.geo.fences.splice($index,1);
     };
@@ -1256,7 +1256,7 @@ app.controller('geoReportsCtr',['$rootScope','$scope','ReportsService','$timeout
 
 
 app.controller('distanceReportsCtr',['$rootScope','$scope','ReportsService','$timeout','$location',function($rootScope,$scope,ReportsService,$timeout,$location){
-    
+
     $rootScope.AndroidText = 'Distance reports';
     showPreloader();
 
@@ -1279,7 +1279,7 @@ app.controller('distanceReportsCtr',['$rootScope','$scope','ReportsService','$ti
                             });
         ReportsService.changeReportIcons();
         if($rootScope.userDetails.userType == 'COMPANY'){
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     for(var i=0; i < customers.length; i++) {
                         if(customers[i].accountActive == 'Y')

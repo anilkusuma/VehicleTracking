@@ -7,7 +7,7 @@
             </div>
             <div class="users-select">
                 <div class="input-field user-select-div">
-                    <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.vtsUsers.name for customer in customers track by customer.userId" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
+                    <select class="usertype-select" id="userTypeSelect" id="userTypeSelect" ng-model="selectedCustomer" ng-options="customer as customer.name for customer in customers track by customer.id" ng-change="customerChanged(selectedCustomer)" ng-if="userDetails.userType!='USER'">
                     </select>
                 </div>
             </div>
@@ -42,11 +42,14 @@
         </div-->
         <div class="row dashboard-list-view-row">
 
-            <div class="col s12 m4 l4 dashboard-list-view-col" ng-repeat="vehicle in vehicles track by vehicle.deviceId">
+            <div class="col s12 m4 l4 dashboard-list-view-col" ng-repeat="vehicle in vehicles track by vehicle.vehicleId">
                 <div class="card hoverable dashboard-list-view-card object-card" >
                     <div class="card-contents" ng-click="trackVehicleOnMap(vehicle)">
                         <div class="card-vehicle-title">
-                            <span class="vehicle-name">{{vehicle.deviceName}}</span>
+                            <span class="vehicle-name">{{vehicle.name}}</span>
+                            <span class="vehicle-image">
+                                <i class="mdi-maps-local-shipping {{vehicle.statusColor}}"></i>
+                            </span>
                         </div>
                         <div class="card-main-content card-vehicle-content">
                             <div class="card-details-content">
@@ -58,15 +61,15 @@
                                         <span>{{vehicle.packetTime}}</span>
                                     </div>
                                     <div class="vehicle-speed">
-                                        <span>Speed : {{vehicle.speed}}</span>
+                                        <span>Speed : {{vehicle.speed}} Km/Hr, Odometer: {{vehicle.odometer}} Km</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-vehicle-image-div">
-                                <span class="vehicle-image">
-                                    <i class="mdi-maps-local-shipping {{vehicle.statusColor}}"></i>
-                                </span>
-                            </div>
+<!--                            <div class="card-vehicle-image-div">-->
+<!--                                <span class="vehicle-image">-->
+<!--                                    <i class="mdi-maps-local-shipping {{vehicle.statusColor}}"></i>-->
+<!--                                </span>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </div>

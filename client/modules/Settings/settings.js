@@ -8,7 +8,7 @@ app.factory('SettingsService',['$http','$rootScope','$timeout',function($http,$r
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData,vehicle);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     SettingsServices.getUserVehicles = function(userId,callback){
@@ -19,7 +19,7 @@ app.factory('SettingsService',['$http','$rootScope','$timeout',function($http,$r
         }).then(function successCallback(response) {
             callback(response.data.returnStatus,response.data.responseData);
         },function errorCallback(response) {
-            callback("ERROR");  
+            callback("ERROR");
         });
     };
     SettingsServices.updatePacket= function(packet,callback){
@@ -46,7 +46,7 @@ app.factory('SettingsService',['$http','$rootScope','$timeout',function($http,$r
             callback("ERROR");
         });
     };
-    
+
     SettingsServices.deletePacket = function(packetId,callback){
         var url = '/api/DeviceGps/DeletePacket?packetId='+packetId;
         $http({
@@ -81,14 +81,14 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
     }
     clearEditValues();
     $timeout(function(){$('ul.tabs').tabs()},0,false);
-    $('.tabs').on('click', '.settings-map', function () { 
+    $('.tabs').on('click', '.settings-map', function () {
         $timeout(function(){
             triggerMapResize();
             fitMarkersToBounds();
         },0,true);
     });
     $('.tabs').on('click', '.settings-table', function () {
-        $timeout(function(){  
+        $timeout(function(){
             $(window).trigger('resize');
         },0,false);
     });
@@ -117,13 +117,13 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             packet.longitude = data[3];
             packet.speed = data[4].toString();
             packet.odometer = data[5].toString();
-            $timeout(function(){   
+            $timeout(function(){
                 selectPacket(packet);
             },0,true);
         } );
         if($rootScope.userDetails.userType == 'ADMIN'){
             $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getAllCompanies(function(status,customers){
+            $rootScope.getAllAccounts(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
                 }else if(status=="EMPTY"){
@@ -139,7 +139,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             });
         }else if($rootScope.userDetails.userType == 'COMPANY'){
             $scope.customers = [{'vtsUsers':{'name':'None'},'userId':$rootScope.userDetails.userId,'companyId':$rootScope.userDetails.companyId}];
-            $rootScope.getUsersOfCompany(function(status,customers){
+            $rootScope.getUsersOfAccount(function(status,customers){
                 if(status == "SUCCESS"){
                     $scope.customers = $scope.customers.concat(customers);
                 }else if(status=="EMPTY"){
@@ -189,7 +189,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                     if(status == "SUCCESS"){
                         packets = packets.reverse();
                         vehicle.packets = packets;
-                        
+
                         hidePreloader({},function(){
                             $timeout(function(){
                                 $(window).trigger('resize');
@@ -273,7 +273,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
         }
     };
     var loadMap = function(){
-        var mapOptions ={   
+        var mapOptions ={
                             center: new google.maps.LatLng(17.473075,78.482160),
                             zoom:15,
                             mapTypeControl:true,
@@ -294,14 +294,14 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
             $scope.editPacket.latitude = parseFloat(e.latLng.lat().toString().substring(0,10));
             $scope.editPacket.longitude = parseFloat(e.latLng.lng().toString().substring(0,10));
             $scope.editPacket.packetId = -1;
-        },0,true); 
+        },0,true);
     }
     var setDotPacket = function(e,packet){
         $timeout(function(){
             packet.latitude = parseFloat(e.latLng.lat().toString().substring(0,10));
             packet.longitude = parseFloat(e.latLng.lng().toString().substring(0,10));
             selectPacket(packet);
-        },0,true); 
+        },0,true);
     }
     var placeMarker = function(e){
         if($scope.EditMarker == undefined){
@@ -311,14 +311,14 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
                 draggable: true,
                 animation: google.maps.Animation.DROP,
                 title:"New Point",
-            });  
+            });
             //$scope.SettingsMap.panTo(e.latLng);
             google.maps.event.addListener($scope.EditMarker,'dragend',setEditPacketOnClick);
         }else{
             $scope.EditMarker.setMap($scope.SettingsMap);
             $scope.EditMarker.setPosition(e.latLng);
             $scope.SettingsMap.panTo(e.latLng);
-        }        
+        }
     }
     var triggerMapResize = function(){
         google.maps.event.trigger($scope.SettingsMap,'resize');
@@ -382,7 +382,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
         google.maps.event.addListener(markerv,'click',function(){
             $timeout(function(){
                 selectPacket(markerv.packet);
-            },0,true); 
+            },0,true);
         });
         google.maps.event.addListener($scope.SettingsMap,'click', function () {
             for(var i = 0 ; i < $scope.infoBoxes.length ; i++){
@@ -396,7 +396,7 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
         });
         return ib;
     };
-    
+
     var updateInfoBox = function(ibv,i,packet){
         var content = "Packet Number : " +packet.packetId+ "<br/>" + "Speed : " + packet.speed + " KMPH" + "<br/>" + "Time Of Data : " + moment(packet.packetTime,'ddd MMM DD YYYY HH:mm:ss').format('MMMM Do YYYY, HH:mm:ss') + "<br/>" + "Distance Covered  : " +packet.odometer + " Km <br/>";
         ibv.setContent(content);
@@ -405,11 +405,11 @@ app.controller('settingsCtr',['$rootScope','$scope','SettingsService','$timeout'
         for(var i=0;i<$scope.pointMarkers.length;i++){
             if($scope.pointMarkers[i]!=undefined){
                 $scope.pointMarkers[i].setMap($scope.SettingsMap);
-            }   
+            }
         }
         $timeout(function(){
             fitMarkersToBounds();
-        },0,true); 
+        },0,true);
     };
     var fitMarkersToBounds = function(){
         var latlngbounds = new google.maps.LatLngBounds();

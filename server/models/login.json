@@ -1,0 +1,42 @@
+{
+    "name": "Login",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "mongodb": {
+        "collection": "Login"
+    },
+    "properties": {
+        "id": {
+            "id": true,
+            "type": "String",
+            "required": false
+        },
+        "userInformation": {
+            "type": "string",
+            "required": true
+        },
+        "accountId" : {
+            "type": "String",
+            "index": true,
+            "required": true
+        }
+    },
+    "validations": [],
+    "relations": {
+        "user": {
+            "type": "hasOne",
+            "model": "User",
+            "foreignKey": "id"
+        },
+        "account": {
+            "type": "belongsTo",
+            "model": "Account",
+            "foreignKey": "accountId"
+        }
+    },
+    "acls": [],
+    "methods": {}
+}

@@ -4,9 +4,10 @@ var path = require('path');
 function serveindex(){
   return function(req, res){
       customeLib.validateCookies(req,function(validated,user){
-          var user = JSON.parse(user);
+          console.log("validated and user is " + validated + user);
       	  if(validated){
-                  res.sendFile(path.resolve('../client/userhome.html'));
+      	      var user = JSON.parse(user);
+      	      res.sendFile(path.resolve('../client/userhome.html'));
       		}else{
       			   res.sendFile(path.resolve('../client/login.html'));
       		}

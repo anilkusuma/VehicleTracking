@@ -62,15 +62,15 @@ module.exports = function(VtsLogin) {
         customLib.validateCookies(req,function(validated,user){
             if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 var password = req.query.oldPassword;
                 password = crypto.createHash('sha1').update(password).digest('Hex');
-                VtsLogin.find({where:{'and':[{'userId':userID},{'userInformation':password}]}},function(err,instance){
+                VtsLogin.find({where:{'and':[{'userId':userId},{'userInformation':password}]}},function(err,instance){
                     if(instance.length!=0){
                         var newPassword = req.query.newPassword;
                         newPassword = crypto.createHash('sha1').update(newPassword).digest('Hex');
-                        VtsLogin.updateAll({'userId':userID},{'userInformation':newPassword},function(err,info){
+                        VtsLogin.updateAll({'userId':userId},{'userInformation':newPassword},function(err,info){
                             if(err)
                             {
                                 result = {};
@@ -112,13 +112,13 @@ module.exports = function(VtsLogin) {
             ],
             http:{path:'/UpdatePassword',verb:'get'}
         }
-    ); 
+    );
 
     VtsLogin.validateUsername = function(req,res,next){
         customLib.validateCookies(req,function(validated,user){
             if(validated){
                 var user = JSON.parse(user);
-                var userID = user.userId;
+                var userId = user.userId;
                 var userType = user.vtsLogin.userType;
                 customLib.validateUsername(req.query.userName,function(status){
                     if(status){
@@ -148,5 +148,5 @@ module.exports = function(VtsLogin) {
             ],
             http:{path:'/checkUserName',verb:'get'}
         }
-    );        
+    );
  };
