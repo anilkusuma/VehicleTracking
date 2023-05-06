@@ -18,7 +18,7 @@
     "loopback-connector-mongodb": "^5.0.1",
     "loopback-connector-mysql": "^2.2.1",
     "loopback-datasource-juggler": "^2.59.2",
-    "moment-timezone": "^0.5.27",
+    "moment-timezone": "^0.5.35",
     "mqtt": "^3.0.0",
     "multer": "^1.4.2",
     "request": "^2.88.0",
